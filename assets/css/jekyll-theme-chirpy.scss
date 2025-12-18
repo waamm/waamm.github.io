@@ -1,0 +1,76 @@
+---
+---
+
+/* prettier-ignore */
+@use 'main
+{%- if jekyll.environment == 'production' -%}
+  .bundle
+{%- endif -%}
+';
+
+/* append your custom style below */
+html[data-mode='light'],
+html:not([data-mode]) {
+  .box {
+    padding: 1em;
+    border-left: 4px solid;
+    border-radius: 6px;
+    margin: 1em 0;
+    font-size: 0.95rem;
+    color: #000;
+  }
+
+  .box.notation    { background: #fff7e6; border-color: #ffb347; }
+  .box.definition  { background: #f0fff0; border-color: #4caf50; }
+  .box.proposition { background: #e6f0ff; border-color: #3399ff; }
+  .box.lemma       { background: #f0e6ff; border-color: #9966ff; }
+  .box.remark      { background: #fff0f5; border-color: #cc33ff; }
+  .box.theorem     { background: #ffe6e6; border-color: #ff3333; }
+  .box.proof       { background: #f9f9f9; border-color: #666; }
+  .box.example     { background: #e6ffff; border-color: #00cccc; color: #000; }
+  .box.corollary   { background: #fff4e6; border-color: #ff9933; color: #000; }
+}
+
+/* ---------------- Dark mode ---------------- */
+html[data-mode='dark'] {
+  .box {
+    color: #eee; /* text for dark mode */
+  }
+
+  .box.notation    { background: #4d3c00; border-color: #ffb347; }
+  .box.definition  { background: #003300; border-color: #4caf50; }
+  .box.proposition { background: #001a33; border-color: #3399ff; }
+  .box.lemma       { background: #330066; border-color: #9966ff; }
+  .box.remark      { background: #330033; border-color: #cc33ff; }
+  .box.theorem     { background: #4d0000; border-color: #ff3333; }
+  .box.proof       { background: #222; border-color: #888; }
+  .box.example     { background: #003333; border-color: #00cccc; color: #eee; }
+  .box.corollary   { background: #4d2b00; border-color: #ff9933; color: #eee; }
+}
+
+/* ---------------- Optional fallback for system dark mode ---------------- */
+@media (prefers-color-scheme: dark) {
+  html:not([data-mode]) {
+    .box {
+      color: #eee;
+    }
+
+  .box.notation    { background: #4d3c00; border-color: #ffb347; }
+  .box.definition  { background: #003300; border-color: #4caf50; }
+  .box.proposition { background: #001a33; border-color: #3399ff; }
+  .box.lemma       { background: #330066; border-color: #9966ff; }
+  .box.remark      { background: #330033; border-color: #cc33ff; }
+  .box.theorem     { background: #4d0000; border-color: #ff3333; }
+  .box.proof       { background: #222; border-color: #888; }
+  .box.example     { background: #003333; border-color: #00cccc; color: #eee; }
+  .box.corollary   { background: #4d2b00; border-color: #ff9933; color: #eee; }
+  }
+}
+
+.light {
+  color: #333;
+}
+
+.dark {
+  color: #ddd;
+}
