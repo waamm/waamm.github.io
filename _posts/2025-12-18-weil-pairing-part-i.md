@@ -61,7 +61,7 @@ on $E$ that is left implicit. Some texts (**[Wa08, Sil09]**) provide a second de
 
 ## The Complex Torus
 
-I don't have access to Weil's original papers --- and it's generally discouraged to read them anyway because his language of algebraic geometry is too dated --- but I want to start with sketching some of the relevant theory over the complex numbers $\mathbb{C}$, which I believe was his point of entry.[^Wikipedia]
+At the moment I don't have access to Weil's original papers --- and it's generally discouraged to read them anyway because [his](https://en.wikipedia.org/wiki/Foundations_of_Algebraic_Geometry) language of algebraic geometry is too dated --- but I want to start with sketching some of the relevant theory over the complex numbers $\mathbb{C}$, which I believe was his point of entry.[^Wikipedia]
 
 [^Wikipedia]: In fact, on [Wikipedia](https://en.wikipedia.org/wiki/Weil_pairing) it has said since 2009:
     > the corresponding results for elliptic functions *were known*, and can be expressed simply by use of the Weierstrass sigma function.
@@ -72,14 +72,14 @@ I don't have access to Weil's original papers --- and it's generally discouraged
 > Let $n$ be a positive integer. A subset $\Lambda \subset \mathbb{R}^n$ is called a *(full) lattice* if it is a subgroup of $\mathbb{R}^n$ isomorphic to $\mathbb{Z}^{n}$.
 {: .box .definition }
 
-Identifying $\mathbb{C}^n \simeq \mathbb{R}^{2n}$, a lattice in $\mathbb{C}^n$ is a subgroup isomorphic to $\mathbb{Z}^{2n}$.
+Identifying $\mathbb{C}^n \simeq \mathbb{R}^{2n}$, a lattice in $\mathbb{C}^n$ is then a subgroup isomorphic to $\mathbb{Z}^{2n}$.
 
 > **Example.**  
 > A lattice $\Lambda \subset \mathbb{C}$ is a subgroup $\Lambda = \mathbb{Z} \omega_1 + \mathbb{Z} \omega_2 $ for a pair of elements $\omega_1,\omega_2 \in \mathbb{C}$ which are linearly independent over $\mathbb{R}$ (i.e., they do not lie on the same line through the origin).
 {: .box .example }
 
 An elliptic curve $E(K)$ over a field $K$ is typically defined (when
-$\mathrm{char}(K)$ is not in $\\{2,3\\}$) as the set of zeroes of a short
+$\mathrm{char}(K)$ is not $2$ or $3$) as the set of zeroes of a short
 Weierstrass equation $y^{2}=x^{3}+ax+b$ (with nonzero discriminant $4 a^3 + 27 b^2$)
 over the plane $K^{2}$, together with a point $O$ at infinity. Focusing
 on the complex numbers has the advantage that $E(\mathbb{C})$ can
@@ -93,7 +93,7 @@ elliptic curve addition corresponding to ordinary addition on $\mathbb{C}$:
 > E(\mathbb{C}) \simeq \mathbb{C} / \Lambda
 > $$
 > 
-> as complex Lie groups.[^equivalence]
+> as [complex Lie groups](https://en.wikipedia.org/wiki/Complex_Lie_group).[^equivalence]
 {: .box .theorem }
 
 In this setting, torsion points $E(\mathbb{C})[n]$ and their properties
@@ -130,7 +130,7 @@ Concretely, in the rest of this post we will:
 
 1. Explain why divisors like $nD_{P}$ and $nD_{Q}$ are principal, by using them to explicitly construct certain functions on $\mathbb{C}$ and showing that these functions descend to the sought-after functions $f_{P}$ and $f_{Q}$ on $E(\mathbb{C})$.
 
-3. Demonstrate that over $\mathbb{C}$ the Weil pairing $\mathrm{Weil}_{n}(\cdot,\cdot)$ takes the form
+3. Demonstrate that over $\mathbb{C}$ the Weil pairing $\mathrm{Weil}_{n}(\cdot,\cdot)$ does not need such divisors or functions, because it takes the form
 
     $$(P,Q)\longmapsto\xi^{\langle P,Q \rangle}$$
 
@@ -155,8 +155,8 @@ a complex torus (this is part of a larger [principle](https://en.wikipedia.org/w
 
 Rather than studying these functions directly on
 the torus $\mathbb{C}/\Lambda$, it is often more convenient (as we
-will soon see) to pull them back to $\mathbb{C}$ along the universal
-covering map 
+will soon see) to pull them back to $\mathbb{C}$ along the [universal
+covering](https://en.wikipedia.org/wiki/Covering_space#Universal_covering)
 
 $$
 \mathbb{C}\twoheadrightarrow\mathbb{C}/\Lambda
@@ -233,7 +233,7 @@ The second statement extends [differently](https://en.wikipedia.org/wiki/Abel–
 
 The forward direction of the theorem can be proven directly (for $\mathbb{C}/\Lambda$)
 as follows. Pull back a meromorphic function on $\mathbb{C}/\Lambda$ corresponding to $D$
-along the covering map $\mathbb{C}\twoheadrightarrow\mathbb{C}/\Lambda$
+along the covering $\mathbb{C}\twoheadrightarrow\mathbb{C}/\Lambda$
 to obtain an elliptic function $f$ on $\mathbb{C}$. Let $\gamma$
 denote the loop running over the sides of a fundamental parallelogram
 (slightly shifted if a zero or pole lies on one of its sides). Then the residue
@@ -246,7 +246,7 @@ $$
 ## Weierstrass σ-functions
 
 The converse of the theorem can be proved indirectly using a Riemann–Roch
-style induction. However, we'd prefer a more explicit construction of the
+style induction. However, for computations we'd prefer a more explicit construction of the
 meromorphic function corresponding to a given divisor.
 
 A natural first attempt at constructing an elliptic function on $\mathbb{C}$
@@ -271,11 +271,11 @@ and showed that it converges [conditionally](https://en.wikipedia.org/wiki/Condi
     $$
 
 $$
-\log(1-\frac{z}{\lambda})=-\frac{z}{\lambda}-\frac{1}{2}\frac{z^{2}}{\lambda^{2}}-\frac{1}{3}\frac{z^{3}}{\lambda^{3}}-\cdots,
+\log(1-\frac{z}{\lambda})=-\frac{z}{\lambda}-\frac{1}{2}\frac{z^{2}}{\lambda^{2}}-\frac{1}{3}\frac{z^{3}}{\lambda^{3}}-\cdots
 $$
 
-in this product, one sees that eliminating the first two terms is
-enough to obtain absolute convergence. This can be achieved by inserting
+appearing in the exponential, one sees that eliminating the first two terms is
+enough to obtain absolute convergence. This can be achieved immediately by inserting
 a suitable exponential factor: 
 
 > **Definition ([Weierstrass σ-function](https://en.wikipedia.org/wiki/Weierstrass_functions#Weierstrass_sigma_function) [Wei93]).**  
@@ -303,7 +303,7 @@ from $-\Lambda^* = \Lambda^*$. This is not an elliptic function (as the image of
 [^theta]: Instead it's an example of a [theta function](https://en.wikipedia.org/wiki/Theta_function), as we'll see in the next post.
 
 > **Proposition (Quasi-periodicity of σ-functions).**  
-> There exists a linear map[^eta] $\lambda\mapsto\eta_{\lambda}$, meaning
+> There exists[^eta] a linear map $\lambda\mapsto\eta_{\lambda}$, meaning
 > $\eta_{\lambda+\lambda'}=\eta_{\lambda}+\eta_{\lambda'}$ for all $\lambda,\lambda'\in\Lambda$, such that
 >
 > $$
@@ -372,18 +372,18 @@ Nevertheless, we will use these non-elliptic functions to construct elliptic one
 > ([source code](/assets/source-code/Elliptic_function.py))_
 {: .box .example }
 
-Again, we are constructing functions on $E(\mathbb C)$ through the covering map $\mathbb{C}\twoheadrightarrow\mathbb{C}/\Lambda$, which does not exist over arbitrary fields; although this theorem still holds in that generality, it is not possible to explicitly construct a function associated to a divisor this directly.
+Again, we are constructing functions on $E(\mathbb C)$ through the covering $\mathbb{C}\twoheadrightarrow\mathbb{C}/\Lambda$, which does not exist over arbitrary fields; although this theorem still holds in that generality, it is not possible to explicitly construct a function associated to a divisor this directly.
 
 > *Proof:* By Abel's theorem, the number of zeroes and poles indeed agree, and
 > we have $\sum_{i=1}^n a_i \equiv \sum_{i=1}^n b_i$ modulo $\Lambda$.
 > Thus the existence of these $\tilde a_i,\tilde b_i$ follows. 
 > Now denote the right-hand-side for $c=1$ by $g(z)$; it is elliptic,
-> since for any $\omega$ in $\Lambda$ we have
+> since for any $\lambda$ in $\Lambda$ we have
 > \begin{align}
-> g(z + \omega) &= \prod_{i=1}^n  \frac{\sigma(z+\omega-{\tilde a_i})}{\sigma(z+\omega-{\tilde b_i})} \nonumber \\\\\
-> &= \prod_{i=1}^n \frac{-e^{\eta_\omega (z-{\tilde a_i} + \omega / 2)} \sigma(z- {\tilde a_i})}{-e^{\eta_{\omega}(z-{\tilde b_i} + \omega / 2)}\sigma ( z - {\tilde b_i} ) } \nonumber \\\\\
-> & =g(z)\prod_{i=1}^n e^{\eta_{\omega}({\tilde b_i}-{\tilde a_i})} \nonumber \\\\\
-> & =g(z)e^{\eta_{\omega}\sum_{i=1}^n ({\tilde b_i}-{\tilde a_i})}=g(z). \nonumber
+> g(z + \lambda) &= \prod_{i=1}^n  \frac{\sigma(z+\lambda-{\tilde a_i})}{\sigma(z+\lambda-{\tilde b_i})} \nonumber \\\\\
+> &= \prod_{i=1}^n \frac{-e^{\eta_\lambda (z-{\tilde a_i} + \lambda / 2)} \sigma(z- {\tilde a_i})}{-e^{\eta_{\lambda}(z-{\tilde b_i} + \lambda / 2)}\sigma ( z - {\tilde b_i} ) } \nonumber \\\\\
+> & =g(z)\prod_{i=1}^n e^{\eta_{\lambda}({\tilde b_i}-{\tilde a_i})} \nonumber \\\\\
+> & =g(z)e^{\eta_{\lambda}\sum_{i=1}^n ({\tilde b_i}-{\tilde a_i})}=g(z). \nonumber
 > \end{align}
 >
 > Since $f(z)$ and $g(z)$ are both elliptic functions and have the
@@ -440,7 +440,7 @@ we find
 > $$
 {: .box .corollary }
 
-> *Proof:* After using linearity of $\omega\mapsto\eta_{\omega}$ and expanding 
+> *Proof:* After using linearity of $\lambda\mapsto\eta_{\lambda}$ and expanding 
 > 
 > \begin{align}
 > (\eta_{n\tilde{P}}\tilde{Q}-\eta_{n\tilde{Q}}\tilde{P})n & =(a\eta_{1}+b\eta_{2})(c\omega_{1}+d\omega_{2})-(c\eta_{1}+d\eta_{2})(a\omega_{1}+b\omega_{2}) \nonumber \\\\\
