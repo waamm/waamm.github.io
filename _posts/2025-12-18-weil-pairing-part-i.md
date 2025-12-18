@@ -54,7 +54,7 @@ To me, this definition is far from enlightening. The functions $f_{P}$
 and $f_{Q}$ are only defined up to multiplication by constants, so using them for evaluations
 seems off.[^functions] Moreover, the choice of divisors
 $D_{P}$ and $D_{Q}$ (and the use of linear equivalence more generally)
-strongly suggest a deeper conneciton with the geometry of line bundles
+strongly suggest a deeper connection with the geometry of line bundles
 on $E$ that is left implicit. Some texts (**[Wa08, Sil09]**) provide a second definition, yet it is no more illuminating. What, then, is the conceptual picture behind these constructions?
 
 [^functions]: It works out here technically because the constants cancel out when evaluating a divisor of degree zero like $[P]-[O]$, but that is besides the point.
