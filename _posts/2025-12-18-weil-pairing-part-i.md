@@ -55,7 +55,7 @@ and $f_{Q}$ are only defined up to multiplication by constants, so using them fo
 seems off.[^functions] Moreover, the choice of divisors
 $D_{P}$ and $D_{Q}$ (and the use of linear equivalence more generally)
 strongly suggest a deeper connection with the geometry of line bundles
-on $E$ that is left implicit. Some texts (**[Wa08, Sil09]**) provide a second definition, yet it is no more illuminating. What, then, is the conceptual picture behind these constructions?
+on $E$ that is left implicit. Some texts (**[Wa08, Sil09]** and [Wikipedia](https://en.wikipedia.org/wiki/Weil_pairing)) provide a second definition, yet it is no more illuminating. What, then, is the conceptual picture behind these constructions?
 
 [^functions]: It works out here technically because the constants cancel out when evaluating a divisor of degree zero like $[P]-[O]$, but that is besides the point.
 
@@ -130,7 +130,7 @@ Concretely, in the rest of this post we will:
 
 1. Explain why divisors like $nD_{P}$ and $nD_{Q}$ are principal, by using them to explicitly construct certain functions on $\mathbb{C}$ and showing that these functions descend to the sought-after functions $f_{P}$ and $f_{Q}$ on $E(\mathbb{C})$.
 
-3. Demonstrate that over $\mathbb{C}$ the Weil pairing $\mathrm{Weil}_{n}(\cdot,\cdot)$ does not need such divisors or functions, because it takes on the much simpler form
+3. Subsequently demonstrate that over $\mathbb{C}$ the Weil pairing $\mathrm{Weil}_{n}(\cdot,\cdot)$ does not need such divisors or functions, because it takes on the much simpler form
 
     $$(P,Q)\longmapsto\xi^{\langle P,Q \rangle}$$
 
@@ -192,7 +192,7 @@ Meromorphic functions on compact Riemann surfaces (and hence elliptic functions)
 > (To put it more plainly, if $f$ and $g$ have the same divisor, then we want to use that $f/g$ has the trivial divisor.) Thus it suffices to show that a nonzero meromorphic function on a compact Riemann surface without zeroes or poles is constant, which is exactly [Liouville's theorem](https://en.wikipedia.org/wiki/Liouville%27s_theorem_(complex_analysis)#On_compact_Riemann_surfaces).
 {: .box .proof }
 
-Divisors are often simpler to handle than meromorphic functions, and this statement is often used to show that two meromorphic functions agree. On an elliptic curve, principal divisors can be described very explicitly:
+Divisors are often simpler to handle than meromorphic functions, and this statement is frequently used to show that two meromorphic functions agree. On an elliptic curve, principal divisors can be described very explicitly:
 
 > **Theorem (Abel's theorem for elliptic curves).**  
 > Let $D$ be a divisor on an elliptic curve $E$ with identity $O$. Then $D=\sum_{P\in E}n_{P}[P]$
@@ -357,10 +357,12 @@ Nevertheless, we will use these non-elliptic functions to construct elliptic one
 > 
 > * $\tilde{b}_i\equiv b_i\mod{\Lambda}$, and
 > 
-> * $\sum_{i=1}^n {\tilde a_i} = \sum_{i=1}^n {\tilde b_i}$,
+> * $\sum_{i=1}^n {\tilde a_i} = \sum_{i=1}^n {\tilde b_i}$,[^bug]
 >
 > and conversely such functions are elliptic.
 {: .box .theorem }
+
+[^bug]: Although this condition is often forgotten (e.g. [here](https://en.wikipedia.org/wiki/Weierstrass_elliptic_function#Proofs)), it seems to me that it can't be omitted.
 
 > **Example.**  
 > Continuing from the previous example, again consider the lattice $$\Lambda= \langle \omega_{1}, \omega_{2} \rangle$$ with $\omega\_{1} = 1$ and $\omega\_{2} = 1/2 + 2i$. The points 
