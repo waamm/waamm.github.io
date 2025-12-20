@@ -17,16 +17,39 @@ This quote by Victor Miller from his seminal 2004 paper[^miller] foreshadowed th
 
 I recently spent some time studying the Weil pairing and decided to record some notes and reflections. In Weil’s original work **[Weil40]**, arising from his proof of [the Riemann hypothesis for curves over finite fields](https://en.wikipedia.org/wiki/Local_zeta_function#Riemann_hypothesis_for_curves_over_finite_fields), in Miller’s paper **[Mil04]**, and in many modern references (e.g., **[Cos, Lan87, Wa08, Sil09, Sut23]**), the pairing is defined roughly as follows:
 
-**Notation ([Weil divisors](https://en.wikipedia.org/wiki/Divisor_(algebraic_geometry))).**  
-A *divisor on an elliptic curve $E$* is a formal sum of points
-$D=\sum_{P\in E} n_P [P]$ with $n_P \in \mathbb{Z}$, such that $n_P$
-is nonzero for only finitely many $P$; this finite set of points
-is referred to as its *support*, and its degree is defined as $\deg(D)\mathrel{\vcenter{:}}=\sum_{P \in E} n_{P}$.
- The *divisor $$\mathrm{div}(f) = \sum_{P \in E} \mathrm{ord}_P(f) \, [P]$$
-of a rational function $f$ on $E$* records at each point $P$ the
-order $$\mathrm{ord}_f(P)$$ of the zero (with a plus sign) or pole
-(with a minus sign) of $f$ at $P$, and is zero otherwise. When $\mathrm{div}(f)$ and $D$ have disjoint support, we set 
-$f(D)\mathrel{\vcenter{:}}= \prod_{P\in E} f(P)^{n_P}$, and when they are equal one says that $D$ is *principal*. Given a pair of divisors $P,Q$ on $E$, we write $P \sim Q$ if $P - Q$ is principal, and say that $P$ and $Q$ are *linearly equivalent*.
+> **Notation ([Weil divisors](https://en.wikipedia.org/wiki/Divisor_(algebraic_geometry))).**  
+> A *divisor* on an elliptic curve $E$ defined over a field is an element of the [free abelian group](https://en.wikipedia.org/wiki/Free_abelian_group) 
+>
+> $$
+> \mathrm{Div}(E) \mathrel{\vcenter{:}}= \bigoplus_{P\in E} \mathbb{Z},
+> $$ 
+> 
+> whose basis elements are thus indexed by the points of $$E$$. Equivalently, a divisor $D$ can be written as a finite formal sum
+> 
+> $$
+> D=\sum_{P\in E} n_P [P],\qquad n_P \in \mathbb{Z},
+> $$
+> 
+> where $[P]$ denotes the basis element corresponding to the point $P$, and only finitely many of the $n_P$ are nonzero. The set of points $$P$$ in $$E$$ such that $n_P$ is nonzero is called the *support* of $$D$$, and its *degree* is defined to be the integer
+> $$
+> \deg(D)\mathrel{\vcenter{:}}=\sum_{P \in E} n_{P}.
+> $$ 
+>
+> Given a rational function $f$ on $E$, its divisor
+>
+> $$
+> \mathrm{div}(f) = \sum_{P \in E} \mathrm{ord}_P(f) \, [P]
+> $$
+> 
+> records at each point $P$ in $E$ the
+> order $$\mathrm{ord}_f(P)$$ of the zero (with a plus sign) or pole
+> (with a minus sign) of $f$ at $P$, and is zero otherwise. A divisor of the form $\mathrm{div}(f)$ is called *principal*. If $ D = \sum_{P\in E} n_P [P]$ is a divisor whose support is disjoint from the support of $\mathrm{div}(f)$ (so $f$ evaluates to a non-zero field element at each element in the support of $D$), we set 
+>
+> $$
+> f(D)\mathrel{\vcenter{:}}= \prod_{P\in E} f(P)^{n_P}.
+> $$
+> 
+> Finally, given a pair of divisors $P,Q$ on $E$, we write $P \sim Q$ if $P - Q$ is principal, and say that $P$ and $Q$ are *linearly equivalent*.
 {: .box .notation }
 
 > **Definition ([Weil pairing](https://en.wikipedia.org/wiki/Weil_pairing) [Wei40]).**  
@@ -186,7 +209,7 @@ Meromorphic functions on compact Riemann surfaces (and hence elliptic functions)
 > Let $S$ be a compact Riemann surface. Since $\mathrm{ord}_P(\cdot): K(S)^\times \rightarrow \mathbb{Z}$ is a homomorphism, the same is true for the coproduct of morphisms
 > 
 > $$
-> \mathrm{div}(\cdot): K(S)^\times \longrightarrow \bigoplus_{P\in S} \mathbb{Z},\qquad f\longmapsto \bigl(\mathrm{ord}_P(f)\bigr)_{P\in S}.
+> \mathrm{div}(\cdot): K(S)^\times \longrightarrow \mathrm{Div}(S) = \bigoplus_{P\in S} \mathbb{Z},\qquad f\longmapsto \bigl(\mathrm{ord}_P(f)\bigr)_{P\in S}.
 > $$
 > 
 > (To put it more plainly, if $f$ and $g$ have the same divisor, then we want to use that $f/g$ has the trivial divisor.) Thus it suffices to show that a nonzero meromorphic function on a compact Riemann surface without zeroes or poles is constant, which is exactly [Liouville's theorem](https://en.wikipedia.org/wiki/Liouville%27s_theorem_(complex_analysis)#On_compact_Riemann_surfaces).
