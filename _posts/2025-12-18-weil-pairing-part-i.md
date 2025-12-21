@@ -11,7 +11,7 @@ math: true
 >
 > — **[Mil04]**
 
-This quote by Victor Miller from his seminal 2004 paper[^miller] foreshadowed the emergence of what is today a fully fledged domain known as [pairing-based cryptography](https://en.wikipedia.org/wiki/Pairing-based_cryptography). Despite its significance—and despite cryptographers’ general inclination to dissect every construct they encounter—pairings are often treated as a black box, largely due to their technical complexity.
+This quote by Victor Miller from his seminal 2004 paper[^miller] foreshadowed the emergence of what is today a fully fledged domain known as [pairing-based cryptography](https://en.wikipedia.org/wiki/Pairing-based_cryptography). Despite its significance --- and despite cryptographers’ general inclination to dissect every construct they encounter --- pairings are often treated as a black box, largely due to their technical complexity.
 
 [^miller]: The main result of his paper actually dates back to an unpublished manuscript from 1986: [Short programs for functions on curves](https://drops.dagstuhl.de/storage/00lipics/lipics-vol291-fun2024/LIPIcs.FUN.2024.34/LIPIcs.FUN.2024.34.pdf)  
 
@@ -24,13 +24,13 @@ I recently spent some time studying the Weil pairing and decided to record some 
 > \mathrm{Div}(E) \mathrel{\vcenter{:}}= \bigoplus_{P\in E} \mathbb{Z},
 > $$ 
 > 
-> whose basis elements are thus indexed by the points of $$E$$. Equivalently, a divisor $D$ can be written as a finite formal sum
+> whose basis elements are thus indexed by the points of $$E$$. Equivalently, a divisor $D$ can be written as a formal sum
 > 
 > $$
-> D=\sum_{P\in E} n_P [P],\qquad n_P \in \mathbb{Z},
+> D=\sum_{P\in E} n_P [P],\qquad \textrm{for various }n_P \in \mathbb{Z},
 > $$
 > 
-> where $[P]$ denotes the basis element corresponding to the point $P$, and only finitely many of the $n_P$ are nonzero. The set of points $$P$$ in $$E$$ such that $n_P$ is nonzero is called the *support* of $$D$$, and its *degree* is defined to be the integer
+> where $[P]$ denotes the basis element corresponding to the point $P$, and only *finitely* many of the $n_P$ are nonzero. The set of points $$P$$ in $$E$$ such that $n_P$ is nonzero is called the *support* of $$D$$, and its *degree* is defined to be the integer
 > $$
 > \deg(D)\mathrel{\vcenter{:}}=\sum_{P \in E} n_{P}.
 > $$ 
@@ -43,7 +43,7 @@ I recently spent some time studying the Weil pairing and decided to record some 
 > 
 > records at each point $P$ in $E$ the
 > order $$\mathrm{ord}_f(P)$$ of the zero (with a plus sign) or pole
-> (with a minus sign) of $f$ at $P$, and is zero otherwise. A divisor of the form $\mathrm{div}(f)$ is called *principal*. If $ D = \sum_{P\in E} n_P [P]$ is a divisor whose support is disjoint from the support of $\mathrm{div}(f)$ (so $f$ evaluates to a non-zero field element at each element in the support of $D$), we set 
+> (with a minus sign) of $f$ at $P$, and is zero otherwise. A divisor of the form $\mathrm{div}(f)$ is called *principal*. If $ D = \sum_{P\in E} n_P [P]$ is a divisor whose support is disjoint from the support of $\mathrm{div}(f)$ (so that $f$ evaluates to a non-zero field element at each element in the support of $D$), we set 
 >
 > $$
 > f(D)\mathrel{\vcenter{:}}= \prod_{P\in E} f(P)^{n_P}.
@@ -78,18 +78,39 @@ and $f_{Q}$ are only defined up to multiplication by constants, so using them fo
 seems off.[^functions] Moreover, the choice of divisors
 $D_{P}$ and $D_{Q}$ (and the use of linear equivalence more generally)
 strongly suggest a deeper connection with the geometry of line bundles
-on $E$ that is left implicit. Some texts (**[Wa08, Sil09]** and [Wikipedia](https://en.wikipedia.org/wiki/Weil_pairing)) provide a second definition, yet it is no more illuminating. What, then, is the conceptual picture behind these constructions?
+on $E$ that is left implicit. Some texts (**[Wa08, Sil09]** and [Wikipedia](https://en.wikipedia.org/w/index.php?title=Weil_pairing&oldid=1262788149)) provide a second definition, yet it is no more illuminating. What, then, is the conceptual picture behind these constructions?
 
 [^functions]: It works out here technically because the constants cancel out when evaluating a divisor of degree zero like $[P]-[O]$, but that is besides the point.
 
-## The Complex Torus
+At the moment I don't have access to Weil's original papers --- and it's generally discouraged to read them anyway because [his](https://en.wikipedia.org/wiki/Foundations_of_Algebraic_Geometry) language of algebraic geometry is too dated --- but I want to start this investigation with sketching some of the relevant theory over the complex numbers $\mathbb{C}$, which I believe was his point of entry.[^Wikipedia] Focusing on $\mathbb{C}$ allows us to leverage analytic functions and lattices to construct the pairing explicitly.
 
-At the moment I don't have access to Weil's original papers --- and it's generally discouraged to read them anyway because [his](https://en.wikipedia.org/wiki/Foundations_of_Algebraic_Geometry) language of algebraic geometry is too dated --- but I want to start with sketching some of the relevant theory over the complex numbers $\mathbb{C}$, which I believe was his point of entry.[^Wikipedia]
-
-[^Wikipedia]: In fact, on [Wikipedia](https://en.wikipedia.org/wiki/Weil_pairing) it has said since 2009:
+[^Wikipedia]: In fact, on [Wikipedia](https://en.wikipedia.org/w/index.php?title=Weil_pairing&oldid=1262788149) it has said since 2009:
     > the corresponding results for elliptic functions *were known*, and can be expressed simply by use of the Weierstrass sigma function.
 
     Although we will indeed end up using Weierstrass σ-functions to show equivalence with the algebraic definition presented at the start of this post, the resulting formula is rather simple and there is no need to express the pairing in terms of functions, and I'm not sure why one would do that.
+
+Concretely then, in the rest of this post we will:
+
+1. Recall the analytic description of complex elliptic curves, as a quotient of $\mathbb{C}$ by a lattice.
+
+2. Explain why divisors like $nD_{P}$ and $nD_{Q}$ are principal in this setting, by using them to explicitly construct certain functions on $\mathbb{C}$ and showing that these functions descend to the sought-after functions $f_{P}$ and $f_{Q}$ on $E(\mathbb{C})$.
+
+3. Subsequently demonstrate that over $\mathbb{C}$ the Weil pairing $\mathrm{Weil}_{n}(\cdot,\cdot)$ does not need such divisors or functions, because it reduces to the much simpler form
+
+    $$(P,Q)\longmapsto\xi^{\langle P,Q \rangle}$$
+
+    for the primitive $n$-th root of unity
+    $\xi=e^{2\pi i/n}$ and a certain[^skew] skew-symmetric pairing $\langle \cdot,\cdot \rangle$
+    coming from $\Lambda$.
+
+[^skew]: More precisely, this is $n^2$ times the skew-symmetric pairing coming from the canonical principal polarisation; so in terms of that pairing $\langle \cdot ,\cdot \rangle$, it would be $(P,Q) \mapsto e^{2\pi i n \langle P, Q \rangle }$ instead.
+
+Throughout the rest of this post, it is assumed that the reader is comfortable with the basic theory of complex analysis.
+
+
+## The Complex Torus
+
+We now make precise the first step mentioned above: describing complex elliptic curves as quotients of $\mathbb{C}$ by a lattice.
 
 > **Definition ([lattices](https://en.wikipedia.org/wiki/Lattice_(group))).**  
 > Let $n$ be a positive integer. A subset $\Lambda \subset \mathbb{R}^n$ is called a *(full) lattice* if it is a subgroup of $\mathbb{R}^n$ isomorphic to $\mathbb{Z}^{n}$.
@@ -98,7 +119,7 @@ At the moment I don't have access to Weil's original papers --- and it's general
 Identifying $\mathbb{C}^n \simeq \mathbb{R}^{2n}$, a lattice in $\mathbb{C}^n$ is then a subgroup isomorphic to $\mathbb{Z}^{2n}$.
 
 > **Example.**  
-> A lattice $\Lambda \subset \mathbb{C}$ is a subgroup $\Lambda = \mathbb{Z} \omega_1 + \mathbb{Z} \omega_2 $ for a pair of elements $\omega_1,\omega_2 \in \mathbb{C}$ which are linearly independent over $\mathbb{R}$ (i.e., they do not lie on the same line through the origin).
+> A lattice $\Lambda \subset \mathbb{C}$ is a subgroup $\Lambda = \mathbb{Z} \omega_1 + \mathbb{Z} \omega_2 $ for a pair of elements $\omega_1,\omega_2 \in \mathbb{C}$ which are linearly independent over $\mathbb{R}$ (i.e., they do not lie on the same line through the origin). They are usually ordered so that $\Im(\omega_{2}/\omega_{1})>0$, and are called a [fundamental pair of periods](https://en.wikipedia.org/wiki/Fundamental_pair_of_periods).
 {: .box .example }
 
 An elliptic curve $E(K)$ over a field $K$ is typically defined (when
@@ -119,7 +140,13 @@ elliptic curve addition corresponding to ordinary addition on $\mathbb{C}$:
 > as [complex Lie groups](https://en.wikipedia.org/wiki/Complex_Lie_group).[^equivalence]
 {: .box .theorem }
 
-In this setting, torsion points $E(\mathbb{C})[n]$ and their properties
+In this setting, the points of $E$ are usually identified with the [fundamental domain](https://en.wikipedia.org/wiki/Fundamental_domain) obtained by picking a basis $\omega_1, \omega_2$ for the lattice $\Lambda$ and restricting to the parallelograms with corners 
+
+$$
+0, \qquad \omega_1, \qquad \omega_2, \qquad \omega_1 + \omega_2.
+$$
+
+Torsion points $E(\mathbb{C})[n]$ and their properties
 --- such as the canonical identification $E(\mathbb{C})[n] \simeq (\Lambda/n)/\Lambda \simeq(\mathbb{Z}/n\mathbb{Z})^{2}$
 --- are straightforward to visualise:
 
@@ -149,23 +176,7 @@ geometric origins.
 
 In this case, it turns out that naively complexifying the definition of the Weil pairing does *not* provide much insight --- and for good reason. In the next post, we’ll see that we should be looking at line bundles instead; evidently this pairing is really a product of 20th century geometry, rather than the 19th century developments in which much of the complex analytic theory of elliptic curves originated. Nevertheless, the resulting complex-analytic approach is quite elegant and will be reused in the next post, and I thought it might be worthwhile to record it for readers who are also curious for a quick derivation of the Weil pairing over $\mathbb{C}/\Lambda$.
 
-Concretely, in the rest of this post we will:
-
-1. Explain why divisors like $nD_{P}$ and $nD_{Q}$ are principal, by using them to explicitly construct certain functions on $\mathbb{C}$ and showing that these functions descend to the sought-after functions $f_{P}$ and $f_{Q}$ on $E(\mathbb{C})$.
-
-3. Subsequently demonstrate that over $\mathbb{C}$ the Weil pairing $\mathrm{Weil}_{n}(\cdot,\cdot)$ does not need such divisors or functions, because it takes on the much simpler form
-
-    $$(P,Q)\longmapsto\xi^{\langle P,Q \rangle}$$
-
-    for the primitive $n$-th root of unity
-    $\xi=e^{2\pi i/n}$ and a certain[^skew] skew-symmetric pairing $\langle \cdot,\cdot \rangle$
-    coming from $\Lambda$.
-
-[^skew]: More precisely, this is $n^2$ times the skew-symmetric pairing coming from the canonical principal polarisation; so in terms of that pairing $\langle \cdot ,\cdot \rangle$, it would be $(P,Q) \mapsto e^{2\pi i n \langle P, Q \rangle }$ instead.
-
-Throughout the rest of this post, it is assumed that the reader is comfortable with the basic theory of complex analysis.
-
-## Principal divisors
+## Principal Divisors
 
 The complex analytic analogue of the rational functions $f_{P}$ and
 $f_{Q}$ on an elliptic curve are certain [meromorphic functions](https://en.wikipedia.org/wiki/Meromorphic_function#On_Riemann_surfaces) on
@@ -229,7 +240,7 @@ Divisors are often simpler to handle than meromorphic functions, and this statem
 We will sketch the proof of the forward direction soon, and prove the converse in the next section.
 
 >  **Example.** Let $D_{P}=[P]-[O]$ for a point $P$ in the $n$-torsion of $E$.
-> Then both conditions hold for the divisor $nD_{P}$, so by the theorem there exists
+> Then both conditions hold for the divisor $nD_{P}$, so by this theorem there exists
 > a meromorphic function $f_{P}$ on $\mathbb{C}/\Lambda$ with $\mathrm{div}(f_{P})=nD_{P}$.
 {: .box .example }
 
@@ -426,6 +437,8 @@ Again, we are constructing functions on $E(\mathbb C)$ through the covering $\ma
 > constant.
 {: .box .proof }
 
+## The Weil Pairing over $\mathbb{C}$
+
 Now for arbitrary points $P,Q,R$ in $E(\mathbb{C})[n]=(\Lambda/n)/\Lambda$
 consider the divisors $D_{P}=(P)-(O)$ and $D_{Q}=(Q+R)-(R)$; we
 will assume that $P,Q,R$ are chosen so that their support is disjoint. For any choice of lifts $\tilde{P},\tilde{Q},\tilde{R}$
@@ -435,7 +448,7 @@ $$
 f_{P}(z)=\frac{\sigma(z-\tilde{P})^{n}}{\sigma(z)^{n-1}\sigma(z-n\tilde{P})}\qquad\textrm{and}\qquad f_{Q}(z)=\frac{\sigma(z-\tilde{Q}-\tilde{R})^{n}}{\sigma(z-\tilde{R})^{n-1}\sigma(z-\tilde{R}-n\tilde{Q})}
 $$
 
-are elliptic on $\mathbb{C}$ by the theorem, and they have divisors $nD_{P}$ and $nD_{Q}$ when considered as functions on
+are elliptic on $\mathbb{C}$ by the previous theorem, and they have divisors $nD_{P}$ and $nD_{Q}$ when considered as functions on
 the complex torus. Setting $\mathrm{Weil}_n (P,Q) \mathrel{\vcenter{:}}= f_P (D_Q)/f_Q (D_P )$ as before,
 we find
 
