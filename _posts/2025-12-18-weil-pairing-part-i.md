@@ -82,7 +82,7 @@ on $E$ that is left implicit. Some texts (**[Wa08, Sil09]** and [Wikipedia](http
 
 [^functions]: It works out here technically because the constants cancel out when evaluating a divisor of degree zero like $[P]-[O]$, but that is besides the point.
 
-At the moment I don't have access to Weil's original papers --- and it's generally discouraged to read them anyway because [his](https://en.wikipedia.org/wiki/Foundations_of_Algebraic_Geometry) language of algebraic geometry is too dated --- but I want to start this investigation with sketching some of the relevant theory over the complex numbers $\mathbb{C}$, which I believe was his point of entry.[^Wikipedia] Focusing on $\mathbb{C}$ allows us to leverage analytic functions and lattices to construct the pairing explicitly.
+At the moment I don't have access to Weil's original papers --- and it's generally discouraged to read them anyway because [his](https://en.wikipedia.org/wiki/Foundations_of_Algebraic_Geometry) language of algebraic geometry is too dated --- but I want to start this investigation with sketching some of the relevant theory over the complex numbers $\mathbb{C}$, which I believe was his point of entry.[^Wikipedia] Focusing on $\mathbb{C}$ allows us to leverage analytic functions and lattices to construct the pairing very explicitly.
 
 [^Wikipedia]: In fact, on [Wikipedia](https://en.wikipedia.org/w/index.php?title=Weil_pairing&oldid=1262788149) it has said since 2009:
     > the corresponding results for elliptic functions *were known*, and can be expressed simply by use of the Weierstrass sigma function.
@@ -91,7 +91,7 @@ At the moment I don't have access to Weil's original papers --- and it's general
 
 Concretely then, in the rest of this post we will:
 
-1. Recall the analytic description of complex elliptic curves, as a quotient of $\mathbb{C}$ by a lattice.
+1. Recall the analytic description of a complex elliptic curve, as a quotient of $\mathbb{C}$ by a lattice.
 
 2. Explain why divisors like $nD_{P}$ and $nD_{Q}$ are principal in this setting, by using them to explicitly construct certain functions on $\mathbb{C}$ and showing that these functions descend to the sought-after functions $f_{P}$ and $f_{Q}$ on $E(\mathbb{C})$.
 
@@ -116,10 +116,14 @@ We now make precise the first step mentioned above: describing complex elliptic 
 > Let $n$ be a positive integer. A subset $\Lambda \subset \mathbb{R}^n$ is called a *(full) lattice* if it is a subgroup of $\mathbb{R}^n$ isomorphic to $\mathbb{Z}^{n}$.
 {: .box .definition }
 
-Identifying $\mathbb{C}^n \simeq \mathbb{R}^{2n}$, a lattice in $\mathbb{C}^n$ is then a subgroup isomorphic to $\mathbb{Z}^{2n}$.
+The quotient $\mathbb{R}^n / \Lambda$ is a [compact Lie group](https://en.wikipedia.org/wiki/Compact_group#Compact_Lie_groups) isomorphic to a [hypertorus](https://en.wikipedia.org/wiki/Torus#n-dimensional_torus) $$(S^1)^n $$, and the projection map $$\mathbb{R}^n \rightarrow \mathbb{R}^n / \Lambda$$ is a [universal covering](https://en.wikipedia.org/wiki/Covering_space#Universal_covering). Identifying $\mathbb{C}^n \simeq \mathbb{R}^{2n}$, a lattice in $\mathbb{C}^n$ is then a subgroup isomorphic to $\mathbb{Z}^{2n}$, and the quotient is a compact [complex Lie group](https://en.wikipedia.org/wiki/Complex_Lie_group).
 
 > **Example.**  
-> A lattice $\Lambda \subset \mathbb{C}$ is a subgroup $\Lambda = \mathbb{Z} \omega_1 + \mathbb{Z} \omega_2 $ for a pair of elements $\omega_1,\omega_2 \in \mathbb{C}$ which are linearly independent over $\mathbb{R}$ (i.e., they do not lie on the same line through the origin). They are usually ordered so that $\Im(\omega_{2}/\omega_{1})>0$, and are called a [fundamental pair of periods](https://en.wikipedia.org/wiki/Fundamental_pair_of_periods).
+> A lattice $\Lambda \subset \mathbb{C}$ is a subgroup $\Lambda = \mathbb{Z} \omega_1 + \mathbb{Z} \omega_2 $ for a pair of elements $\omega_1,\omega_2 \in \mathbb{C}$ which are linearly independent over $\mathbb{R}$ (i.e., they do not lie on the same line through the origin). The pair is usually ordered so that their arguments satisfy $\Im(\omega_{2}/\omega_{1})>0$, and is called a [fundamental pair of periods](https://en.wikipedia.org/wiki/Fundamental_pair_of_periods). The quotient $\mathbb{C}/\Lambda$ can be realised topologically as a [torus](https://en.wikipedia.org/wiki/Torus) $S^1 \times S^1$ by manipulating the [fundamental domain](https://en.wikipedia.org/wiki/Fundamental_domain) (i.e., by identifying opposite sides of the parallelogram enclosing it) of $\mathbb{C}/\Lambda$ as follows: 
+>    
+>    ![img-description](assets/img/weil-pairing-part-i/Torus_from_rectangle.gif)
+>    _After identifying opposite sides of a rectangle, it becomes a torus
+>    ([source](https://commons.wikimedia.org/wiki/File:Torus_from_rectangle.gif))_
 {: .box .example }
 
 An elliptic curve $E(K)$ over a field $K$ is typically defined (when
@@ -127,7 +131,7 @@ $\mathrm{char}(K)$ is not $2$ or $3$) as the set of zeroes of a short
 Weierstrass equation $y^{2}=x^{3}+ax+b$ (with nonzero discriminant $4 a^3 + 27 b^2$)
 over the plane $K^{2}$, together with a point $O$ at infinity. Focusing
 on the complex numbers has the advantage that $E(\mathbb{C})$ can
-be studied concretely as a [torus](https://en.wikipedia.org/wiki/Torus) $\mathbb{C}/\Lambda$,[^torus] for some lattice $\Lambda \subset \mathbb{C}$, with $O$ the zero element and
+be studied concretely as a torus $\mathbb{C}/\Lambda$, for some lattice $\Lambda \subset \mathbb{C}$, with $O$ the zero element and
 elliptic curve addition corresponding to ordinary addition on $\mathbb{C}$:
 
 > **Theorem (the uniformization theorem for elliptic curves).**  
@@ -150,16 +154,10 @@ Torsion points $E(\mathbb{C})[n]$ and their properties
 --- such as the canonical identification $E(\mathbb{C})[n] \simeq (\Lambda/n)/\Lambda \simeq(\mathbb{Z}/n\mathbb{Z})^{2}$
 --- are straightforward to visualise:
 
-[^torus]: We won't be using it explicitly in this post, but a lattice quotient $\mathbb{C}/\Lambda$ can be identified topologically with a torus, by manipulating the fundamental domain of $\mathbb{C}/\Lambda$ as follows: 
-    
-    ![img-description](assets/images/Torus_from_rectangle.gif)
-    _After identifying opposite sides of a rectangle, it becomes a torus
-    ([source](https://commons.wikimedia.org/wiki/File:Torus_from_rectangle.gif))_
-
 [^equivalence]: This correspondence extends to an [equivalence of categories](https://en.wikipedia.org/wiki/Equivalence_of_categories).
 
-![img-description](assets/images/Lattice_torsion_points_light.svg){: .light }
-![img-description](assets/images/Lattice_torsion_points_dark.svg){: .dark }
+![img-description](assets/img/weil-pairing-part-i/Lattice_torsion_points_light.svg){: .light }
+![img-description](assets/img/weil-pairing-part-i/Lattice_torsion_points_dark.svg){: .dark }
 _An elliptic curve $\mathbb{C}/\Lambda$ with its lattice $\Lambda$
 generated by $\omega\_{1} = 1$ and $\omega\_{2} = 1/2 + 2i$, showing its 4-torsion subgroup of size $4^2$
 ([source](https://en.wikipedia.org/wiki/Complex_multiplication#/media/File:Lattice_torsion_points.svg))_
@@ -330,7 +328,7 @@ It has a simple zero at each lattice point, and no poles since it converges abso
 > **Example.**  
 > Let $$\Lambda= \langle \omega_{1}, \omega_{2} \rangle$$ be the lattice generated by $\omega\_{1} = 1$ and $\omega\_{2} = 1/2 + 2i$. Consider the Weierstrass sigma function $$\sigma(z;\Lambda)$$ on the square region $$[-3.5, 3.5] \times [-3.5, 3.5]$$ in the complex plane. On the horizontal line through the origin there are 7 zeroes at $$-3,-2,-1,0,1,2,3$$, and there are two more rows of zeroes at the horiziontal lines through $\omega\_{2}$ and $- \omega\_{2}$:
 > 
-> ![img-description](assets/images/Weierstrass_sigma_function.png)
+> ![img-description](assets/img/weil-pairing-part-i/Weierstrass_sigma_function.png)
 > _[Domain colouring](https://en.wikipedia.org/wiki/Domain_coloring) plot of the Weierstrass σ-function with fundamental periods $\omega\_{1} = 1$ and $\omega\_{2} = 1/2 + 2i$ on the square region $$[-3.5, 3.5] \times [-3.5, 3.5]$$.
 > ([source code](/assets/source-code/Weierstrass_sigma_function.py))_
 {: .box .example }
@@ -413,7 +411,7 @@ Nevertheless, we will use these non-elliptic functions to construct elliptic one
 >
 > which are marked by the pole at $\tilde b_1 = 0$. Inside the parallelogram there will be a (double) zero at $\tilde a_1$ and and additional pole at $2 \tilde a_1$.
 > 
-> ![img-description](assets/images/Elliptic_function.png)
+> ![img-description](assets/img/weil-pairing-part-i/Elliptic_function.png)
 > _[Domain colouring](https://en.wikipedia.org/wiki/Domain_coloring) plot of this elliptic function with $\tilde a_1 = \tilde a_2 = \omega\_{1}/2 + \omega\_{2}/2, \tilde b_1 = 0, c = 1$, for fundamental periods $\omega\_{1} = 1$ and $\omega\_{2} = 1/2 + 2i$, on the square region $$[-3.5, 3.5] \times [-3.5, 3.5]$$.
 > ([source code](/assets/source-code/Elliptic_function.py))_
 {: .box .example }
@@ -480,7 +478,7 @@ we find
 
 > **Corollary.**  
 > Now write $\tilde{P}=a\omega_{1}/n+b\omega_{2}/n$ and $\tilde{Q}=c\omega_{1}/n+d\omega_{2}/n$,
-> for some fundamental periods $\omega_{1},\omega_{2}$ with imaginary part
+> for some fundamental periods $\omega_{1},\omega_{2}$ with arguments
 > $\Im(\omega_{2}/\omega_{1})>0$, and $\xi \mathrel{\vcenter{:}}= e^{2\pi i/n}$. Then
 > 
 > $$
@@ -496,6 +494,27 @@ we find
 > \end{align}
 > 
 > this follows from [Legendre's relation](https://en.wikipedia.org/wiki/Legendre%27s_relation#Elliptic_functions).
+{: .box .proof }
+
+Since the literature is sometimes inconsistent about the sign in Legendre's relation, let us quickly prove it:
+
+> **Proposition ([Leg25]).**  
+> Assume that the imaginary parts of the fundamental periods $\omega_{1},\omega_{2}$ of a lattice satisfy
+> $\Im(\omega_{2}/\omega_{1})>0$. Then
+> 
+> $$
+> \eta_{1}\omega_{2}-\eta_{2}\omega_{1} = 2 \pi i .
+> $$
+{: .box .proposition }
+
+> *Proof:* As before we integrate over the sides of the fundamental parallelogram
+and invoke the residue theorem:
+> 
+> \begin{align}
+> 2\pi i & =\oint_{\gamma}\zeta(z;\Lambda)\mathrm{d}z \nonumber \\\\\
+>  & =\oint_{0}^{\omega_{1}}\bigl(\zeta(z;\Lambda)-\zeta(z+\omega_{2};\Lambda)\bigr)\mathrm{d}z+\oint_{0}^{\omega_{2}}\bigl(\zeta(z+\omega_{1};\Lambda)-\zeta(z;\Lambda)\bigr)\mathrm{d}z \nonumber \\\\\
+>  & =\eta_{1}\omega_{2}-\eta_{2}\omega_{1}. \nonumber
+> \end{align}
 {: .box .proof }
 
 ## References
@@ -516,6 +535,8 @@ Available at: <https://static1.squarespace.com/static/5fdbb09f31d71c1227082339/t
 **[Gal05]** Steven D. Galbraith. "The Weil pairing on elliptic curves over $\mathbb{C}$." Cryptology ePrint Archive (2005). Available at: <https://eprint.iacr.org/2005/323.pdf>
 
 **[Lan87]** Serge Lang, *Elliptic Functions*, 2nd edition, Springer GTM 112, New York, 1987.
+
+**[Leg25]** A. M. Legendre. Traité des fonctions elliptiques et des intégrales Eulériennes, vol. I. 1825.
 
 **[Mil86]** Victor S. Miller, “Short programs for functions on curves,” unpublished manuscript, 1986.
 Available at: <https://crypto.stanford.edu/miller/miller.pdf>
