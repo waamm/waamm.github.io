@@ -15,7 +15,7 @@ This quote by Victor Miller from his seminal 2004 paper[^miller] foreshadowed th
 
 [^miller]: The main result of his paper actually dates back to an unpublished manuscript from 1986: [Short programs for functions on curves](https://drops.dagstuhl.de/storage/00lipics/lipics-vol291-fun2024/LIPIcs.FUN.2024.34/LIPIcs.FUN.2024.34.pdf)  
 
-I recently spent some time studying the Weil pairing and decided to record some notes and reflections. In Weil’s original work **[Weil40]**, arising from his proof of [the Riemann hypothesis for curves over finite fields](https://en.wikipedia.org/wiki/Local_zeta_function#Riemann_hypothesis_for_curves_over_finite_fields), in Miller’s paper **[Mil04]**, and in many modern references (e.g., **[Cos, Lan87, Wa08, Sil09, Sut23]**), the pairing is defined roughly as follows:
+I recently spent some time studying the Weil pairing and was encouraged to record some notes and reflections. In Weil’s original work **[Weil40]**, arising from his proof of [the Riemann hypothesis for curves over finite fields](https://en.wikipedia.org/wiki/Local_zeta_function#Riemann_hypothesis_for_curves_over_finite_fields), in Miller’s paper **[Mil04]**, and in many modern references (e.g., **[Cos, Lan87, Wa08, Sil09, Sut23]**), the pairing is defined roughly as follows:
 
 > **Notation ([Weil divisors](https://en.wikipedia.org/wiki/Divisor_(algebraic_geometry))).**  
 > A *divisor* on an elliptic curve $E$ defined over a field is an element of the [free abelian group](https://en.wikipedia.org/wiki/Free_abelian_group) 
@@ -113,8 +113,10 @@ Throughout the rest of this post, it is assumed that the reader is comfortable w
 We now make precise the first step mentioned above: describing complex elliptic curves as quotients of $\mathbb{C}$ by a lattice.
 
 > **Definition ([lattices](https://en.wikipedia.org/wiki/Lattice_(group))).**  
-> Let $n$ be a positive integer. A subset $\Lambda \subset \mathbb{R}^n$ is called a *(full) lattice* if it is a subgroup of $\mathbb{R}^n$ isomorphic to $\mathbb{Z}^{n}$.
+> Let $n$ be a positive integer. A subset $\Lambda \subset \mathbb{R}^n$ is called a *(full) lattice* if it is a subgroup of $\mathbb{R}^n$ isomorphic to $\mathbb{Z}^{n}$.[^lattice]
 {: .box .definition }
+
+[^lattice]: More abstractly, a lattice in a finite-dimensional real vector space $V$ is a subgroup $\Lambda$ such that $\Lambda \otimes_\mathbb{Z} \mathbb{R} = V$.
 
 The quotient $\mathbb{R}^n / \Lambda$ is a [compact Lie group](https://en.wikipedia.org/wiki/Compact_group#Compact_Lie_groups) isomorphic to a [hypertorus](https://en.wikipedia.org/wiki/Torus#n-dimensional_torus) $$(S^1)^n $$, and the projection map $$\mathbb{R}^n \rightarrow \mathbb{R}^n / \Lambda$$ is a [universal covering](https://en.wikipedia.org/wiki/Covering_space#Universal_covering). Identifying $\mathbb{C}^n \simeq \mathbb{R}^{2n}$, a lattice in $\mathbb{C}^n$ is then a subgroup isomorphic to $\mathbb{Z}^{2n}$, and the quotient is a compact [complex Lie group](https://en.wikipedia.org/wiki/Complex_Lie_group).
 
@@ -122,7 +124,7 @@ The quotient $\mathbb{R}^n / \Lambda$ is a [compact Lie group](https://en.wikipe
 > A lattice $\Lambda \subset \mathbb{C}$ is a subgroup $\Lambda = \mathbb{Z} \omega_1 + \mathbb{Z} \omega_2 $ for a pair of elements $\omega_1,\omega_2 \in \mathbb{C}$ which are linearly independent over $\mathbb{R}$ (i.e., they do not lie on the same line through the origin). The pair is usually ordered so that their arguments satisfy $\Im(\omega_{2}/\omega_{1})>0$, and is called a [fundamental pair of periods](https://en.wikipedia.org/wiki/Fundamental_pair_of_periods). The quotient $\mathbb{C}/\Lambda$ can be realised topologically as a [torus](https://en.wikipedia.org/wiki/Torus) $S^1 \times S^1$ by manipulating the [fundamental domain](https://en.wikipedia.org/wiki/Fundamental_domain) (i.e., by identifying opposite sides of the parallelogram enclosing it) of $\mathbb{C}/\Lambda$ as follows: 
 >    
 >    ![img-description](assets/img/weil-pairing-part-i/Torus_from_rectangle.gif)
->    _After identifying opposite sides of a rectangle, it becomes a torus
+>    _After identifying the opposite sides of a rectangle, it becomes a torus
 >    ([source](https://commons.wikimedia.org/wiki/File:Torus_from_rectangle.gif))_
 {: .box .example }
 
@@ -242,6 +244,14 @@ We will sketch the proof of the forward direction soon, and prove the converse i
 > a meromorphic function $f_{P}$ on $\mathbb{C}/\Lambda$ with $\mathrm{div}(f_{P})=nD_{P}$.
 {: .box .example }
 
+>  **Corollary.**
+> Let $Q,R$ be two points in an elliptic curve $E$. Then there is a linear equivalence of divisors 
+>
+> $$
+> (Q)-(O)\sim(Q+R)-(R).
+> $$
+{: .box .corollary }
+
 {% comment %}
 
 >  **Corollary.**
@@ -279,7 +289,7 @@ $$
 
 ## Weierstrass σ-functions
 
-The converse of the theorem can be proved indirectly using a Riemann–Roch
+The converse of the theorem can be proved indirectly using a [Riemann–Roch](https://en.wikipedia.org/wiki/Riemann–Roch_theorem)
 style induction. However, for computations we'd prefer a more explicit construction of the
 meromorphic function corresponding to a given divisor.
 
@@ -486,6 +496,10 @@ we find
 > $$
 {: .box .corollary }
 
+> **Notation.**  
+> Given a fundamental period $\omega_{i}$ of some lattice, one often writes $\eta_i \mathrel{\vcenter{:}}= \eta_{\omega_i}$.
+{: .box .notation }
+
 > *Proof:* After using linearity of $\lambda\mapsto\eta_{\lambda}$ and expanding 
 > 
 > \begin{align}
@@ -499,7 +513,7 @@ we find
 Since the literature is sometimes inconsistent about the sign in Legendre's relation, let us quickly prove it:
 
 > **Proposition ([Leg25]).**  
-> Assume that the imaginary parts of the fundamental periods $\omega_{1},\omega_{2}$ of a lattice satisfy
+> Assume that the arguments of the fundamental periods $\omega_{1},\omega_{2}$ of a lattice satisfy
 > $\Im(\omega_{2}/\omega_{1})>0$. Then
 > 
 > $$
@@ -507,12 +521,11 @@ Since the literature is sometimes inconsistent about the sign in Legendre's rela
 > $$
 {: .box .proposition }
 
-> *Proof:* As before we integrate over the sides of the fundamental parallelogram
-and invoke the residue theorem:
+> *Proof:* This time we integrate the Weierstrass ζ-function over the sides of the fundamental parallelogram, and then the residue theorem yields:
 > 
 > \begin{align}
 > 2\pi i & =\oint_{\gamma}\zeta(z;\Lambda)\mathrm{d}z \nonumber \\\\\
->  & =\oint_{0}^{\omega_{1}}\bigl(\zeta(z;\Lambda)-\zeta(z+\omega_{2};\Lambda)\bigr)\mathrm{d}z+\oint_{0}^{\omega_{2}}\bigl(\zeta(z+\omega_{1};\Lambda)-\zeta(z;\Lambda)\bigr)\mathrm{d}z \nonumber \\\\\
+>  & =\int_{0}^{\omega_{1}}\bigl(\zeta(z;\Lambda)-\zeta(z+\omega_{2};\Lambda)\bigr)\mathrm{d}z+\int_{0}^{\omega_{2}}\bigl(\zeta(z+\omega_{1};\Lambda)-\zeta(z;\Lambda)\bigr)\mathrm{d}z \nonumber \\\\\
 >  & =\eta_{1}\omega_{2}-\eta_{2}\omega_{1}. \nonumber
 > \end{align}
 {: .box .proof }
