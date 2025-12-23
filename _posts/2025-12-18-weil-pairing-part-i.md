@@ -118,22 +118,58 @@ We now make precise the first step mentioned above: describing complex elliptic 
 
 [^lattice]: More abstractly, a lattice in a finite-dimensional real vector space $V$ is a subgroup $\Lambda$ such that $\Lambda \otimes_\mathbb{Z} \mathbb{R} = V$.
 
-The quotient $\mathbb{R}^n / \Lambda$ is a [compact Lie group](https://en.wikipedia.org/wiki/Compact_group#Compact_Lie_groups) isomorphic to a [hypertorus](https://en.wikipedia.org/wiki/Torus#n-dimensional_torus) $$(S^1)^n $$, and the projection map $$\mathbb{R}^n \rightarrow \mathbb{R}^n / \Lambda$$ is a [universal covering](https://en.wikipedia.org/wiki/Covering_space#Universal_covering). Identifying $\mathbb{C}^n \simeq \mathbb{R}^{2n}$, a lattice in $\mathbb{C}^n$ is then a subgroup isomorphic to $\mathbb{Z}^{2n}$, and the quotient is a compact [complex Lie group](https://en.wikipedia.org/wiki/Complex_Lie_group).
+First, let's consider the case $n=1$:
 
 > **Example.**  
-> A lattice $\Lambda \subset \mathbb{C}$ is a subgroup $\Lambda = \mathbb{Z} \omega_1 + \mathbb{Z} \omega_2 $ for a pair of elements $\omega_1,\omega_2 \in \mathbb{C}$ which are linearly independent over $\mathbb{R}$ (i.e., they do not lie on the same line through the origin). The pair is usually ordered so that their arguments satisfy $\Im(\omega_{2}/\omega_{1})>0$, and is called a [fundamental pair of periods](https://en.wikipedia.org/wiki/Fundamental_pair_of_periods). The quotient $\mathbb{C}/\Lambda$ can be realised topologically as a [torus](https://en.wikipedia.org/wiki/Torus) $S^1 \times S^1$ by manipulating the [fundamental domain](https://en.wikipedia.org/wiki/Fundamental_domain) (i.e., by identifying opposite sides of the parallelogram enclosing it) of $\mathbb{C}/\Lambda$ as follows: 
+> Any nonzero element $\omega$ in $\mathbb{R}$ generates a subgroup isomorphic to $\mathbb{Z}$, so a lattice $\Lambda \subset \mathbb{R}$ is always of the form $\omega \mathbb{Z}$ for some $\omega \in \mathbb{R}^\times$.
+{: .box .example }
+
+> **Proposition.**  
+The quotient $\mathbb{R}/\Lambda$ can be realised topologically as a circle $S^1$.
+{: .box .proposition }
+
+> *Proof:*
+> Every element in the quotient $\mathbb{R} / \omega \mathbb{Z}$ has a unique representative in the [half-open interval](https://en.wikipedia.org/wiki/Interval_(mathematics)#Definitions_and_terminology) $[0, \omega)$; since the end-point $\omega$ is identified in this quotient with the start-point $0$, topologically this means that $\mathbb{R} / \Lambda$ is homeomorphic to a circle.
+{: .box .proof }
+
+Identifying $\mathbb{C}^n \simeq \mathbb{R}^{2n}$, a lattice in $\mathbb{C}^n$ is then a subgroup isomorphic to $\mathbb{Z}^{2n}$. 
+
+> **Example.**  
+> By definition a lattice $\Lambda \subset \mathbb{C}$ is a subgroup $\Lambda = \mathbb{Z} \omega_1 + \mathbb{Z} \omega_2 $ for a pair of elements $\omega_1,\omega_2 \in \mathbb{C}$ which are linearly independent over $\mathbb{R}$ (i.e., they do not lie on the same line through the origin). The pair is usually ordered so that their arguments satisfy $\Im(\omega_{2}/\omega_{1})>0$, and is called a [fundamental pair of periods](https://en.wikipedia.org/wiki/Fundamental_pair_of_periods).
+{: .box .example }
+
+> **Proposition.**  
+The quotient $\mathbb{C}/\Lambda$ can be realised topologically as a [torus](https://en.wikipedia.org/wiki/Torus) $S^1 \times S^1$.
+{: .box .proposition }
+
+> *Proof:*
+> Since the fundamental periods form a basis for the two-dimensional real vector space $\mathbb{C}$, the set
+>
+> $$
+> \\\{ c_1 \omega_1 + c_2 \omega_2 : 0\leq c_1,c_2 < 1  \\\}
+> $$
+> 
+> forms a [fundamental domain](https://en.wikipedia.org/wiki/Fundamental_domain). The two borders 
+>
+> $$
+> \\\{ \omega_1 + c_2 \omega_2 : 0\leq c_2 \leq 1  \\\} \qquad \textrm{ and }\qquad \\\{ c_1 \omega_1 + \omega_2 : 0\leq c_1 \leq 1  \\\}
+> $$
+>
+are identified by the lattice with their opposites. Pictorally the identification with the torus can then be seen as follows:
 >    
 >    ![img-description](assets/img/weil-pairing-part-i/Torus_from_rectangle.gif)
 >    _After identifying the opposite sides of a rectangle, it becomes a torus
 >    ([source](https://commons.wikimedia.org/wiki/File:Torus_from_rectangle.gif))_
-{: .box .example }
+{: .box .proof }
+
+More generally, for any $n\geq 1$ the quotient $\mathbb{R}^n / \Lambda$ is a [compact Lie group](https://en.wikipedia.org/wiki/Compact_group#Compact_Lie_groups) isomorphic to a [hypertorus](https://en.wikipedia.org/wiki/Torus#n-dimensional_torus) $$(S^1)^n $$, and the projection map $$\mathbb{R}^n \rightarrow \mathbb{R}^n / \Lambda$$ is a [universal covering](https://en.wikipedia.org/wiki/Covering_space#Universal_covering). For a lattice in $\mathbb{C}^n$, the quotient is furthermore a compact [complex Lie group](https://en.wikipedia.org/wiki/Complex_Lie_group).
 
 An elliptic curve $E(K)$ over a field $K$ is typically defined (when
 $\mathrm{char}(K)$ is not $2$ or $3$) as the set of zeroes of a short
 Weierstrass equation $y^{2}=x^{3}+ax+b$ (with nonzero discriminant $4 a^3 + 27 b^2$)
 over the plane $K^{2}$, together with a point $O$ at infinity. Focusing
 on the complex numbers has the advantage that $E(\mathbb{C})$ can
-be studied concretely as a torus $\mathbb{C}/\Lambda$, for some lattice $\Lambda \subset \mathbb{C}$, with $O$ the zero element and
+be studied concretely as a [complex torus](https://en.wikipedia.org/wiki/Complex_torus) $\mathbb{C}/\Lambda$, for some lattice $\Lambda \subset \mathbb{C}$, with $O$ the zero element and
 elliptic curve addition corresponding to ordinary addition on $\mathbb{C}$:
 
 > **Theorem (the uniformization theorem for elliptic curves).**  
@@ -146,7 +182,7 @@ elliptic curve addition corresponding to ordinary addition on $\mathbb{C}$:
 > as [complex Lie groups](https://en.wikipedia.org/wiki/Complex_Lie_group).[^equivalence]
 {: .box .theorem }
 
-In this setting, the points of $E$ are usually identified with the [fundamental domain](https://en.wikipedia.org/wiki/Fundamental_domain) obtained by picking a basis $\omega_1, \omega_2$ for the lattice $\Lambda$ and restricting to the parallelograms with corners 
+Again, the points of $E$ are usually identified with the fundamental domain obtained by picking a basis $\omega_1, \omega_2$ for the lattice $\Lambda$ and restricting to the parallelograms with corners 
 
 $$
 0, \qquad \omega_1, \qquad \omega_2, \qquad \omega_1 + \omega_2.
