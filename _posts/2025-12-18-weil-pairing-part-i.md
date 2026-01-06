@@ -15,7 +15,7 @@ This quote by Victor Miller from his seminal 2004 paper[^miller] foreshadowed th
 
 [^miller]: The main result of his paper actually dates back to an unpublished manuscript from 1986: [Short programs for functions on curves](https://drops.dagstuhl.de/storage/00lipics/lipics-vol291-fun2024/LIPIcs.FUN.2024.34/LIPIcs.FUN.2024.34.pdf)  
 
-I recently spent some time studying the [Weil pairing](https://en.wikipedia.org/wiki/Weil_pairing) and was encouraged to record and share some notes and reflections. The goal of this post is to explore its complex-analytic perspective, which will allow us to construct the pairing very explicitly. A more detailed overview is given at the end of the next section.
+I recently spent some time studying the [Weil pairing](https://en.wikipedia.org/wiki/Weil_pairing) and was encouraged to record and share some notes and reflections. The goal of this post is to explore its complex-analytic perspective, which will allow us to construct the pairing very explicitly; I believe this was Weil's point of entry as well. A more detailed overview is given at the end of the next section.
 
 Throughout the rest of this post, it is assumed that the reader is familiar with the basic notions of [elliptic curves](https://en.wikipedia.org/wiki/Elliptic_curve) and [Riemann surfaces](https://en.wikipedia.org/wiki/Riemann_surface).
 
@@ -74,9 +74,9 @@ The algebraic version is:
 Conceptually a local parameter exists because a smooth curve locally looks like a line --- essentially a version of the [implicit function theorem](https://en.wikipedia.org/wiki/Implicit_function_theorem#Two_variables_case):
 
 > **Proposition.**  
-> Let $X$ be a smooth affine curve defined by the vanishing of some polynomial $F(X,Y) \in K[X,Y]$, so for each point $P=(a,b)$ on $X$ at least one of $\partial F / \partial Y (P)$ or $\partial F / \partial X (P)$ is nonzero. We can obtain a local parameter as follows:
-> - If $\partial F / \partial Y (P) \neq 0$, then $X - a$ is a local parameter.
-> - If $\partial F / \partial X (P) \neq 0$, then $Y - b$ is a local parameter.
+> Let $X$ be a smooth affine curve defined by the vanishing of some polynomial $F(X,Y) \in K[X,Y]$, so for each point $P=(P_x,P_y)$ on $X$ at least one of $\partial F / \partial Y (P)$ or $\partial F / \partial X (P)$ is nonzero. We can obtain a local parameter as follows:
+> - If $\partial F / \partial Y (P) \neq 0$, then $X - P_x$ is a local parameter.
+> - If $\partial F / \partial X (P) \neq 0$, then $Y - P_y$ is a local parameter.
 > - At the point $O$ at infinity, $X / Y$ is a local parameter.
 {: .box .proposition }
 
@@ -97,7 +97,7 @@ when working over a sufficiently large field.
 >
 > $$f(X,Y) = \frac{Y^2}{(X-\alpha')(X-\alpha'')}$$
 >
-> where $\alpha'$ and $\alpha''$ are the other zeroes of $X^3 + aX + b = 0$. Since the zeroes of this polynomial are distinct (due to the nonvanishing discriminant), the denominator doesn't vanish. This equation then implies that $\mathrm{ord}_P (f) = 2$.
+> where $\alpha'$ and $\alpha''$ are the other zeroes of $X^3 + aX + b = 0$. Since the zeroes of this polynomial are distinct (due to the nonvanishing discriminant), the denominator doesn't vanish at $P$. This equation then implies that $\mathrm{ord}_P (f) = 2$.
 >
 > In either case, for $O$ we then find $\mathrm{ord}_O (f) = -2$ through \eqref{order} or direct computation.
 {: .box .example }
@@ -159,17 +159,17 @@ The multi-set of zeroes and poles of a rational function is then formalised as f
 > f(D)\mathrel{\vcenter{:}}= \prod_{P\in \mathrm{supp}(D)} f(P)^{n_P}.
 > $$
 > 
-> Finally, given a pair of divisors $P,Q$ on $E$, we write $P \sim Q$ if $P - Q$ is principal, and say that $P$ and $Q$ are *linearly equivalent*.
+> Finally, given a pair of divisors $D,D'$ on $E$, we write $D \sim D'$ if their difference $D - D'$ is principal, and say that $D$ and $D'$ are *linearly equivalent*.
 {: .box .definition }
 
-Using divisors rather than multi-sets is useful here because it allows one to employ formulas like 
+We will motivate the definition of linear equivalence in the next post. Using divisors rather than multi-sets is useful here because it allows one to employ formulas like 
 
 $$
 \mathrm{div}(fg) = \mathrm{div}(f) + \mathrm{div}(g).
 $$
 
 > **Example.**  
-> Let $P=(P_x, P_y)$ be a nontrivial point on an elliptic curve $E$. Then the vertical line $v_P$ through $P$ has equation $v_P(X,Y) = X - P_x$, and we've seen that
+> Let $P$ be a nontrivial point on an elliptic curve $E$, with $X$-coordinate $\alpha$. Then the vertical line $v_P$ through $P$ has equation $v_P(X,Y) = X - \alpha$, and we've seen that
 > 
 > $$
 > \mathrm{div}(v_P) = [P] + [-P] -2[O],
@@ -211,7 +211,7 @@ on $E$ that is left implicit. Some texts (**[Wa08, Sil09]** and [Wikipedia](http
 
 [^functions]: It works out here technically because the constants cancel out when evaluating a divisor of degree zero like $[P]-[O]$, but that is besides the point.
 
-At the moment I don't have access to Weil's original papers --- and it's generally discouraged to read them anyway because [his](https://en.wikipedia.org/wiki/Foundations_of_Algebraic_Geometry) language of algebraic geometry is too dated --- but I want to start this investigation with sketching some of the relevant theory over the complex numbers $\mathbb{C}$, which I believe was Weil's point of entry as well.[^Wikipedia] Focusing on $\mathbb{C}$ allows us to leverage analytic functions and lattices to construct the pairing very explicitly.
+At the moment I don't have access to Weil's original papers --- and it's generally discouraged to read them anyway because [his](https://en.wikipedia.org/wiki/Foundations_of_Algebraic_Geometry) language of algebraic geometry is too dated --- but I want to start this investigation with sketching some of the relevant theory over the complex numbers $\mathbb{C}$. Focusing on $\mathbb{C}$ allows us to leverage analytic functions and lattices to construct the pairing very explicitly.[^Wikipedia]
 
 When searching for the complex-analytic analogue of the Weil pairing I found that many texts simply state that the result is a skew-symmetric pairing or the exponential of one **[Gal05, Sil09, KR17]**, without explaining why this holds. The only source I found that sketches a derivation is **[Lan87, Appendix A]**, though the argument there is a bit terse; this post is devoted to giving a more detailed and more self-contained explanation, before extending that in the next blog post with line bundles.
 
@@ -286,13 +286,21 @@ Let $\Lambda$ be a lattice in $\mathbb{C}$. The quotient space $\mathbb{C}/\Lamb
 > \\\{ c_1 \omega_1 + c_2 \omega_2 : 0\leq c_1,c_2 < 1  \\\}
 > $$
 > 
-> forms a [fundamental domain](https://en.wikipedia.org/wiki/Fundamental_domain). The two borders with $c_1 = 1$ and $c_2 = 1$, so
+> forms a [fundamental domain](https://en.wikipedia.org/wiki/Fundamental_domain):
+>
+> ![img-description](assets/img/weil-pairing-part-i/Lattice_torsion_points_light.svg){: .light }
+> ![img-description](assets/img/weil-pairing-part-i/Lattice_torsion_points_dark.svg){: .dark }
+> _An elliptic curve $\mathbb{C}/\Lambda$ with its lattice $\Lambda$
+> generated by $\omega\_{1} = 1$ and $\omega\_{2} = 1/2 + 2i$, showing 16 points in its fundamental domain
+> ([source](https://en.wikipedia.org/wiki/Complex_multiplication#/media/File:Lattice_torsion_points.svg))_
+>
+> The two borders that satisfy $c_1 = 1$ and $c_2 = 1$, so
 >
 > $$
 > \\\{ \omega_1 + c_2 \omega_2 : 0\leq c_2 \leq 1  \\\} \qquad \textrm{ and }\qquad \\\{ c_1 \omega_1 + \omega_2 : 0\leq c_1 \leq 1  \\\},
 > $$
 >
-are identified by the lattice with their opposites (which have $c_1 = 0$ and $c_2 = 0$ respectively). Pictorally the identification with the torus can then be seen as follows:
+are identified by the lattice with their opposites (which satisfy $c_1 = 0$ and $c_2 = 0$ respectively). Pictorally the identification with the torus can then be seen as follows:
 >    
 >    ![img-description](assets/img/weil-pairing-part-i/Torus_from_rectangle.gif)
 >    _After identifying the opposite sides of a rectangle, it becomes a torus
@@ -327,15 +335,7 @@ $$
 
 Torsion points $E(\mathbb{C})[n]$ and their properties
 --- such as the canonical identification $E(\mathbb{C})[n] \simeq (\Lambda/n)/\Lambda \simeq(\mathbb{Z}/n\mathbb{Z})^{2}$
---- are straightforward to visualise:
-
-[^equivalence]: This correspondence extends to an [equivalence of categories](https://en.wikipedia.org/wiki/Equivalence_of_categories).
-
-![img-description](assets/img/weil-pairing-part-i/Lattice_torsion_points_light.svg){: .light }
-![img-description](assets/img/weil-pairing-part-i/Lattice_torsion_points_dark.svg){: .dark }
-_An elliptic curve $\mathbb{C}/\Lambda$ with its lattice $\Lambda$
-generated by $\omega\_{1} = 1$ and $\omega\_{2} = 1/2 + 2i$, showing its 4-torsion subgroup of size $4^2$
-([source](https://en.wikipedia.org/wiki/Complex_multiplication#/media/File:Lattice_torsion_points.svg))_
+--- are straightforward to visualise; the first picture in the previous proof shows the 4-torsion subgroup of size $4^2$.
 
 ## Principal Divisors
 
