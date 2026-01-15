@@ -21,7 +21,7 @@ Throughout the rest of this post, it is assumed that the reader is familiar with
 
 ## The Weil Pairing over Fields
 
-Before specialising it to the complex-analytic setting, we will first have to review a standard definition of the Weil pairing, for which we need to recall some concepts: rational functions on an elliptic curve, their zeroes and poles, divisors, and linear equivalence.
+Before specialising it to the complex-analytic setting, we will first have to review a standard definition of the Weil pairing over arbitrary fields, for which we need to recall some concepts: rational functions on an elliptic curve, their zeroes and poles, divisors, and linear equivalence.
 
 > **Notation.**  
 > Without loss of generality, we will always assume that an elliptic curve $E$ is presented as the affine zero set $E^\mathrm{aff}$ of a Weierstrass equation over a field $K$, together with its identity element $O$ "at infinity".
@@ -80,7 +80,11 @@ Conceptually a local parameter exists because a smooth curve locally looks like 
 > - At the point $O$ at infinity, $X / Y$ is a local parameter.
 {: .box .proposition }
 
-Instead of doing the computation for $O$ explicitly, one can use that
+> **Example.**  
+> Let $E$ be an elliptic curve, defined by a short Weierstrass equation $Y^2 = X^3 + aX + b$ with nonzero discriminant. Recall that a nontrivial 2-torsion point has $Y$-coordinate zero, which implies that its $X$-coordinate is a solution to $X^3 + aX + b = 0$. Here $\partial F / \partial Y (P)$ vanishes so $Y$ is a local parameter. Away from those points, a point $P = (P_x, P_y)$ satisfies $P_y \neq 0$ so $\partial F / \partial Y (P) \neq 0$ and hence $X - P_x$ is a local parameter.
+{: .box .example }
+
+Instead of computing orders at $O$ manually, one can use the formula
 
 $$
 \begin{equation}
@@ -91,78 +95,57 @@ $$
 when working over a sufficiently large field.
 
 > **Example.**  
-> Let $E$ be an elliptic curve, defined by a short Weierstrass equation $Y^2 = X^3 + aX + b$ with nonzero discriminant. Recall that a nontrivial 2-torsion point has $Y$-coordinate zero, which implies that its $X$-coordinate is a solution to $X^3 + aX + b = 0$. Here $\partial F / \partial Y (P)$ vanishes so $Y$ is a local parameter. Away from those points, a point $P = (P_x, P_y)$ satisfies $P_y \neq 0$ so $\partial F / \partial Y (P) \neq 0$ and hence $X - P_x$ is a local parameter.
->
-> Now consider vertical lines of the form $f(X,Y) = X - \alpha$. Then for $\alpha$ not a solution to $X^3 + aX + b = 0$, the line will intersect $E$ in two points (or zero if the field doesn't contain the right roots) where the local parameter is $X - \alpha$, so the order of $f$ at those points is 1. If on the other hand $\alpha$ is the $X$-coordinate of a 2-torsion point $P$, we can use the Weierstrass equation to rewrite
+> Continuing the previous example, now consider vertical lines of the form $f(X,Y) = X - \alpha$. Then for $\alpha$ not a solution to $X^3 + aX + b = 0$, the line will intersect $E$ in two points (or zero if the field doesn't contain the right roots) where the local parameter is $X - \alpha$, so the order of $f$ at those points is $1$. If on the other hand $\alpha$ is the $X$-coordinate of a 2-torsion point $P$, we can use the Weierstrass equation to rewrite
 >
 > $$f(X,Y) = \frac{Y^2}{(X-\alpha')(X-\alpha'')}$$
 >
 > where $\alpha'$ and $\alpha''$ are the other zeroes of $X^3 + aX + b = 0$. Since the zeroes of this polynomial are distinct (due to the nonvanishing discriminant), the denominator doesn't vanish at $P$. This equation then implies that $\mathrm{ord}_P (f) = 2$.
 >
-> In either case, for $O$ we then find $\mathrm{ord}_O (f) = -2$ through \eqref{order} or direct computation.
+> In either case, for the point $O$ we then find $\mathrm{ord}_O (f) = -2$ through \eqref{order} or direct computation.
 {: .box .example }
 
 The standard formalism for handling this multi-set (counting the orders) of points of $E$ is:
 
-{% comment %}
-
-> **Definition (order at any point in $E$).**  
-> Continue in the setting of the previous definition. Given a point $P = (a,b) \in E^\mathrm{aff}$, the order of the rational function $f$ at $P$ is
->
-> $$
-> \mathrm{ord}_P (f) \mathrel{\vcenter{:}}= \textrm{multiplicity of zero of }F \textrm{ at }P-\textrm{multiplicity of zero of }G \textrm{ at }P.
-> $$
->
-> There is an elegant formalism that treats $O$ in the same footing, but we're trying to avoid that level of generality in this post. The most direct way to compute $\mathrm{ord}_P (f)$ in this setting is a bit hacky, so instead we will simply set
->
-> $$
-> \mathrm{ord}_O (f) \mathrel{\vcenter{:}}= -\sum_{P\in E^\mathrm{aff}} \mathrm{ord}_P (f).
-> $$
-{: .box .definition }
-
-{% endcomment %}
-
-
 > **Definition ([Weil divisors](https://en.wikipedia.org/wiki/Divisor_(algebraic_geometry))).**  
-> A *(Weil) divisor* on an elliptic curve $E$ is an element of the [free abelian group](https://en.wikipedia.org/wiki/Free_abelian_group) 
+> A *(Weil) divisor* on a smooth curve $X$ is an element of the [free abelian group](https://en.wikipedia.org/wiki/Free_abelian_group) 
 >
 > $$
-> \mathrm{Div}(E) \mathrel{\vcenter{:}}= \bigoplus_{P\in E} \mathbb{Z},
+> \mathrm{Div}(X) \mathrel{\vcenter{:}}= \bigoplus_{P\in X} \mathbb{Z},
 > $$ 
 > 
-> whose basis elements are thus indexed by the points of $$E$$. Equivalently, a divisor $D$ can be written as a formal sum
+> whose basis elements are thus indexed by the points of $$X$$. Equivalently, a divisor $D$ can be written as a formal sum
 > 
 > $$
-> D=\sum_{P\in E} n_P [P],\qquad \textrm{for various }n_P \in \mathbb{Z},
+> D=\sum_{P\in X} n_P [P],\qquad \textrm{for various }n_P \in \mathbb{Z},
 > $$
 > 
-> where $[P]$ denotes the basis element corresponding to the point $P$, and only *finitely* many of the $n_P$ are nonzero. The set of points $$P$$ in $$E$$ such that $n_P$ is nonzero is called the *support* of $$D$$, denoted $\mathrm{supp}(D)$, and its *degree* is defined to be the integer
+> where $[P]$ denotes the basis element corresponding to the point $P$, and only *finitely* many of the $n_P$ are nonzero. The set of points $$P$$ in $$X$$ such that $n_P$ is nonzero is called the *support* of $$D$$, denoted $\mathrm{supp}(D)$, and its *degree* is defined to be the integer
 > $$
-> \deg(D)\mathrel{\vcenter{:}}=\sum_{P \in E} n_{P}.
+> \deg(D)\mathrel{\vcenter{:}}=\sum_{P \in X} n_{P}.
 > $$ 
 {: .box .definition }
 
 The multi-set of zeroes and poles of a rational function is then formalised as follows:
 
 > **Definition (principal divisors).** 
-> Given a rational function $f$ on $E$, its divisor
+> Given a rational function $f$ on $X$, its divisor
 >
 > $$
-> \mathrm{div}(f) = \sum_{P \in E} \mathrm{ord}_P(f) \, [P] \in \mathrm{Div}(E)
+> \mathrm{div}(f) = \sum_{P \in X} \mathrm{ord}_P(f) \, [P] \in \mathrm{Div}(X)
 > $$
 > 
-> records at each point $P$ in $E$ the
+> records at each point $P$ in $X$ the
 > order $$\mathrm{ord}_f(P)$$ of the zero (with a plus sign) or pole
-> (with a minus sign) of $f$ at $P$, and is zero otherwise. A divisor of the form $\mathrm{div}(f)$ is called *principal*. If $ D = \sum_{P\in E} n_P [P]$ is a divisor whose support is disjoint from the support of $\mathrm{div}(f)$ (so that $f$ evaluates to a non-zero field element at each element in the support of $D$), we set 
+> (with a minus sign) of $f$ at $P$, and is zero otherwise. A divisor of the form $\mathrm{div}(f)$ is called *principal*. If $ D = \sum_{P\in X} n_P [P]$ is a divisor whose support is disjoint from the support of $\mathrm{div}(f)$ (so that $f$ evaluates to a non-zero field element at each element in the support of $D$), we set 
 >
 > $$
 > f(D)\mathrel{\vcenter{:}}= \prod_{P\in \mathrm{supp}(D)} f(P)^{n_P}.
 > $$
 > 
-> Finally, given a pair of divisors $D,D'$ on $E$, we write $D \sim D'$ if their difference $D - D'$ is principal, and say that $D$ and $D'$ are *linearly equivalent*.
+> Finally, given a pair of divisors $D,D'$ on $X$, we write $D \sim D'$ if their difference $D - D'$ is principal, and say that $D$ and $D'$ are *linearly equivalent*.
 {: .box .definition }
 
-We will motivate the definition of linear equivalence in the next post. Using divisors rather than multi-sets is useful here because it allows one to employ formulas like 
+We will motivate the definition of linear equivalence in the [next post](/posts/weil-pairing-part-ii/). Using divisors rather than multi-sets is useful here because it allows one to employ formulas like 
 
 $$
 \mathrm{div}(fg) = \mathrm{div}(f) + \mathrm{div}(g).
@@ -178,8 +161,10 @@ $$
 > so the support of $\mathrm{div}(v_P)$ is the set $\\\{P, -P, O \\\}$ and its degree is $0$.
 {: .box .example }
 
+More generally, one can show that the line through two points $P,Q$ has divisor $[P] + [Q] + [-P - Q] -3[O]$.
 
-In Weil’s original work **[Weil40]**, arising from his proof of [the Riemann hypothesis for curves over finite fields](https://en.wikipedia.org/wiki/Local_zeta_function#Riemann_hypothesis_for_curves_over_finite_fields), in Miller’s paper **[Mil04]**, and in many modern references (e.g., **[Cos, Lan87, Wa08, Sil09, Sut23]**), the Weil pairing is then defined roughly as follows:
+
+In Weil’s original work **[Weil40]**, arising from his proof of [the Riemann hypothesis for curves over finite fields](https://en.wikipedia.org/wiki/Local_zeta_function#Riemann_hypothesis_for_curves_over_finite_fields), in Miller’s paper **[Mil04]**, and in many modern references (e.g., **[Cos, Lan87, Was08, Sil09, Sut23]**), the Weil pairing is then defined roughly as follows:
 
 > **Definition ([Weil pairing](https://en.wikipedia.org/wiki/Weil_pairing) [Wei40]).**  
 > Let $E$ be an elliptic curve defined over a field $K$
@@ -207,13 +192,13 @@ and $f_{Q}$ are only defined up to multiplication by constants, so using them fo
 seems off.[^functions] Moreover, the choice of divisors
 $D_{P}$ and $D_{Q}$ (and the use of linear equivalence more generally)
 strongly suggest a deeper connection with the geometry of line bundles
-on $E$ that is left implicit. Some texts (**[Wa08, Sil09]** and [Wikipedia](https://en.wikipedia.org/w/index.php?title=Weil_pairing&oldid=1262788149)) provide a second definition, yet it is no more illuminating. What, then, is the conceptual picture behind these constructions?
+on $E$ that is left implicit. Some texts (**[Was08, Sil09]** and [Wikipedia](https://en.wikipedia.org/w/index.php?title=Weil_pairing&oldid=1262788149)) provide a second definition, yet it is no more illuminating. What, then, is the conceptual picture behind these constructions?
 
 [^functions]: It works out here technically because the constants cancel out when evaluating a divisor of degree zero like $[P]-[O]$, but that is besides the point.
 
 At the moment I don't have access to Weil's original papers --- and it's generally discouraged to read them anyway because [his](https://en.wikipedia.org/wiki/Foundations_of_Algebraic_Geometry) language of algebraic geometry is too dated --- but I want to start this investigation with sketching some of the relevant theory over the complex numbers $\mathbb{C}$. Focusing on $\mathbb{C}$ allows us to leverage analytic functions and lattices to construct the pairing very explicitly.[^Wikipedia]
 
-When searching for the complex-analytic analogue of the Weil pairing I found that many texts simply state that the result is a skew-symmetric pairing or the exponential of one **[Gal05, Sil09, KR17]**, without explaining why this holds. The only source I found that sketches a derivation is **[Lan87, Appendix A]**, though the argument there is a bit terse; this post is devoted to giving a more detailed and more self-contained explanation, before extending that in the next blog post with line bundles.
+When searching for the complex-analytic analogue of the Weil pairing I found that many texts simply state that the result is a skew-symmetric pairing or the exponential of one **[Gal05, Sil09, KR17]**, without explaining why this holds. The only source I found that sketches a derivation is **[Lan87, Appendix A]**, though the argument there is a bit terse; this post is devoted to giving a more detailed and more self-contained explanation, before extending that in the [next post](/posts/weil-pairing-part-ii/) with line bundles.
 
 My motivation here is that one of the first things I do when learning a new concept in algebraic
 geometry is to explore its geometric interpretation, and I find that
@@ -222,7 +207,7 @@ example, I would have struggled to understand the definition and properties
 of the [Zariski (co)tangent space](https://en.wikipedia.org/wiki/Zariski_tangent_space#Definition) without having seen in differential geometry the description of the tangent space in terms of differentials. And earlier in this post, I tried to show how the notion of the order of a rational function at a point in a smooth curve parallels the corresponding, less technical notion for meromorphic functions on Riemann surfaces. However, this strategy only works when the definition at hand is close to its
 geometric origins.
 
-In this case, it turns out that naively complexifying the definition of the Weil pairing does *not* provide much insight --- and for good reason. In the next post, we’ll see that we should be looking at line bundles instead; evidently this pairing is really a product of 20th century geometry, rather than the 19th century developments in which much of the complex analytic theory of elliptic curves originated. Nevertheless, the resulting complex-analytic approach is quite elegant and will be expanded in the next post, and I thought it might be worthwhile to record it for readers who are also curious for a quick derivation of the Weil pairing over $\mathbb{C}$.
+In this case, it turns out that naively complexifying the definition of the Weil pairing does *not* provide much insight --- and for good reason. In the [next post](/posts/weil-pairing-part-ii/), we’ll see that we should be looking at line bundles instead; evidently this pairing is really a product of 20th century geometry, rather than the 19th century developments in which much of the complex analytic theory of elliptic curves originated. Nevertheless, the resulting complex-analytic approach is quite elegant and will be expanded in the next post, and I thought it might be worthwhile to record it for readers who are also curious for a quick derivation of the Weil pairing over $\mathbb{C}$.
 
 [^Wikipedia]: In fact, on [Wikipedia](https://en.wikipedia.org/w/index.php?title=Weil_pairing&oldid=1262788149) it has said since 2009:
     > the corresponding results for elliptic functions *were known*, and can be expressed simply by use of the Weierstrass sigma function.
@@ -250,15 +235,15 @@ Concretely then, in the rest of this post we will:
 We now make precise the first step mentioned above: describing complex elliptic curves as quotients of $\mathbb{C}$ by a lattice.
 
 > **Definition ([lattices](https://en.wikipedia.org/wiki/Lattice_(group))).**  
-> Let $n$ be a positive integer. A subset $\Lambda \subset \mathbb{R}^n$ is called a *(full) lattice* if it is a subgroup of $\mathbb{R}^n$ isomorphic to $\mathbb{Z}^{n}$.[^lattice]
+> Let $n$ be a positive integer. A subset $\Lambda \subset \mathbb{R}^n$ is called a *(full-rank) lattice* if it is a subgroup of $\mathbb{R}^n$ isomorphic to $\mathbb{Z}^{n}$.
 {: .box .definition }
 
-[^lattice]: More abstractly, a lattice in a finite-dimensional real vector space $V$ is a subgroup $\Lambda$ such that $\Lambda \otimes_\mathbb{Z} \mathbb{R} = V$.
+More abstractly, a lattice in a finite-dimensional real vector space $V$ is a subgroup $\Lambda$ such that $\Lambda \otimes_\mathbb{Z} \mathbb{R} = V$. 
 
 Let's start with the simplest case, namely $n=1$:
 
 > **Example.**  
-> Any nonzero element $\omega$ in $\mathbb{R}$ generates a subgroup $\omega \mathbb{Z} = \\\{ \omega n: n\in \mathbb{Z} \\\}$ isomorphic to $\mathbb{Z}$, so a lattice $\Lambda \subset \mathbb{R}$ is always of the form $\omega \mathbb{Z}$ for some $\omega \in \mathbb{R}^\times$.
+> Any nonzero element $\omega$ in $\mathbb{R}$ generates a subgroup $\omega \mathbb{Z} = \\\{ \omega \cdot k \in \mathbb{R}: k\in \mathbb{Z} \\\}$ isomorphic to $\mathbb{Z}$, so a lattice $\Lambda \subset \mathbb{R}$ is always of the form $\omega \mathbb{Z}$ for some $\omega \in \mathbb{R}^\times$.
 {: .box .example }
 
 > **Proposition.**  
@@ -269,11 +254,17 @@ Let $\Lambda$ be a lattice in $\mathbb{R}$. The [quotient space](https://en.wiki
 > Every element in the quotient $\mathbb{R} / \omega \mathbb{Z}$ has a unique representative in the [half-open interval](https://en.wikipedia.org/wiki/Interval_(mathematics)#Definitions_and_terminology) $[0, \omega)$; since the end-point $\omega$ is identified in this quotient with the start-point $0$, topologically this means that $\mathbb{R} / \Lambda$ is homeomorphic to a circle.
 {: .box .proof }
 
-Identifying $\mathbb{C}^n \simeq \mathbb{R}^{2n}$, a lattice in $\mathbb{C}^n$ is then a subgroup isomorphic to $\mathbb{Z}^{2n}$. 
+Identifying $\mathbb{C}^n \simeq \mathbb{R}^{2n}$, a lattice in an $n$-dimensional complex vector space is then a subgroup isomorphic to $\mathbb{Z}^{2n}$. 
 
 > **Example.**  
-> By definition a lattice $\Lambda \subset \mathbb{C}$ is a subgroup $\Lambda = \mathbb{Z} \omega_1 + \mathbb{Z} \omega_2 $ for a pair of elements $\omega_1,\omega_2 \in \mathbb{C}$ which are linearly independent over $\mathbb{R}$ (i.e., they do not lie on the same line through the origin). The pair is usually ordered so that their arguments satisfy $\Im(\omega_{2}/\omega_{1})>0$, and is called a [fundamental pair of periods](https://en.wikipedia.org/wiki/Fundamental_pair_of_periods).
+> By definition a lattice $\Lambda \subset \mathbb{C}$ is a subgroup $\Lambda = \mathbb{Z} \omega_1 + \mathbb{Z} \omega_2 $ for a pair of elements $\omega_1,\omega_2 \in \mathbb{C}$ which are linearly independent over $\mathbb{R}$ (i.e., they do not lie on the same line through the origin).
 {: .box .example }
+
+> **Definition.**  
+> This pair $\omega_1, \omega_2$ is usually ordered so that their principal arguments satisfy $\mathrm{Arg}(\omega_1) < \mathrm{Arg}(\omega_2)$ (which is equivalent to $\Im(\omega_{1}/\omega_{2})<0$), and is called a [fundamental pair of periods](https://en.wikipedia.org/wiki/Fundamental_pair_of_periods) for the lattice.
+{: .box .definition }
+
+By using a suitable isomorphism, one may always set $\omega_1 = 1$; the other point is then usually denoted by $\tau$.
 
 > **Proposition.**  
 Let $\Lambda$ be a lattice in $\mathbb{C}$. The quotient space $\mathbb{C}/\Lambda$ can be realised topologically as a [torus](https://en.wikipedia.org/wiki/Torus) $S^1 \times S^1$.
@@ -286,7 +277,7 @@ Let $\Lambda$ be a lattice in $\mathbb{C}$. The quotient space $\mathbb{C}/\Lamb
 > \\\{ c_1 \omega_1 + c_2 \omega_2 : 0\leq c_1,c_2 < 1  \\\}
 > $$
 > 
-> forms a [fundamental domain](https://en.wikipedia.org/wiki/Fundamental_domain):
+> forms a [fundamental domain](https://en.wikipedia.org/wiki/Fundamental_domain) (called the *fundamental parallelepiped*):
 >
 > ![img-description](assets/img/weil-pairing-part-i/Lattice_torsion_points_light.svg){: .light }
 > ![img-description](assets/img/weil-pairing-part-i/Lattice_torsion_points_dark.svg){: .dark }
@@ -324,10 +315,10 @@ elliptic curve addition corresponding to ordinary addition on $\mathbb{C}$:
 > E(\mathbb{C}) \simeq \mathbb{C} / \Lambda
 > $$
 > 
-> as [complex Lie groups](https://en.wikipedia.org/wiki/Complex_Lie_group).[^equivalence]
+> as [complex Lie groups](https://en.wikipedia.org/wiki/Complex_Lie_group). This isomorphism extends to an equivalence of categories.
 {: .box .theorem }
 
-Again, the points of $E$ are usually identified with the fundamental domain obtained by picking a basis $\omega_1, \omega_2$ for the lattice $\Lambda$ and restricting to the parallelograms with corners 
+Again, the points of $E$ are usually identified with the fundamental domain obtained by picking a basis $\omega_1, \omega_2$ for the lattice $\Lambda$ and restricting to the parallelepiped with corners 
 
 $$
 0, \qquad \omega_1, \qquad \omega_2, \qquad \omega_1 + \omega_2.
@@ -413,15 +404,6 @@ We will sketch the proof of the forward direction soon, and prove the converse i
 > $$
 {: .box .corollary }
 
-{% comment %}
-
->  **Corollary.**
-> Let $D$ be a divisor with degree zero on an elliptic curve. Then $D$ has degree zero if and only if $D \sim tau_R(D)\coloneqq$ for some point $R$ (uh wat als nul?), if and only if it holds for any point $R$.
-> Let $Q,R$ be two points in an elliptic curve $E$. In particular, for any two points $Q, R$ in an elliptic curve we have $(Q)-(O)\sim(Q+R)-(R)$.
-{: .box .corollary }
-
-{% endcomment %}
-
 Both of the identities in this theorem have analogues for arbitrary compact Riemann surfaces. The generalisation of the first identity is:
 
 > **Proposition (the degree of a principal divisor is zero).**  
@@ -440,7 +422,7 @@ The forward direction of the theorem can be proven directly (for $\mathbb{C}/\La
 as follows. Pull back a meromorphic function on $\mathbb{C}/\Lambda$ corresponding to $D$
 along the covering $\mathbb{C}\twoheadrightarrow\mathbb{C}/\Lambda$
 to obtain an elliptic function $f$ on $\mathbb{C}$. Let $\gamma$
-denote the loop running over the sides of a fundamental parallelogram
+denote the loop running over the sides of a fundamental parallelepiped
 (slightly shifted if a zero or pole lies on one of its sides). Then the residue
 theorem implies that the two identities reduce to showing
 
@@ -497,7 +479,7 @@ a suitable exponential factor:
 It has a simple zero at each lattice point, and no poles since it converges absolutely. This proves
 
 > **Proposition.**  
-> For any finite set of points $a_i$ in $\mathbb{C}$ and integers $n_i$, the function
+> Let $\Lambda$ be a lattice in $\mathbb{C}$. Then for any finite set of points $\\\{ a_i \\\}_i$ in $\mathbb{C}$ and integers $\\\{ n_i \\\}_i$, the function
 >
 > $$
 > f(z)\mathrel{\vcenter{:}}= \prod_{i}\sigma(z-a_{i};\Lambda)^{n_{i}}
@@ -518,7 +500,7 @@ Observe that a Weierstrass σ-function is *odd*, meaning that $\sigma(-z;\Lambda
 
 This is not an elliptic function (as the image of its plot already shows):[^theta]
 
-[^theta]: Instead it's an example of a [theta function](https://en.wikipedia.org/wiki/Theta_function), as we'll see in the next post.
+[^theta]: Instead it's an example of a [theta function](https://en.wikipedia.org/wiki/Theta_function), as we'll see in the [next post](/posts/weil-pairing-part-ii/).
 
 > **Proposition (Quasi-periodicity of σ-functions).**  
 > For a fixed lattice $\Lambda$ there exists[^eta] a linear map $\lambda\mapsto\eta_{\lambda}$, meaning
@@ -533,7 +515,7 @@ This is not an elliptic function (as the image of its plot already shows):[^thet
 
 [^eta]: This is called the [Weierstrass η-function](https://en.wikipedia.org/wiki/Weierstrass_functions#Weierstrass_eta_function).
 
-This statement has a natural interpretation in terms of holomorphic line bundles, as we'll see in the next post.
+This statement has a natural interpretation in terms of holomorphic line bundles, as we'll see in the [next post](/posts/weil-pairing-part-ii/).
 
 > *Proof sketch:* The logarithmic derivative $\zeta(z; \Lambda)\mathrel{\vcenter{:}}=\sigma'(z; \Lambda)/\sigma(z; \Lambda)$
 > of the Weierstrass σ-function is the [Weierstrass ζ-function](https://en.wikipedia.org/wiki/Weierstrass_functions#Weierstrass_zeta_function), and the derivative of that is minus
@@ -586,13 +568,13 @@ Nevertheless, we will use these non-elliptic functions to construct elliptic one
 > \tilde a_1 = \tilde a_2 = \omega_{1} / 2 + \omega_{2}/2,\qquad \tilde b_1 = 0
 > $$ 
 > 
-> satisfy the conditions of the theorem. Therefore, the formula given there should yield an elliptic function with respect to $$\Lambda$$. In other words, the function is expected to be periodic with respect to shifts by the fundamental parallelogram with corners 
+> satisfy the conditions of the theorem. Therefore, the formula given there should yield an elliptic function with respect to $$\Lambda$$. In other words, the function is expected to be periodic with respect to shifts by the fundamental parallelepiped with corners 
 > 
 > $$
 > 0, \qquad \omega_{1}, \qquad \omega_{2}, \qquad \omega_{1} + \omega_{2},
 > $$
 >
-> which are marked by the pole at $\tilde b_1 = 0$. Inside the parallelogram there will be a (double) zero at $\tilde a_1$ and and additional pole at $2 \tilde a_1$.
+> which are marked by the pole at $\tilde b_1 = 0$. Inside the parallelepiped there will be a (double) zero at $\tilde a_1$ and and additional pole at $2 \tilde a_1$.
 > 
 > ![img-description](assets/img/weil-pairing-part-i/Elliptic_function.png)
 > _[Domain colouring](https://en.wikipedia.org/wiki/Domain_coloring) plot of this elliptic function with $\tilde a_1 = \tilde a_2 = \omega\_{1}/2 + \omega\_{2}/2, \tilde b_1 = 0, c = 1$, for fundamental periods $\omega\_{1} = 1$ and $\omega\_{2} = 1/2 + 2i$, on the square region $$[-3.5, 3.5] \times [-3.5, 3.5]$$.
@@ -700,7 +682,7 @@ Since the literature is sometimes unclear about the sign in Legendre's relation,
 > $$
 {: .box .proposition }
 
-> *Proof:* This time we integrate the Weierstrass ζ-function over the sides of the fundamental parallelogram, and then the residue theorem yields:
+> *Proof:* This time we integrate the Weierstrass ζ-function over the sides of the fundamental parallelepiped, and then the residue theorem yields:
 > 
 > \begin{align}
 > 2\pi i & =\oint_{\gamma}\zeta(z;\Lambda)\mathrm{d}z \nonumber \\\\\
@@ -710,10 +692,6 @@ Since the literature is sometimes unclear about the sign in Legendre's relation,
 {: .box .proof }
 
 ## References
-
-{% comment %}
-... Guide to Pairing-Based Cryptography
-{% endcomment %}
 
 **[Cos]** Craig Costello, *Pairings for Beginners*.
 Available at: <https://static1.squarespace.com/static/5fdbb09f31d71c1227082339/t/5ff394720493bd28278889c6/1609798774687/PairingsForBeginners.pdf>
@@ -743,7 +721,7 @@ Journal of Cryptology 17 (2004), 235–261.
 
 **[Sut23]** Andrew Sutherland (2023). 18.783 – Elliptic curves [Lecture notes]. Massachusetts Institute of Technology. Available at: https://math.mit.edu/classes/18.783/2023/
 
-**[Wa08]** Lawrence C. Washington. Elliptic curves: number theory and cryptography. Chapman and Hall/CRC, 2008.
+**[Was08]** Lawrence C. Washington. Elliptic curves: number theory and cryptography. Chapman and Hall/CRC, 2008.
 
 **[Wei40]** André Weil, “Sur les fonctions algébriques à corps de constantes finis,” 
 C. R. Acad. Sci. Paris 210 (1940), 592–594.
