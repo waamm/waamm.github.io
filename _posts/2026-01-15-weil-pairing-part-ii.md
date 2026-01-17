@@ -9,15 +9,15 @@ math: true
 
 > "My mathematics work is proceeding beyond my wildest hopes, and I am even a bit worried --- if it's only in prison that I work so well, will I have to arrange to spend two or three months locked up every year?"
 > 
-> — André Weil, letter to his wife Eveline from Rouen Prison, 7 April 1940 (around the time he discovered the Weil pairing and proved the Riemann hypothesis for curves over finite fields) **[Wei92, p. 146]**[^Cartan]
+> — André Weil, letter to his wife Eveline from the Rouen prison, 7 April 1940 (around the time he discovered the Weil pairing and proved the Riemann hypothesis for curves over finite fields) **[Wei92, p. 146]**[^Cartan]
 
 [^Cartan]: According to the same autobiography, Cartan wrote to Weil during his imprisonment that "We're not all lucky enough to sit and work undisturbed like you".
 
-In the [previous post](/posts/weil-pairing-part-i/) we remarked that in order to understand the nature of the Weil pairing, we should probably be using line bundles instead of functions. From this perspective, it is only a small step to pass from elliptic curves to [abelian varieties](https://en.wikipedia.org/wiki/Abelian_variety) and to consider line bundles on those instead. This additional generality hopefully helps clarify which features of the construction are essential and which are merely incidental.
+In the [previous post](/posts/weil-pairing-part-i/) we remarked early on that in order to understand the nature of the Weil pairing, we should probably be using line bundles instead of functions. From this perspective, it is only a small step to pass from elliptic curves, which are abelian varieties of dimension one, to arbitrary [abelian varieties](https://en.wikipedia.org/wiki/Abelian_variety) and to consider line bundles on those instead. This additional generality hopefully helps clarify which features of the construction are essential and which are merely dimension-one phenomena.
 
-But properly constructing the Weil pairing in such generality requires PhD-level algebraic geometry, which I would like to avoid. Instead, we will try keep the main *statements* at roughly the same level of generality, whilst specialising the field to $K = \mathbb{C}$.[^fields] As we saw in the previous post, this simplification allows us to bring in powerful analytic tools --- there, it was the Weierstrass σ-function; here, it will be the Appell–Humbert theorem. I have not seen this approach written out elsewhere,[^Edixhoven] and I hope it may serve as a light introduction even for readers who already have the requisite mathematical background.
+But properly constructing the Weil pairing in such generality requires PhD-level algebraic geometry, which I would like to avoid. Instead, we will try keep the main *statements* at roughly the same level of generality, whilst specialising the underlying field to $K = \mathbb{C}$.[^fields] As we saw in the previous post, this simplification allows us to bring in powerful analytic tools --- there, it was the Weierstrass σ-function; here, it will be the Appell–Humbert theorem. I have not seen this approach to the Weil pairing written out elsewhere,[^Edixhoven] and I hope it may serve as a light introduction even for readers who already have the requisite mathematical background.
 
-[^fields]: Proofs for more general fields are beyond the scope of these posts; but if the reader has the required background, they appear in standard references on abelian varieties like **[Mum74]** and **[Bha17]**, and some of them reappear on Akhil Mathew's [blog](https://amathew.wordpress.com/tag/line-bundles/).
+[^fields]: Proofs over more general fields are beyond the scope of these posts. Readers with the appropriate background can find them in the standard reference **[Mum74]** (parts of which also appear on Akhil Mathew's [blog](https://amathew.wordpress.com/tag/line-bundles/)) and in lecture notes such as **[Bha17]**.
 
 [^Edixhoven]:
     For example, **[Edi02]** is a bit terse in developing the required geometric background (it was written for a very different audience) and when it finally develops the pairing it simply says
@@ -28,17 +28,17 @@ But properly constructing the Weil pairing in such generality requires PhD-level
 
 
 
-## Line bundles
+## Line Bundles
 
 As mentioned in the previous post, the definition of the Weil pairing as usually presented very much indicates a strong connection with line bundles, despite not using that language at all. This is presumably for simplicity --- line bundles don't help with concrete computations and require more abstraction --- but at the very least I believe they do help explain why the Weil pairing exists and what kind of properties one would expect it to have.
 
-Line bundles are generalised by [vector bundles](https://en.wikipedia.org/wiki/Vector_bundle) and those are further generalised by [fibre bundles](https://en.wikipedia.org/wiki/Fiber_bundle); these concepts are pervasive both throughout geometry, providing powerful invariants, and throughout modern [physics](https://ncatlab.org/nlab/show/fiber+bundles+in+physics). Line bundles are also responsible for the group law on elliptic curves.
+More broadly, line bundles are used to prove important theorems about abelian varieties, and are responsible for the group law on elliptic curves. They are generalised by [vector bundles](https://en.wikipedia.org/wiki/Vector_bundle) and those are further generalised by [fibre bundles](https://en.wikipedia.org/wiki/Fiber_bundle); these concepts are pervasive both throughout geometry, providing powerful invariants, and throughout modern [physics](https://ncatlab.org/nlab/show/fiber+bundles+in+physics). This section aims to give a quick introduction to fibre bundles tailored to our needs, and can be safely skipped by anyone already familiar with their basics.
 
 > **Definition (fibres).**  
-> Given a continous map $$\pi: E\rightarrow B$$ of topological spaces, the *fibre* of $$\pi$$ over an element $$b$$ in $$B$$ is the subspace $$\pi^{-1}(b)$$ of $$E$$ that maps to $$b$$.
+> Given a continous map $$\pi: E\rightarrow B$$ of topological spaces, the *fibre* of $$\pi$$ over an element $$b$$ in $$B$$ is defined to be the subspace $$\pi^{-1}(b)$$ of $$E$$ that maps to $$b$$.
 {: .box .definition }
 
-Intuitively, a fibre bundle is a continuous surjective map $$\pi : E \rightarrow B$$ of topological spaces, where each fibre is homeomorphic to the same space $$F$$, and furthermore in small regions of $$E$$ this map looks like the standard projection $$\mathrm{proj}_1: B \times F \rightarrow B$$ onto the first component. More formally:[^tao]
+Formally, a fibre bundle is a continuous surjective map $$\pi : E \rightarrow B$$ of topological spaces, where each fibre is homeomorphic to the same space $$F$$, and furthermore in small regions of $$E$$ this map looks like the standard projection $$\mathrm{proj}_1: B \times F \rightarrow B$$ onto the first component:
 
 > **Definition (fibre bundles).**  
 > A fibre bundle consists of a 4-tuple $$(E, B, \pi , F)$$, where $$E, B, F$$ are topological spaces (called the *total space*, *base space* and *fibre* respectively) and $$\pi: E\rightarrow B$$ is a continuous surjection
@@ -49,33 +49,37 @@ Intuitively, a fibre bundle is a continuous surjective map $$\pi : E \rightarrow
 > ![img-description](assets/img/weil-pairing-part-ii/Fibre_bundle_local_trivial_dark.svg){: .dark }
 > _<span class="light">Local triviality of a fibre bundle over a neighbourhood $$U$$.</span><span class="dark">Local triviality of a fibre bundle over a neighbourhood $$U$$.</span>_
 > 
-> We will sometimes simply say that $$\pi: E\rightarrow B$$ is a fibre bundle, omitting $$F$$ from notation, or that it is an *$$F$$-bundle*. The fibre above a point $$b$$ is sometimes denoted $$F_b$$. When $$F$$ is a vector space and we can choose these *local trivializations* $$\varphi$$ such that the restriction of $$\varphi$$ to all fibres $$ \pi^{-1}(b) \simeq F$$ is a linear isomorphism, this is called a vector bundle. When the vector space $$F$$ is furthermore a line, i.e. is one-dimensional, it's called a *line bundle*.
+> We will sometimes simply say that $$\pi: E\rightarrow B$$ is a fibre bundle, omitting $$F$$ from notation, or that it is an *$$F$$-bundle*. The fibre above a point $$b$$ is sometimes denoted $$F_b$$. When $$F$$ is a vector space and we can choose these *local trivializations* $$\varphi$$ such that the restriction of $$\varphi$$ to all fibres $$ F_b$$ is a linear isomorphism, this is called a vector bundle. When the vector space $$F$$ is furthermore a line, i.e. is one-dimensional, it's called a *line bundle*.
 {: .box .definition }
 
 The linear isomorphism requirement for vector bundles actually comes for free:
 
 > **Remark (fibre bundles with vector space fibres).**  
-> If the fibres of a fibre bundle can be identified (topologically) with a vector space, then one can choose the local trivialisations to be linear isomorphisms, i.e. the fibre bundle is fact a vector bundle [Ste60].
+> If the fibres of a fibre bundle can be identified (topologically) with a vector space, then one can choose the local trivialisations to be linear isomorphisms, i.e. the fibre bundle is fact a vector bundle **[Ste60]**.
 {: .box .remark }
 
 $$S^1$$-bundles are the natural geometric setting for [electromagnetism](https://en.wikipedia.org/wiki/Circle_bundle#Relationship_to_electrodynamics). Given any base space $$B$$ and fibre $$F$$, we can construct at least one fibre bundle:
 
 > **Example (trivial bundle).**  
-> Given any pair of topological spaces $$B$$ and $$F$$, the *trivial bundle* $$\mathrm{proj}_1: B \times F \rightarrow B$$ is a fibre bundle.
+> Given any pair of topological spaces $$B$$ and $$F$$, the projection map
+> 
+> $$\mathrm{proj}_1: B \times F \longrightarrow B$$
+> 
+> onto the first component yields a fibre bundle over $B$ called the *trivial bundle*.
 {: .box .example }
 
-So if $$B = \mathbb{R}$$ and $$F = I \mathrel{\vcenter{:}}= [-1,1] \subset \mathbb{R}$$, the bundle morphism $$\pi: E = \mathbb{R} \times I \rightarrow \mathbb{R}$$ looks like flattening an infinitely long strip into an infinitely long line. 
+So if $$B = \mathbb{R}$$ and $$F = I \mathrel{\vcenter{:}}= [-1,1] \subset \mathbb{R}$$, the trivial bundle $$\pi: E = \mathbb{R} \times I \rightarrow \mathbb{R}$$ looks like flattening an infinitely long strip into an infinitely long line. 
 
 > **Example (covering space as fibre bundle).**  
 > A [covering space](https://en.wikipedia.org/wiki/Covering_space) is a fibre bundle with discrete fibre.
 {: .box .example }
 
-### The Möbius bundle
+### The Möbius Bundle
 
 Now let's have a look at a more instructive example. Consider the lattice $\mathbb{Z}$ inside of $$\mathbb{R}$$; as we already mentioned in the previous post, its quotient $$\mathbb{R} /\mathbb{Z}$$ can be identified with the circle $S^1$.
 
 > **Example (Two bundles over the circle $$S^1$$).**  
-> Over $$B = S^1$$ with $$F = I \mathrel{\vcenter{:}}= [-1,1]$$, the trivial bundle geometrically looks like a ring (or cylinder). On the other hand, the Möbius strip can also be interpreted as a fibre bundle (called the *Möbius bundle*) with the same base space and fibre:
+> Over $$B = S^1$$ with $$F = I \mathrel{\vcenter{:}}= [-1,1]$$, the trivial bundle geometrically looks like a ring (or cylinder). On the other hand, the [Möbius strip](https://en.wikipedia.org/wiki/Möbius_strip) can also be interpreted as a fibre bundle (called the *Möbius bundle*) with the same base space and fibre:
 > ![img-description](assets/img/weil-pairing-part-ii/g9008_light.svg){: .light }
 > ![img-description](assets/img/weil-pairing-part-ii/g9008_dark.svg){: .dark }
 > _<span class="light">The Möbius strip as a fibre bundle, showing a fibre $$F_y$$ over a point $$y \in S^1$$ and a local trivalisation $$\phi_\alpha$$ over an open subset $$U_\alpha$$.</span><span class="dark">The Möbius strip as a fibre bundle, showing a fibre $$F_y$$ over a point $$y \in S^1$$ and a local trivalisation $$\phi_\alpha$$ over an open subset $$U_\alpha$$.</span>
@@ -98,13 +102,13 @@ as follows:
 >x \sim x'\quad \textrm{ for }x,x' \in \mathbb{R},\qquad\textrm{if and only if}\qquad x = x'+n\textrm{ for some }n \in \mathbb{Z}.
 >$$
 > 
-> Extending this to
+> After trivially extending this to a relation on $$\mathbb{R} \times F$$ (an infinitely long strip) by setting
 >
 >$$ 
 >(x,y) \sim (x',y')\quad \textrm{ for }x,x' \in \mathbb{R}\textrm{ and }y,y' \in I,\qquad\textrm{if and only if}\qquad (x,y) = (x'+n,y')\textrm{ for some }n \in \mathbb{Z},
 >$$
 > 
-> the quotient of the trivial bundle $$\mathbb{R} \times F$$ (an infinitely long strip) under this relation is naturally identified with the trivial bundle $$S^1 \times F$$ (a ring). The Möbius bundle is similarly obtained, by instead setting
+> the quotient of the trivial bundle $$\mathbb{R} \times F\rightarrow \mathbb{R}$$ is naturally identified with the trivial bundle $$S^1 \times F\rightarrow S^1$$ (a ring). The Möbius bundle is similarly obtained, by instead setting
 >
 >$$ 
 >(x,y) \sim (x',y')\quad \textrm{ for }x,x' \in \mathbb{R}\textrm{ and }y,y' \in I,\qquad\textrm{if and only if}\qquad (x,y) = (x'+n,(-1)^n y')\textrm{ for some }n \in \mathbb{Z}.
@@ -127,11 +131,19 @@ The pair of maps $$(q,\varepsilon)$$ in the last image is an example of
 > _<span class="light">A morphism between two fibre bundles.</span><span class="dark">A morphism between two fibre bundles.</span>_
 {: .box .definition }
 
-We will then say that a fibre bundle is *trivial* if it is isomorphic to a trivial bundle.
+As usual, an isomorphism in this category is then defined to be an invertible morphism.
 
-### Tangent bundles
+> **Definition (bundle triviality).**  
+> We will say that a fibre bundle $\pi: E \rightarrow B$ is *trivial* if it is isomorphic to a trivial bundle $B\times F \rightarrow B$.
+{: .box .definition }
 
-Although we use it in this post only as an interesting vector bundle to demonstrate sections and illustrate pullbacks, one of the most important examples of a vector bundle is:
+### Tangent Bundles
+
+Now that we've seen some basic examples, it is time to stress that that the formalisation of fibre bundles is clumsy to work with in practice, and that practitioners tend to think of an $F$-bundle over a base space $B$ as[^tao]
+
+<p style="text-align: center;"><em>a family of objects isomorphic to $F$, continuously parametrised by the points of $B$.</em></p>
+
+Although in this post we use it primarily as an illustrative example of a vector bundle, to demonstrate sections and pullbacks, this perspective immediately yields one of the most important examples:
 
 > **Proposition (tangent bundle).**  
 > The set $$TM$$ of all tangent spaces to all points of a manifold $$M$$ can naturally be given the structure of a vector bundle $$\pi: TM \rightarrow M$$, called the *[tangent bundle](https://en.wikipedia.org/wiki/Tangent_bundle)*.
@@ -145,40 +157,48 @@ In general this vector bundle is not trivial; for even-dimensional spheres $M = 
 
 ### Sections
 
-An analogy I like is that you can only understand a physical system by taking measurements --- if a topological space is the phase space of such a system, measurements correspond to *functions* on that space. Line bundles can be thought of as yielding "generalised functions", as follows:
+An analogy I like is that you can only understand a physical system by taking measurements --- if a topological space is the [phase space](https://en.wikipedia.org/wiki/Phase_space) of such a system, measurements correspond to *functions* on that space. Line bundles can then be thought of as yielding "generalised functions", as follows:
 
 > **Definition (bundle section).**  
-> Given a fibre bundle $$\pi: E\rightarrow B$$, a *(global) section* is a continuous right inverse of $\pi$.
+> A *(global) section* of a fibre bundle $$\pi: E\rightarrow B$$ is a continuous right inverse of $\pi$.
 {: .box .definition }
 
-A vector bundle always has a section:
-
-> **Example (zero section).**  
-> Given a vector bundle, the map which sends an element in the base space to the zero element in its fibre is a section, called the *zero section*.
-{: .box .example }
-
-Since constant maps are continuous, so does a trivial bundle:
+Since constant maps are continuous, a trivial bundle always has sections:
 
 > **Example.**  
 > For a trivial bundle $$\pi: B \times F \rightarrow B$$, a section is the same as a continuous map $$B \rightarrow F$$.
 {: .box .example }
 
-So for the trivial line bundle on a manifold $$M$$, a section is the same as a function on $$M$$.
+So for the trivial line bundle on a manifold $$M$$, a section is the same thing as a function on $$M$$.
 
-Fibre bundles do not admit global sections in general, see e.g. the $$\mathbb{Z}/2\mathbb{Z}$$ bundle [here](https://commons.wikimedia.org/wiki/File:Z2_principal_bundle_over_circle.png): if a section were to map a base element to some element in a fibre, then by continuity the rest of the image of the section is fixed to its neighbouring elements, but if you walk around the circle you end up at the other element.
+Similarly, a vector bundle always has a section:
 
-> **Definition (bundle section).**  
+> **Example (zero section).**  
+> Given a vector bundle, the map which sends an element in the base space to the zero element in its fibre is a section, called the *zero section*.
+{: .box .example }
+
+Fibre bundles do not admit global sections in general:
+
+> **Example.**  
+> Consider the $$\mathbb{Z}/2\mathbb{Z}$$-bundle depicted [here](https://commons.wikimedia.org/wiki/File:Z2_principal_bundle_over_circle.png).[^frame] If a section were to map a base element to some element in a fibre, then by continuity the rest of the image of the section is fixed to its neighbouring elements, but if you walk around the circle you end up at the other element.
+{: .box .example }
+
+[^frame]: This fibre bundle resembles the Möbius bundle, because this is its orthonormal [frame bundle](https://en.wikipedia.org/wiki/Frame_bundle).
+
+> **Definition (local section).**  
 > Given a fibre bundle $$\pi: E\rightarrow B$$, a *local section* is a section of the restriction $\pi: \pi^{-1}(U) \rightarrow U$ of the fibre bundle to an open subset $U$ of $$B$$. The set of sections over an open subset $U$ will be denoted by $\Gamma(E, U)$.
 {: .box .definition }
 
-As we've already seen, these always exist over a local trivialisation.
+In the literature the word "section" can be used to refer to global or to local sections, depending on context.
+
+As we've already seen, local sections always exist by using local trivialisations.
 
 > **Example (vector fields as sections).**  
 > On a manifold $$M$$, a vector field is the same as a section of the tangent bundle $$TM$$.
 {: .box .example }
 
 > **Example (Möbius bundle section).**  
-> On the trivial bundle $$\mathbb{R} \times I \rightarrow \mathbb{R}$$, the constant section descends to the trivial bundles on $$S^1$$, but not to the Möbius bundle. Conversely, trigonometric functions like
+> On the trivial bundle $$\mathbb{R} \times I \rightarrow \mathbb{R}$$, the constant section descends to a section of the trivial bundle on $$\mathbb{R} / \mathbb{Z} = S^1$$, but not to the Möbius bundle. Conversely, trigonometric functions like
 > 
 > $$
 > x\mapsto \sin(\pi x),\qquad \textrm{and}\qquad x\mapsto \cos(\pi x) 
@@ -187,15 +207,15 @@ As we've already seen, these always exist over a local trivialisation.
 > do descend to sections of the Möbius bundle, but not of the trivial bundle.
 {: .box .example }
 
-### Pullback bundles
+### Pullback Bundles
 
-As in the previous post, we're going to use the universal covering map 
+As in the previous post, we're going to use (the $n$-dimensional analogue of) the universal covering map 
 
 $$
 \mathbb{C}\twoheadrightarrow\mathbb{C}/\Lambda
 $$
 
-to understand the torus. This time, we will use it to understand line bundles on the torus. The first step is:
+to understand the torus. This time, instead of functions we will use it to understand line bundles on the torus. The first step is:
 
 > **Proposition (pullbacks of fibre bundles are fibre bundles).**  
 > Let $$f: B'\rightarrow B$$ be a continuous map and let $$\pi: E\rightarrow B$$ be a fibre bundle. Then the [categorical pullback](https://en.wikipedia.org/wiki/Pullback_(category_theory))
@@ -207,12 +227,14 @@ to understand the torus. This time, we will use it to understand line bundles on
 > is a fibre bundle.
 {: .box .proposition }
 
+Roughly speaking, this holds because pulling back a continous parametrisation yields another continous parametrisation.
+
 > **Definition (pullback bundle).**  
-> This is called the *pullback bundle*, and one typically writes $$f^* (E) \mathrel{\vcenter{:}}=E \times_B B'$$.
+> This is called the *pullback bundle*, and one typically denotes it by $$f^* (E) \mathrel{\vcenter{:}}=E \times_B B'$$.
 {: .box .definition }
 
 > *Proof:* 
-> More concretely, the pullback bundle can be described as the subspace
+> More formally, the pullback bundle can be described as the subspace
 >
 > $$
 > f^* (E) = \{(e,b') \in E\times B' : \pi(e) = f(b')  \} \subseteq E \times B'.
@@ -234,7 +256,7 @@ The universal property of the categorical pullback implies that sections of $$\p
 The only nice picture I could find of a pullback bundle was this one:
 
 > **Example (Two bundles over the circle $$S^1$$).**  
-> Let $$\mathcal{M}$$ be a two-dimensional manifold and let $$\gamma: \mathcal{N} \rightarrow \mathcal{M}$$ be a path, mapping a point $$P$$ in $$\mathcal{N}$$ to a point $$Q$$ in $$\mathcal{M}$$. Then we can pullback the tangent bundle $$T \mathcal{M}$$ to a fibre bundle $$\gamma^* T \mathcal{M}$$ over $$\mathcal{N}$$ with two-dimensional fibres. A vector field on $$\mathcal{M}$$, with vector $$\mathbf{v}$$ at $$Q$$, pulls back to a section of the pullback $$\gamma^* T \mathcal{M}$$.
+> Let $$\mathcal{M}$$ be a two-dimensional manifold and let $$\gamma: \mathcal{N} \rightarrow \mathcal{M}$$ be a path, mapping a point $$P$$ in $$\mathcal{N}$$ to a point $$Q$$ in $$\mathcal{M}$$. Then we can pullback the tangent bundle $$T \mathcal{M}$$ to a fibre bundle $$\gamma^* T \mathcal{M}$$ over $$\mathcal{N}$$ with two-dimensional fibres. A vector field on $$\mathcal{M}$$, with vector $$\mathbf{v}$$ at $$Q$$, pulls back to a section of the pullback $$\gamma^* T \mathcal{M}$$:
 > ![img-description](assets/img/weil-pairing-part-ii/g3470_light.svg){: .light }
 > ![img-description](assets/img/weil-pairing-part-ii/g3470_dark.svg){: .dark }
 > _<span class="light">The Möbius strip as a fibre bundle, showing a fibre $$F_y$$ over a point $$y \in S^1$$ and a local trivalisation $$\phi_\alpha$$ over an open subset $$U_\alpha$$.</span><span class="dark">The Möbius strip as a fibre bundle, showing a fibre $$F_y$$ over a point $$y \in S^1$$ and a local trivalisation $$\phi_\alpha$$ over an open subset $$U_\alpha$$.</span>
@@ -242,23 +264,33 @@ The only nice picture I could find of a pullback bundle was this one:
 {: .box .example }
 
 
-## Systems of Multipliers
+## Holomorphic Line bundles
 
-
-
-Abelian varieties are the $n$-dimensional analogues of elliptic curves, and as a rule of thumb every reasonable statement about elliptic curves should have a generalization that applies to all abelian varieties. In the previous post our first step was to realise a complex elliptic curve as the quotient of a 1-dimensional complex vector space by a lattice, resulting in a complex torus. 
+Abelian varieties are the $n$-dimensional analogues of elliptic curves, and as a rule of thumb every reasonable statement about elliptic curves should have a generalization that applies to all abelian varieties. In the previous post our first step was to realise a complex elliptic curve as the quotient of a one-dimensional complex vector space by a lattice, resulting in a complex torus. 
 
 > **Theorem.**  
 > Let $$A(\mathbb{C})$$ be an $n$-dimensional abelian variety over the complex numbers, and let $V$ denote the tangent space at the identity; this is an $n$-dimensional complex vector space. Then there exists a lattice $\Lambda \subset V$ such that the exponential map yields an isomorphism
 > 
 > $$
-> A(\mathbb{C}) \simeq \mathbb{C} / \Lambda
+> V / \Lambda \simeq A(\mathbb{C})
 > $$
 > 
 > as compact [complex Lie groups](https://en.wikipedia.org/wiki/Complex_Lie_group). This isomorphism extends to an equivalence of categories.
 {: .box .theorem }
 
-We will refer to such an $n$-dimensional torus as a *hypertorus*.
+> **Definition.**  
+> We will refer to such an $n$-dimensional complex torus as a *hypertorus*.
+{: .box .definition }
+
+In order to make use of the available complex structures, we will restrict to line bundles $\pi: L\rightarrow B $ such that $L$ is a complex manifold and $\pi$ is holomorphic; or in other words, such that the family of lines is "holomorphically parametrised by the points of $B$". Furthermore, all sections will be required to be holomorphic as functions.
+
+> **Definition.**  
+> Such a line bundle is said to be *holomorphic*.
+{: .box .definition }
+
+From now on, we will assume that all line bundles are holomorphic.
+
+### Systems of Multipliers
 
 Now let $T = V/\Lambda$ be a hypertorus with projection map
 
@@ -273,7 +305,7 @@ $$
 
 and furthermore $$L$$ is the quotient of the pullback bundle by this action.
 
-Now using that any bundle on $$V$$ is trivial, we may identify $$\mathrm{proj}^* (L)$$ with $$V \times \mathbb{C}$$, and the action of an element $$\lambda \in \Lambda$$ on a fibre $$\mathbb{C}$$ must be linear. Thus we have
+Now using that any bundle on $$V$$ is trivial, we may identify $$\mathrm{proj}^* (L)$$ with $$V \times \mathbb{C}$$, and the action of an element $$\lambda \in \Lambda$$ on a fibre $$\mathbb{C}$$ must be linear, i.e. must be multiplication by a scalar. Thus we have
 
 
 \begin{equation}
@@ -312,7 +344,7 @@ This is a version of [descent](https://en.wikipedia.org/wiki/Descent_along_torso
 
 The notions of direct sums, duals and tensor products for vector spaces extend naturally to vector bundles over a fixed space $X$, with the latter two operations restricting to line bundles. When line bundles are described via systems of multipliers, these operations correspond respectively to inversion and multiplication. Consequently, the [tensor product bundle](https://en.wikipedia.org/wiki/Tensor_product_bundle) construction endows the set of isomorphism classes of line bundles with a natural group structure.
 
-[^tao]: Terence Tao [believes](https://mathoverflow.net/a/449586) the usual formalisations of these operations are unnatural, and that they are obvious from a different point of view.
+[^tao]: For a lengthier explanation, see [here](https://mathoverflow.net/a/449586).
 
 > **Definition (Picard group).**  
 > This group is called the *Picard group*, and we will denote it by $\mathrm{Pic}(X)$.
@@ -344,7 +376,7 @@ This can be formalised in terms of [group cohomology](https://en.wikipedia.org/w
 
 This description is not very concrete; in the previous post we similarly remarked that constructing functions corresponding to divisors is done inductively over general fields, but can be done very explicitly in the analytic setting by using Weierstrass σ-functions, which we showed arise quite naturally. A similar attitude works here, as we'll see in the next sections.
 
-## Line Bundles from Divisors
+### Line Bundles from Divisors
 
 We now relate this to the usual construction of line bundles on an elliptic curve out of a divisor.
 
@@ -482,7 +514,7 @@ On a group variety, these translations are the inherent symmetries, making it na
 > defines a $$\Lambda$$-equivariant bundle isomorphism.
 {: .box .proof }
 
-## The Appell–Humbert theorem
+### The Appell–Humbert theorem
 
 In the previous post, we explicitly constructed all elliptic functions on a complex torus using Liouville’s theorem, whose proof requires only basic complex analysis.
 
@@ -759,7 +791,7 @@ More precisely, we will recover the Weil pairing definition of **[Wa08]** and **
 > \mathrm{div}(\tau_P^*g) = \tau_P^* \mathrm{div}(g) = \tau_P^* [n]^* D_Q = \sum_{T\in E[n]} \tau_P^* [T] - \tau_P^* [Q' + T] = \sum_{T\in E[n]} [T] - [Q' + T] = [n]^* D_Q = \mathrm{div}(g)
 > $$
 >
-> so their fraction is constant; this fraction $g(z + P) / g(z)$ is the Weil pairing.
+> so their fraction is constant; this fraction $g(z + P) / g(z)$ is the Weil pairing of **[Wa08]** and **[Sil09]**.
 {: .box .proof }
 
 ## References
@@ -768,9 +800,9 @@ More precisely, we will recover the Weil pairing definition of **[Wa08]** and **
 
 **[Bha17]** Bhargav Bhatt (2017, December). Abelian varieties (lecture notes). Retrieved from https://www.math.ias.edu/~bhatt/teaching/mat731f17/lectures.pdf
 
-**[Hum93]**  M. G. Humbert (1893), "Théorie générale des surfaces hyperelliptiques", Journal de Mathématiques Pures et Appliquées, Série IV, 9: 29–170, 361–475
-
 **[Edi02]** Bas Edixhoven (2002, February 28). Le couplage de Weil: de la géométrie à l’arithmétique (Seminar talk). Retrieved from https://websites.math.leidenuniv.nl/edixhoven/talks/2002/2002_02_11.pdf
+
+**[Hum93]**  M. G. Humbert (1893), "Théorie générale des surfaces hyperelliptiques", Journal de Mathématiques Pures et Appliquées, Série IV, 9: 29–170, 361–475
 
 **[Mum74]** David Mumford. Abelian varieties. Vol. 5. Oxford: Oxford University Press, 1974.
 
@@ -778,6 +810,8 @@ More precisely, we will recover the Weil pairing definition of **[Wa08]** and **
 
 **[Sil09]** Joseph H. Silverman. The Arithmetic of Elliptic Curves. Vol. 106. New York: Springer, 2009.
 
+**[Ste60]** T. E. Stewart. "On groups of diffeomorphisms." Proceedings of the American Mathematical Society 11.4 (1960): 559-563.
+
 **[Was08]** Lawrence C. Washington. Elliptic curves: number theory and cryptography. Chapman and Hall/CRC, 2008.
 
-**[Wei92]** Weil, André. The apprenticeship of a mathematician. Springer Science & Business Media, 1992.
+**[Wei92]** André Weil. The apprenticeship of a mathematician. Springer Science & Business Media, 1992.
