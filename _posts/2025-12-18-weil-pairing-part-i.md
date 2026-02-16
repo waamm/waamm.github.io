@@ -9,12 +9,12 @@ math: true
 
 > “The Weil pairing, first introduced by André Weil in 1940, plays an important role in the theoretical study of the arithmetic of elliptic curves and Abelian varieties. It has also recently become extremely useful in cryptologic constructions related to those objects.”
 >
-> — **[Mil04]**
+> — [Victor S. Miller](https://en.wikipedia.org/wiki/Victor_S._Miller) in his seminal 2004 paper[^miller] **[Mil04]**
 
-This quote by Victor Miller from his seminal 2004 paper[^miller] foreshadowed the emergence of what is today a fully fledged domain known as [pairing-based cryptography](https://en.wikipedia.org/wiki/Pairing-based_cryptography). Despite its significance --- and despite cryptographers’ general inclination to dissect every construct they encounter --- elliptic curve pairings are often treated as a black box, largely due to their technical complexity.
+[^miller]: The main result of this paper actually dates back to an unpublished manuscript from 1986: [Short programs for functions on curves](https://drops.dagstuhl.de/storage/00lipics/lipics-vol291-fun2024/LIPIcs.FUN.2024.34/LIPIcs.FUN.2024.34.pdf) 
 
-[^miller]: The main result of his paper actually dates back to an unpublished manuscript from 1986: [Short programs for functions on curves](https://drops.dagstuhl.de/storage/00lipics/lipics-vol291-fun2024/LIPIcs.FUN.2024.34/LIPIcs.FUN.2024.34.pdf)  
-
+This quote foreshadowed the emergence of what is today a fully fledged domain known as [pairing-based cryptography](https://en.wikipedia.org/wiki/Pairing-based_cryptography). Despite its significance --- and despite cryptographers’ general inclination to dissect every construct they encounter --- elliptic curve pairings are often treated as a black box, largely due to their technical complexity.
+ 
 I recently spent some time studying the [Weil pairing](https://en.wikipedia.org/wiki/Weil_pairing) and was encouraged to write up some notes. The goal of this post (and its [sequel](/posts/weil-pairing-part-ii/)) is to explore its complex-analytic perspective, which will allow us to construct the pairing very explicitly; I believe this was Weil's point of entry as well. A more detailed overview is given at the end of the next section.
 
 Throughout the rest of this post, it is assumed that the reader is familiar with the basic notions of [elliptic curves](https://en.wikipedia.org/wiki/Elliptic_curve) and [Riemann surfaces](https://en.wikipedia.org/wiki/Riemann_surface).
@@ -250,8 +250,7 @@ Let's start with the simplest case, namely $n=1$:
 Let $\Lambda$ be a lattice in $\mathbb{R}$. The [quotient space](https://en.wikipedia.org/wiki/Quotient_space_(topology)) $\mathbb{R}/\Lambda$ can be realised topologically as a circle $S^1$.
 {: .box .proposition }
 
-> *Proof:*
-> Every element in the quotient $\mathbb{R} / \omega \mathbb{Z}$ has a unique representative in the [half-open interval](https://en.wikipedia.org/wiki/Interval_(mathematics)#Definitions_and_terminology) $[0, \omega)$; since the end-point $\omega$ is identified in this quotient with the start-point $0$, topologically this means that $\mathbb{R} / \Lambda$ is homeomorphic to a circle.
+> *Proof:* Every element in the quotient $\mathbb{R} / \omega \mathbb{Z}$ has a unique representative in the [half-open interval](https://en.wikipedia.org/wiki/Interval_(mathematics)#Definitions_and_terminology) $[0, \omega)$; since the end-point $\omega$ is identified in this quotient with the start-point $0$, topologically this means that $\mathbb{R} / \Lambda$ is homeomorphic to a circle.
 {: .box .proof }
 
 Identifying $\mathbb{C}^n \simeq \mathbb{R}^{2n}$, a lattice in an $n$-dimensional complex vector space is then a subgroup isomorphic to $\mathbb{Z}^{2n}$. 
@@ -270,8 +269,7 @@ By using a suitable isomorphism, one may always set $\omega_1 = 1$; the other po
 Let $\Lambda$ be a lattice in $\mathbb{C}$. The quotient space $\mathbb{C}/\Lambda$ can be realised topologically as a [torus](https://en.wikipedia.org/wiki/Torus) $S^1 \times S^1$.
 {: .box .proposition }
 
-> *Proof:*
-> Since the fundamental periods form a basis for the two-dimensional real vector space $\mathbb{C}$, the set
+> *Proof:* Since the fundamental periods form a basis for the two-dimensional real vector space $\mathbb{C}$, the set
 >
 > $$
 > \\\{ c_1 \omega_1 + c_2 \omega_2 : 0\leq c_1,c_2 < 1  \\\}
@@ -368,8 +366,7 @@ Meromorphic functions on compact Riemann surfaces (and hence elliptic functions)
 > Meromorphic functions on compact Riemann surfaces are classified, up to scalar multiplication, by their divisors.
 {: .box .theorem }
 
-> *Proof:* 
-> Let $S$ be a compact Riemann surface. Since $\mathrm{ord}_P(\cdot): K(S)^\times \rightarrow \mathbb{Z}$ is a homomorphism, the same is true for the coproduct of morphisms
+> *Proof:* Let $S$ be a compact Riemann surface. Since $\mathrm{ord}_P(\cdot): K(S)^\times \rightarrow \mathbb{Z}$ is a homomorphism, the same is true for the coproduct of morphisms
 > 
 > $$
 > \mathrm{div}(\cdot): K(S)^\times \longrightarrow \mathrm{Div}(S) = \bigoplus_{P\in S} \mathbb{Z},\qquad f\longmapsto \bigl(\mathrm{ord}_P(f)\bigr)_{P\in S}.

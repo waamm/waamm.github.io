@@ -38,7 +38,7 @@ More broadly, line bundles are used to prove important theorems about abelian va
 > Given a continous map $$\pi: E\rightarrow B$$ of topological spaces, the *fibre* of $$\pi$$ over an element $$b$$ in $$B$$ is defined to be the subspace $$\pi^{-1}(b)$$ of $$E$$ that maps to $$b$$.
 {: .box .definition }
 
-Formally, a fibre bundle is a continuous surjective map $$\pi : E \rightarrow B$$ of topological spaces, where each fibre is homeomorphic to the same space $$F$$, and furthermore in small regions of $$E$$ this map looks like the standard projection $$\mathrm{proj}_1: B \times F \rightarrow B$$ onto the first component:
+*Formally*, a fibre bundle is a continuous surjective map $$\pi : E \rightarrow B$$ of topological spaces, where each fibre is homeomorphic to the same space $$F$$, and furthermore in small regions of $$E$$ this map looks like the standard projection $$\mathrm{proj}_1: B \times F \rightarrow B$$ onto the first component:
 
 > **Definition (fibre bundles).**  
 > A fibre bundle consists of a 4-tuple $$(E, B, \pi , F)$$, where $$E, B, F$$ are topological spaces (called the *total space*, *base space* and *fibre* respectively) and $$\pi: E\rightarrow B$$ is a continuous surjection
@@ -151,7 +151,7 @@ Although in this post we use it primarily as an illustrative example of a vector
 
 In general this vector bundle is not trivial; for even-dimensional spheres $M = S^{2n}$ this follows from the [hairy ball theorem](https://en.wikipedia.org/wiki/Hairy_ball_theorem). But for $M = \mathbb{R}^n$ and $M = S^1$ it is:
 
-> **Proposition (tangent bundle to a Lie group is trivial).**  
+> **Proposition.**  
 > The tangent bundle to a Lie group is trivial.
 {: .box .proposition }
 
@@ -765,7 +765,7 @@ Combining this with the previous corollary yields:
 > Let $(A, L)$ be a polarised abelian variety and let $\phi$ be the endomorphism $[n] : A\rightarrow A$ of multiplication-by-$n$ for some integer $n$. Then there is a natural pairing between points $a,b$ in $A[n]$ obtained by pairing the element $a$ with the line bundle $L_b$.
 {: .box .corollary }
 
-When $\phi$ is an [isogeny](https://en.wikipedia.org/wiki/Isogeny) (which is the case for $\phi =[n] $ when $n$ is nonzero), the pairing is perfect; this is an instance of [Cartier duality](https://en.wikipedia.org/wiki/Cartier_duality), and the pairing is sometimes also known as the Cartier pairing (e.g. **[Oda69]**).
+When $\phi$ is an [isogeny](https://en.wikipedia.org/wiki/Isogeny) (which is the case for $\phi =[n] $ when $n$ is nonzero, this is also proven using line bundles), the pairing is perfect; this is an instance of [Cartier duality](https://en.wikipedia.org/wiki/Cartier_duality), and the pairing is sometimes also known as the Cartier pairing (e.g. **[Oda69]**).
 
 Finally, we specialise to the setting of complex elliptic curves:
 
