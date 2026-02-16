@@ -1,5 +1,5 @@
 ---
-title: "Generalising SHPLONK"
+title: "Generalising Shplonk"
 author: waamm
 date: 2026-02-16
 categories: [Cryptography, Zero-Knowledge Proofs]
@@ -11,9 +11,9 @@ math: true
 >
 > — Justin Thaler **[Tha22, p. 233]**
 
-The KZG[^pronunciation] polynomial commitment scheme was the first construction of its kind and remains one of the most widely used today **[KZG10]**. Given a polynomial $f$, a polynomial commitment scheme allows a prover to commit to $f$ and later produce a succinct proof that $f(x) = y$ at any chosen evaluation point $x$. The appeal of the KZG scheme lies in two properties: small constant-size evaluation proofs and extremely fast verification.
+The KZG[^pronunciation] protocol was the first construction of a polynomial commitment scheme and remains one of the most widely deployed today **[KZG10]**. Given a polynomial $f$, a polynomial commitment scheme allows a prover to commit to $f$ and later produce a succinct proof that $f(x) = y$ at any chosen evaluation point $x$. The enduring appeal of the KZG scheme lies in two key properties: small constant-size evaluation proofs and fast verification.
 
-[^pronunciation]: Naturally, it's named after the authors Kate (pronounced [kah-tey](https://www.cs.purdue.edu/homes/akate/howtopronounce.html)), Zaverucha and Goldberg.
+[^pronunciation]: Usually it's named KZG after the authors Kate (pronounced [kah-tey](https://www.cs.purdue.edu/homes/akate/howtopronounce.html)), Zaverucha and Goldberg of **[KZG10]**, and is sometimes it's simply called after Kate.
 
 KZG commitments now form a core building block in modern cryptography, including vector commitments, [verifiable secret-sharing](https://en.wikipedia.org/wiki/Verifiable_secret_sharing) (e.g. **[AJM+23,MDR23, Chunky]**) and [SNARKs](https://en.wikipedia.org/wiki/Non-interactive_zero-knowledge_proof) (e.g. Plonk **[GWC19]**).
 
@@ -136,7 +136,7 @@ $$
 
 [^msm]: Using the Schwartz–Zippel lemma, normally one would expect to see $3$ MSM terms here for each of the hidden $y_i$. Alin Tomescu suggested that since the base $[1]_1$ (and the additional base $[\xi]_1$ for hiding KZG variants) repeats, the corresponding scalars can be summed and this can be merged into one term.
 
-The key insight, due to Trisha Datta, is that the prover should only have to compute $\eqref{eq:eval}$. Namely, instead of committing to each secret $$y_i$$ individually, it gathers them into a vector $\mathbf{y} \mathrel{\vcenter{:}}= (y_1 ,\ldots, y_h)$ and commits to them all at once in one commitment $C_\mathbf{y}$, using some homomorphic vector commitment scheme (e.g., a hiding KZG variant). (This is needed at the start of the protocol to prevent a possible grinding attack.) Then once $x$ is known, it sends the element $\eqref{eq:eval}$ along with a sigma protocol proving that it knows the secret $y_i$ giving $C_\mathbf{y}$ and $\eqref{eq:eval}$ and the image of the homomorphism $\varphi$. A commitment for $h$ elements usually has cost similar to that of computing an MSM of size $h$, so the cost of verifying this sigma protocol should be similar to that of computing an MSM of size $\operatorname{cost}(\varphi) + h$.
+The key insight, due to Trisha Datta, is that the prover should only have to compute $\eqref{eq:eval}$. Namely, instead of committing to each secret $$y_i$$ individually, it gathers them into a vector $\mathbf{y} \mathrel{\vcenter{:}}= (y_1 ,\ldots, y_h)$ and commits to them all at once in one commitment $C_\mathbf{y}$, using some homomorphic vector commitment scheme (e.g., a hiding KZG variant). (A commitment is needed at the start of the protocol to prevent a possible grinding attack.) Then once $x$ is known, it sends the element $\eqref{eq:eval}$ along with a sigma protocol proving that it knows the secret $\mathbf{y}$ giving $C_\mathbf{y}$ and $\eqref{eq:eval}$ and the image of the homomorphism $\varphi$. A commitment for $h$ elements usually has cost similar to that of computing an MSM of size $h$, so the cost of verifying this sigma protocol should be similar to that of computing an MSM of size $\operatorname{cost}(\varphi) + h$.
 
 The following formal description should work in more generality than just KZG. Note we are assuming that the Fiat–Shamir transcript already contains the commitments $C_i$ of the $f_i$ and parameters for the $\mathsf{PCS}$.
 
