@@ -110,7 +110,7 @@ Therefore, it is cheaper for the verifier to test it at a point: the claim is th
 
 Using two pairings, this is done in KZG by verifying the identity
 
-$$ \bigl( [\check{q}(\tau)]_1, [\tau]_2 - [x]_2 \bigr) = \bigl( \sum_{i=1}^n c^{i-1} V_{S\setminus S_i} (x) \cdot [f_i (\tau)]_1 - V_S (x) \cdot [q(\tau)]_1 - \bigl[\sum_{i=1}^n c^{i-1} V_{S\setminus S_i } (x) \cdot g_i (x) \bigr]_1 , [1]_2 \bigr),$$
+$$ \bigl( [\check{q}(\tau)]_1, [\tau]_2 - [x]_2 \bigr) = \bigl( \sum_{i=1}^n c^{i-1} V_{S\setminus S_i} (x) \cdot [f_i (\tau)]_1 - V_S (x) \cdot [q(\tau)]_1 - \bigl[\sum_{i=1}^n c^{i-1} V_{S\setminus S_i } (x) g_i (x) \bigr]_1 , [1]_2 \bigr),$$
 
 and similarly in other variants.
 
@@ -119,14 +119,13 @@ and similarly in other variants.
 Ordinarily in $$\mathtt{SHPLONK}$$ the prover would send over each $g_i(X)$ (which is natural as they are part of the statement to be proven), but this equation shows that for the pairing check the verifier only needs to be able to construct the expression
 
 \begin{equation}
-\bigl[\sum_{i=1}^n c^{i-1} V_{S\setminus S_i } (x) \cdot g_i (x) \bigr]_1.
+\bigl[\sum_{i=1}^n c^{i-1} V_{S\setminus S_i } (x) g_i (x) \bigr]_1.
 \label{eq:eval}
 \end{equation}
 
 A natural approach would be for the prover to send commitments $$[y_i]_1$$ for the $h$ evaluations $y_i$ that need to be kept hidden, plus a sigma protocol proving that it knows the hidden $y_i$ which give
-1. the commitments $$\{[y_i]_1 \}$$,
-2. the element $\eqref{eq:eval}$, and
-3. the image of $\varphi$.
+- the commitments $$\{[y_i]_1 \}_{1 \leq i \leq h}$$,
+- the image of $\varphi$.
 
 This is already quite costly for the verifier: if the cost of evaluating the homomorphism $\varphi$ is dominated by computing an MSM of size $\operatorname{cost}(\varphi)$, then the verifier's cost for verifying this sigma protocol should be dominated by an MSM of size $\operatorname{cost}(\varphi) + 2h$.[^msm] Moreover, the verifier then needs to use another MSM of size $h+1$ MSM to compute
 
@@ -140,7 +139,12 @@ $$
 
 [^msm]: Using the Schwartz–Zippel lemma, normally one would expect to see $3$ MSM terms here for each of the hidden $y_i$. Alin Tomescu suggested that since the base $[1]_1$ (and the additional base $[\xi]_1$ for hiding KZG variants) repeats, the corresponding scalars can be summed and this can be merged into one term.
 
-Trisha Datta's approach is that the prover should only have to compute $\eqref{eq:eval}$. Namely, instead of committing to each secret $$y_i$$ individually, it gathers them into a vector $\mathbf{y} \mathrel{\vcenter{:}}= (y_1 ,\ldots, y_h)$ and commits to them all at once in one commitment $C_\mathbf{y}$, using some homomorphic vector commitment scheme (e.g., a hiding KZG variant). (A commitment is needed at the start of the protocol to prevent a possible grinding attack.) Then once the challenge point $x$ is known, it sends the element $\eqref{eq:eval}$ along with a sigma protocol proving that it knows the secret $\mathbf{y}$ giving $C_\mathbf{y}$ and $\eqref{eq:eval}$ and the image of the homomorphism $\varphi$. A commitment for $h$ elements usually has cost similar to that of computing an MSM of size $h$, so the cost of verifying this sigma protocol should be similar to that of computing an MSM of size $\operatorname{cost}(\varphi) + h$.
+Trisha Datta's approach is that the prover should only have to compute $\eqref{eq:eval}$. Namely, instead of committing to each secret $$y_i$$ individually, it gathers them into a vector $\mathbf{y} \mathrel{\vcenter{:}}= (y_1 ,\ldots, y_h)$ and commits to them all at once in one commitment $C_\mathbf{y}$, using some homomorphic vector commitment scheme (e.g., a hiding KZG variant). (A commitment is needed at the start of the protocol to prevent a possible grinding attack.) Then once the challenge point $x$ is known, it sends the element $\eqref{eq:eval}$ along with a sigma protocol proving that it knows the secret $\mathbf{y}$ giving 
+- the commitmentment $C_\mathbf{y}$,
+- the element $\eqref{eq:eval}$, and
+- the image of $\varphi$.
+
+A commitment for $h$ elements usually has cost similar to that of computing an MSM of size $h$, so the cost of verifying this sigma protocol should be similar to that of computing an MSM of size $\operatorname{cost}(\varphi) + h$.
 
 The following formal description should work in more generality than just the ordinary KZG scheme. Note we are assuming that the Fiat–Shamir transcript already contains the commitments $C_i$ of the $f_i$ and parameters for the $\mathsf{PCS}$.
 
