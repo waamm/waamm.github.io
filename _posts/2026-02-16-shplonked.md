@@ -11,11 +11,15 @@ math: true
 >
 > — Justin Thaler **[Tha22, p. 233]**
 
-The KZG[^pronunciation] protocol was the first construction of a polynomial commitment scheme and remains one of the most widely deployed today **[KZG10]**. Given a polynomial $f$, a polynomial commitment scheme allows a prover to commit to $f$ and later produce a succinct proof that $f(x) = y$ at any chosen evaluation point $x$. The enduring appeal of the KZG scheme lies in two key properties: small constant-size evaluation proofs and fast verification.
+The KZG[^pronunciation] protocol was the first construction of a polynomial commitment scheme and remains one of the most widely deployed today **[KZG10]**. 
+
+> **Definition (informal).**  
+> Given a polynomial $f$, a *polynomial commitment scheme* (PCS) allows a prover to commit to $f$ and later produce a succinct proof that $f(x) = y$ at any chosen evaluation point $x$, without revealing $f$.
+{: .box .definition }
 
 [^pronunciation]: Usually it's named KZG after the authors Kate (pronounced [kah-tey](https://www.cs.purdue.edu/homes/akate/howtopronounce.html)), Zaverucha and Goldberg of **[KZG10]**, and is sometimes it's simply called after Kate.
 
-KZG commitments now form a core building block in modern cryptography, including vector commitments, [verifiable secret-sharing](https://en.wikipedia.org/wiki/Verifiable_secret_sharing) (e.g. **[AJM+23,MDR23, Chunky]**) and [SNARKs](https://en.wikipedia.org/wiki/Non-interactive_zero-knowledge_proof) (e.g. Plonk **[GWC19]**).
+The enduring appeal of the KZG scheme lies in two key properties: small constant-size evaluation proofs and fast verification of these proofs. KZG commitments now form a core building block in modern cryptography, including vector commitments, range proofs, [verifiable secret-sharing](https://en.wikipedia.org/wiki/Verifiable_secret_sharing) (e.g. **[AJM+23, MDR23, Chunky]**) and [SNARKs](https://en.wikipedia.org/wiki/Non-interactive_zero-knowledge_proof) (e.g. Plonk **[GWC19]**).
 
 Subsequent work introduced techniques for *batching* multiple KZG evaluation proofs --- across different polynomials or different evaluation points --- into a single proof. The culmination of these batching techniques for the ordinary KZG scheme is $$\mathtt{SHPLONK}$$ **[BDFG20]**.
 
@@ -95,7 +99,7 @@ which is equivalent to
 
 $$V_S(X) \cdot q(X) = \sum_{i = 1}^n c^{i-1} V_{S\setminus S_i }(X) \cdot \bigl( f_i (X) - g_i (X) \bigr).$$
 
-After committing to $q$, verifying this identity would need $n$ pairings on the right-hand-side, so $n+1$ pairings in total.
+After committing to $q$, verifying this identity would need $n$ pairings for the right-hand-side, so $n+1$ pairings in total.
 
 Therefore, it is cheaper for the verifier to test it at a point: the claim is that the prover knows $f_i$ and $q$ such that this identity holds. Thus after committing to $q$, the verifier sends a point $x$, and then the prover proves the identity by committing to 
 
@@ -136,9 +140,9 @@ $$
 
 [^msm]: Using the Schwartz–Zippel lemma, normally one would expect to see $3$ MSM terms here for each of the hidden $y_i$. Alin Tomescu suggested that since the base $[1]_1$ (and the additional base $[\xi]_1$ for hiding KZG variants) repeats, the corresponding scalars can be summed and this can be merged into one term.
 
-The key insight, due to Trisha Datta, is that the prover should only have to compute $\eqref{eq:eval}$. Namely, instead of committing to each secret $$y_i$$ individually, it gathers them into a vector $\mathbf{y} \mathrel{\vcenter{:}}= (y_1 ,\ldots, y_h)$ and commits to them all at once in one commitment $C_\mathbf{y}$, using some homomorphic vector commitment scheme (e.g., a hiding KZG variant). (A commitment is needed at the start of the protocol to prevent a possible grinding attack.) Then once $x$ is known, it sends the element $\eqref{eq:eval}$ along with a sigma protocol proving that it knows the secret $\mathbf{y}$ giving $C_\mathbf{y}$ and $\eqref{eq:eval}$ and the image of the homomorphism $\varphi$. A commitment for $h$ elements usually has cost similar to that of computing an MSM of size $h$, so the cost of verifying this sigma protocol should be similar to that of computing an MSM of size $\operatorname{cost}(\varphi) + h$.
+Trisha Datta's approach is that the prover should only have to compute $\eqref{eq:eval}$. Namely, instead of committing to each secret $$y_i$$ individually, it gathers them into a vector $\mathbf{y} \mathrel{\vcenter{:}}= (y_1 ,\ldots, y_h)$ and commits to them all at once in one commitment $C_\mathbf{y}$, using some homomorphic vector commitment scheme (e.g., a hiding KZG variant). (A commitment is needed at the start of the protocol to prevent a possible grinding attack.) Then once the challenge point $x$ is known, it sends the element $\eqref{eq:eval}$ along with a sigma protocol proving that it knows the secret $\mathbf{y}$ giving $C_\mathbf{y}$ and $\eqref{eq:eval}$ and the image of the homomorphism $\varphi$. A commitment for $h$ elements usually has cost similar to that of computing an MSM of size $h$, so the cost of verifying this sigma protocol should be similar to that of computing an MSM of size $\operatorname{cost}(\varphi) + h$.
 
-The following formal description should work in more generality than just KZG. Note we are assuming that the Fiat–Shamir transcript already contains the commitments $C_i$ of the $f_i$ and parameters for the $\mathsf{PCS}$.
+The following formal description should work in more generality than just the ordinary KZG scheme. Note we are assuming that the Fiat–Shamir transcript already contains the commitments $C_i$ of the $f_i$ and parameters for the $\mathsf{PCS}$.
 
 ### {% raw %} $$\textsf{PCS.BatchOpen}\bigl(\mathsf{prk}_\mathsf{PCS}, \\\{ S_i \\\}_i, \varphi; \\\{ f_i \\\}_{1 \leq i \leq n}, \\\{ \rho_i \\\}_{1 \leq i \leq n} \bigr) \rightarrow \bigl( \\\{ y_{i} \\\}_{i}, \mathrm{im}(\varphi), \pi \bigr)$$ {% endraw %}
 
@@ -166,7 +170,7 @@ The following formal description should work in more generality than just KZG. N
 
 **Step 4c:** $$\pi_2 \leftarrow \textsf{PCS.Open}\bigl(\mathsf{prk}_\mathsf{PCS}, f, x; \rho)$$.
 
-**Step 5a:** Compute $$C_\mathrm{eval} \mathrel{\vcenter{:}}= \sum_{i = 1}^n c^{i-1} V_{S\setminus S_i }(x) \cdot  g_i (x) $$
+**Step 5a:** Compute $$C_\mathrm{eval} \mathrel{\vcenter{:}}= \bigl[ \sum_{i = 1}^n c^{i-1} V_{S\setminus S_i }(x) \cdot  g_i (x) \bigr]_1 $$
 
 **Step 5b:** Compute the proof of knowledge $\pi_{\mathsf{PoK}}$.
 
@@ -194,7 +198,7 @@ The following formal description should work in more generality than just KZG. N
 
 ## Acknowledgements
 
-Many thanks to Alin Tomescu for showing me how to efficiently batch the verification of sigma protocol proofs, and to Trisha Datta for carefully explaining how to batch opening proofs, and for showing how to extend $$\mathtt{SHPLONK}$$ to the setting of the sumcheck protocol in $\textsf{DekartProof}$ and the hiding KZG scheme of **[ZGK+17, KT23]**.
+Many thanks to Alin Tomescu for showing me how to efficiently batch the verification of sigma protocol proofs, and to Trisha Datta for carefully explaining how to batch PCS opening proofs, and for showing how to extend $$\mathtt{SHPLONK}$$ to the setting of the sumcheck protocol in $\textsf{DekartProof}$ and the hiding KZG scheme of **[ZGK+17, KT23]**.
 
 ## References
 
