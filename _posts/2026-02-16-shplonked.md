@@ -2,8 +2,8 @@
 title: "Generalising Shplonk"
 author: waamm
 date: 2026-02-16
-categories: [Cryptography, Zero-Knowledge Proofs]
-tags: [zero-knowledge-proof]
+categories: [Cryptography, Polynomial Commitment Schemes]
+tags: [polynomial-commitment-scheme, kzg, shplonk, shplonked, dekart]
 math: true
 ---
 
@@ -14,12 +14,12 @@ math: true
 The KZG[^pronunciation] protocol was the first construction of a polynomial commitment scheme and remains one of the most widely deployed today **[KZG10]**. 
 
 > **Definition (informal).**  
-> Given a polynomial $f$, a *polynomial commitment scheme* (PCS) allows a prover to commit to $f$ and later produce a succinct proof that $f(x) = y$ at any chosen evaluation point $x$, without revealing $f$.
+> Given a polynomial $f$, a *polynomial commitment scheme* (PCS) allows a prover to commit to $f$ and later produce a succinct *evaluation proof* demonstrating that $f(x) = y$ at any chosen evaluation point $x$.
 {: .box .definition }
 
-[^pronunciation]: Usually it's named KZG after the authors Kate (pronounced [kah-tey](https://www.cs.purdue.edu/homes/akate/howtopronounce.html)), Zaverucha and Goldberg of **[KZG10]**, and is sometimes it's simply called after Kate.
+[^pronunciation]: Usually it's named KZG after the authors Kate (pronounced [kah-tey](https://www.cs.purdue.edu/homes/akate/howtopronounce.html)), Zaverucha and Goldberg of **[KZG10]**, but is sometimes it's simply called after the first author Kate.
 
-The enduring appeal of the KZG scheme lies in two key properties: small constant-size evaluation proofs and fast verification of these proofs. KZG commitments now form a core building block in modern cryptography, including vector commitments, range proofs, [verifiable secret-sharing](https://en.wikipedia.org/wiki/Verifiable_secret_sharing) (e.g. **[AJM+23, MDR23, Chunky]**) and [SNARKs](https://en.wikipedia.org/wiki/Non-interactive_zero-knowledge_proof) (e.g. Plonk **[GWC19]**).
+The enduring appeal of the KZG PCS lies in two key properties: small constant-size evaluation proofs and fast verification of these proofs. KZG commitments now form a core building block in modern cryptography, including vector commitments, range proofs, [verifiable secret-sharing](https://en.wikipedia.org/wiki/Verifiable_secret_sharing) (e.g. **[AJM+23, MDR23, Chunky]**) and [SNARKs](https://en.wikipedia.org/wiki/Non-interactive_zero-knowledge_proof) (e.g. Plonk **[GWC19]**).
 
 Subsequent work introduced techniques for *batching* multiple KZG evaluation proofs --- across different polynomials or different evaluation points --- into a single proof. The culmination of these batching techniques for the ordinary KZG scheme is $$\mathtt{SHPLONK}$$ **[BDFG20]**.
 
@@ -174,7 +174,7 @@ The following formal description should work in more generality than just the or
 
 **Step 4c:** $$\pi_2 \leftarrow \textsf{PCS.Open}\bigl(\mathsf{prk}_\mathsf{PCS}, f, x; \rho)$$.
 
-**Step 5a:** Compute $$C_\mathrm{eval} \mathrel{\vcenter{:}}= \bigl[ \sum_{i = 1}^n c^{i-1} V_{S\setminus S_i }(x) \cdot  g_i (x) \bigr]_1 $$
+**Step 5a:** Compute $$C_\mathrm{eval} \mathrel{\vcenter{:}}= \bigl[ \sum_{i = 1}^n c^{i-1} V_{S\setminus S_i }(x)  g_i (x) \bigr]_1 $$
 
 **Step 5b:** Compute the proof of knowledge $\pi_{\mathsf{PoK}}$.
 
@@ -182,7 +182,7 @@ The following formal description should work in more generality than just the or
 
 ### {% raw %} $$\textsf{PCS.BatchVerify}\bigl(\mathsf{vk}_\mathsf{PCS}, \\\{ S_i \\\}_i, \varphi, \\\{ C_i \\\}_i, \\\{ y_i \\\}_i,  \pi \bigr) \rightarrow \\\{0,1\\\} $$ {% endraw %}
 
-> The verifier succinctly verifies this batch opening, as if only one verification is taking place, and also verifies the image of $\varphi$.
+> The verifier succinctly verifies this batch opening, as if only one verification is taking place, and also verifies the image of $\varphi$. For increased efficiency, a concrete group element $C_i$ may be provided as a linear combination (an MSM representation) rather than as a concrete group element.
 
 **Step 1a:** Parse the proof $(\pi_1, \pi_2, C_\mathbf{y}, C_\mathrm{eval}, \pi_{\mathsf{PoK}}) \leftarrow \pi$.
 
@@ -194,7 +194,9 @@ The following formal description should work in more generality than just the or
 
 **Step 3:** $$x \xleftarrow{\mathcal{FS}} \mathbb{F}$$.
 
-**Step 4a:** Compute $C_f \mathrel{\vcenter{:}}= \sum_i c^{i-1} V_{S\setminus S_i}(x) \, C_i - V_S (x) \, \pi_1 $.
+> If instead of a concrete commitment $C_i$ an MSM representation was passed, it simply expands the following equation into a larger MSM:
+
+**Step 4a:** Compute $C_f \mathrel{\vcenter{:}}= \sum_i c^{i-1} V_{S\setminus S_i}(x) \cdot C_i - V_S (x) \cdot \pi_1 $. 
 
 **Step 4b:** $$\\\{0, 1\\\} \leftarrow \textsf{PCS.Verify}\bigl(\mathsf{vk}_\mathsf{PCS}, x, C_f, C_\mathrm{eval}, \pi_2)$$.
 
