@@ -166,9 +166,9 @@ The following formal description should work in more generality than just the or
 
 > The prover batches multiple opening proofs at various points into one opening proof, and keeps some evaluations secret whilst revealing a relationship determined by the homomorphism $\varphi$.
 
-**Step 1a:** Compute all evaluations $\mathbf{y}$ and add $\mathbf{y}^\mathrm{rev}$ to the Fiat–Shamir transcript, along with the evaluation domains $S_i$.
+**Step 1a:** Compute all evaluations $\mathbf{y}$, then $\varphi(\mathbf{y})$ and the commitment $C_{\mathbf{y}^\mathrm{hid}}$.
 
-**Step 1b:** Compute the commitment $C_{\mathbf{y}^\mathrm{hid}}$ to the remaining $\mathbf{y}^\mathrm{hid}$ and compute $\varphi(\mathbf{y})$, and add both of them to the Fiat–Shamir transcript.
+**Step 1b:** Add the $S_i$'s, $\mathbf{y}^\mathrm{rev}$, $\varphi(\mathbf{y})$ and $C_{\mathbf{y}^\mathrm{hid}}$ to the Fiat–Shamir transcript.
 
 **Step 1c:** $$c \xleftarrow{\mathcal{FS}} \mathbb{F}$$.
 
@@ -200,11 +200,9 @@ The following formal description should work in more generality than just the or
 
 **Step 1a:** Parse the proof $(\pi_1, \pi_2, C_{\mathbf{y}^\mathrm{hid}}, C_\mathrm{eval}, \pi_{\mathsf{PoK}}) \leftarrow \pi$.
 
-**Step 1b:** Add $\mathbf{y}^\mathrm{rev}$ and the $S_i$'s to the Fiat–Shamir transcript.
+**Step 1b:** Add the $S_i$'s, $\mathbf{y}^\mathrm{rev}$, $\varphi(\mathbf{y})$ and $C_{\mathbf{y}^\mathrm{hid}}$ to the Fiat–Shamir transcript.
 
-**Step 1c:** Add $C_{\mathbf{y}^\mathrm{hid}}$ and $\varphi(\mathbf{y})$ to the Fiat–Shamir transcript.
-
-**Step 1d:** $$c \xleftarrow{\mathcal{FS}} \mathbb{F}$$.
+**Step 1c:** $$c \xleftarrow{\mathcal{FS}} \mathbb{F}$$.
 
 **Step 2:** Add $\pi_1$ to the Fiat–Shamir transcript.
 
@@ -222,7 +220,7 @@ The following formal description should work in more generality than just the or
 
 ## Acknowledgements
 
-Many thanks to Alin Tomescu for showing me how to efficiently batch the verification of sigma protocol proofs, and to Trisha Datta for carefully explaining how to batch PCS opening proofs, and for showing how to extend $$\mathtt{SHPLONK}$$ to the setting of the sumcheck protocol in $\textsf{DekartProof}$ and the hiding KZG scheme of **[ZGK+17, KT23]**.
+Many thanks to Alin Tomescu for helpful comments on notation and for showing me how to efficiently batch the verification of sigma protocol proofs; and to Trisha Datta for carefully explaining how to batch PCS opening proofs and for showing how to extend $$\mathtt{SHPLONK}$$ to the setting of the sumcheck protocol in $\textsf{DekartProof}$ and the hiding KZG scheme of **[ZGK+17, KT23]**.
 
 ## References
 
