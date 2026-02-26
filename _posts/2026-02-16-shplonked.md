@@ -61,7 +61,9 @@ Now recall that for each polynomial $f_i$ we have fixed a set $S_i$ of evaluatio
 > 
 > $$ S_i = S_i^\mathrm{rev} \sqcup S_i^\mathrm{hid}, $$
 > 
-> corresponding to the evaluations that are to be revealed and that are to be kept hidden, and let $h \mathrel{\vcenter{:}}= \sum_i \lvert S_i^\mathrm{hid} \rvert$ denote the total number of evaluations that need to be kept hidden.
+> corresponding to the evaluations that are to be revealed and that are to be kept hidden. For simplicity, we gather all evaluations into a vector $\mathbf{y} = (\mathbf{y}^\operatorname{rev}, \mathbf{y}^\operatorname{hid})$, where $\mathbf{y}^\operatorname{rev}$ consists of the evaluations to be revealed and $\mathbf{y}^\operatorname{hid}$ of those to be hidden.
+> 
+> We let $h \mathrel{\vcenter{:}}= \lvert \mathbf{y}^\operatorname{hid} \rvert = \sum_i \lvert S_i^\mathrm{hid} \rvert$ denote the total number of evaluations that need to be kept hidden.
 {: .box .notation }
 
 To facilitate the computation of KZG opening proofs, one usually encodes the evaluations of $f_i$ over $S_i$ into a single polynomial, as follows:
@@ -90,14 +92,18 @@ $$ \operatorname{MSM}(G_1,\ldots,G_k;s_1,\ldots,s_k) = \sum_{i=1}^k s_i \cdot G_
 
 i.e., computing a linear combination of group elements $G_i$ with scalar coefficients $s_i$. MSMs are the dominant cost in many proof systems. Here and throughout, an MSM refers to a multi-scalar multiplication in the subgroup $\mathbb{G}_1$.
 
+> **Definition.**  
+> By an *MSM representation* of an element $C = \sum_{i=1}^k s_i \cdot G_i$ we mean the collection of elements $$\mathbf{C} \mathrel{\vcenter{:}}= \{ (G_1,\ldots,G_k), (s_1,\ldots,s_k) \}$$. Inside of an MSM formula it is meant to expand back to the linear combination $\sum_{i=1}^k s_i \cdot G_i$.
+{: .box .definition }
+
 
 ### $$\mathtt{SHPLONK}$$
 
-The claim that $f_i $ agrees with $\tilde{f}_i $ on the set $S_i$ is equivalent to the existence of a univariate polynomial $q_i$ satisfying
+For a fixed $i$, the claim that $f_i $ agrees with $\tilde{f}_i $ on the set $S_i$ is equivalent to the existence of a univariate polynomial $q_i$ satisfying
 
 $$q_i(X) = \frac{ f_i (X) - \tilde{f}_i (X) }{ Z_{S_i} (X) }.$$
 
-Applying a version of the Schwartz–Zippel lemma, it suffices given a challenge $c$ to show that there exists a polynomial $q$ such that 
+Applying a version of the Schwartz–Zippel lemma, it then suffices given a challenge $c$ to show that there exists a polynomial $q$ such that 
 
 $$q(X) = \sum_{i = 1}^nc^{i-1}  \frac{ f_i (X) - \tilde{f}_i (X) }{ Z_{S_i} (X) },$$
 
@@ -131,9 +137,9 @@ Ordinarily in $$\mathtt{SHPLONK}$$ the prover would send over each $\tilde{f}_i(
 \label{eq:eval}
 \end{equation}
 
-A natural approach would be for the prover to send commitments $$\{ [y_i]_1 \}_{1 \leq i \leq h}$$ for the $h$ evaluations $y_i$ that need to be kept hidden, plus a sigma protocol proving that it knows the hidden $$\{ y_i \}_{1 \leq i \leq h}$$ which give
-- the commitments $$\{[y_i]_1 \}_{1 \leq i \leq h}$$,
-- the image of $\varphi$.
+A natural approach would be for the prover to send commitments to each of the $h$ evaluations in $\mathbf{y}^\mathrm{hid}$ that need to be kept hidden, plus a sigma protocol proving that it knows the hidden $\mathbf{y}^\mathrm{hid}$ which give
+- the $h$ commitments to the elements in $\mathbf{y}^\mathrm{hid}$, and
+- the element $\varphi(\mathbf{y})$.
 
 This is already quite costly for the verifier: if the cost of evaluating the homomorphism $\varphi$ is dominated by computing an MSM of size $\operatorname{cost}(\varphi)$, then the verifier's cost for verifying this sigma protocol should be dominated by an MSM of size $\operatorname{cost}(\varphi) + 2h$.[^msm] Moreover, the verifier then needs to use another MSM of size $h+1$ to compute
 
@@ -147,22 +153,22 @@ $$
 
 [^msm]: Using the Schwartz–Zippel lemma, normally one would expect to see $3$ MSM terms here for each of the hidden $y_i$. Alin Tomescu suggested that since the base $[1]_1$ (and the additional base $[\xi]_1$ for hiding KZG variants) repeats, the corresponding scalars can be summed and this can be merged into one term.
 
-Trisha Datta's approach is that the prover should only have to compute $\eqref{eq:eval}$. Namely, instead of committing to each secret $$y_i$$ individually, it gathers them into a vector $\mathbf{y} \mathrel{\vcenter{:}}= (y_1 ,\ldots, y_h)$ and commits to them all at once in one commitment $C_\mathbf{y}$, using some homomorphic vector commitment scheme (e.g., a hiding KZG variant). (A commitment is needed at the start of the protocol to prevent a possible grinding attack.) Then once the challenge point $x$ is known, it sends the element $\eqref{eq:eval}$ along with a sigma protocol proving that it knows the secret $\mathbf{y}$ giving 
-- the commitmentment $C_\mathbf{y}$,
+Trisha Datta's approach is that the prover should only have to compute $\eqref{eq:eval}$. Namely, instead of committing to each secret element in $\mathbf{y}^\mathrm{hid}$ individually, it simply commits to them all at once in one commitment $C_{\mathbf{y}^\mathrm{hid}}$, using some homomorphic vector commitment scheme (e.g., a hiding KZG variant). (This commitment is needed at the start of the protocol to prevent a possible grinding attack.) Then once the challenge point $x$ is known, it sends the element $\eqref{eq:eval}$ along with a sigma protocol proving that it knows the secret $\mathbf{y}^\mathrm{hid}$ giving 
+- the commitmentment $C_{\mathbf{y}^\mathrm{hid}}$,
 - the element $\eqref{eq:eval}$, and
-- the image of $\varphi$.
+- the element $\varphi(\mathbf{y})$.
 
 A commitment for $h$ elements usually has cost similar to that of computing an MSM of size $h$, so the cost of verifying this sigma protocol should be similar to that of computing an MSM of size $\operatorname{cost}(\varphi) + h$.
 
-The following formal description should work in more generality than just the ordinary KZG scheme. Note we are assuming that the Fiat–Shamir transcript already contains the commitments $C_i$ of the $f_i$ and parameters for the $\mathsf{PCS}$.
+The following formal description should work in more generality than just the ordinary KZG scheme. Note we are assuming that the Fiat–Shamir transcript already contains the commitments $C_i$ of the $f_i$ and parameters for the $\mathsf{PCS}$. The commitment randomness of $C_i$ is denoted $\rho_i$.
 
-### {% raw %} $$\textsf{PCS.BatchOpen}\bigl(\mathsf{prk}_\mathsf{PCS}, \\\{ S_i \\\}_i, \varphi; \\\{ f_i \\\}_{1 \leq i \leq n}, \\\{ \rho_i \\\}_{1 \leq i \leq n} \bigr) \rightarrow \bigl( \\\{ y_{i} \\\}_{i}, \mathrm{im}(\varphi), \pi \bigr)$$ {% endraw %}
+### {% raw %} $$\textsf{PCS.BatchOpen}\bigl(\mathsf{prk}_\mathsf{PCS}, \\\{ S_i \\\}_{1 \leq i \leq n}, \varphi; \\\{ f_i \\\}_{1 \leq i \leq n}, \\\{ \rho_i \\\}_{1 \leq i \leq n} \bigr) \rightarrow \bigl( \mathbf{y}^\mathrm{rev}, \varphi(\mathbf{y}), \pi \bigr)$$ {% endraw %}
 
 > The prover batches multiple opening proofs at various points into one opening proof, and keeps some evaluations secret whilst revealing a relationship determined by the homomorphism $\varphi$.
 
-**Step 1a:** Compute all evaluations $y_i$ and add those that are to be revealed to the Fiat–Shamir transcript, along with $S_i$.
+**Step 1a:** Compute all evaluations $\mathbf{y}$ and add $\mathbf{y}^\mathrm{rev}$ to the Fiat–Shamir transcript, along with the evaluation domains $S_i$.
 
-**Step 1b:** Compute the commitment $C_\mathbf{y}$ to the remaining $y_i$ and $\mathrm{im}(\varphi)$ and add them to the Fiat–Shamir transcript.
+**Step 1b:** Compute the commitment $C_{\mathbf{y}^\mathrm{hid}}$ to the remaining $\mathbf{y}^\mathrm{hid}$ and compute $\varphi(\mathbf{y})$, and add both of them to the Fiat–Shamir transcript.
 
 **Step 1c:** $$c \xleftarrow{\mathcal{FS}} \mathbb{F}$$.
 
@@ -186,17 +192,19 @@ The following formal description should work in more generality than just the or
 
 **Step 5b:** Compute the proof of knowledge $\pi_{\mathsf{PoK}}$.
 
-**Step 6:** $\pi \leftarrow (\pi_1, \pi_2, C_\mathbf{y}, C_\mathrm{eval}, \pi_{\mathsf{PoK}})$.
+**Step 6:** $\pi \leftarrow (\pi_1, \pi_2, C_{\mathbf{y}^\mathrm{hid}}, C_\mathrm{eval}, \pi_{\mathsf{PoK}})$.
 
-### {% raw %} $$\textsf{PCS.BatchVerify}\bigl(\mathsf{vk}_\mathsf{PCS}, \\\{ S_i \\\}_i, \varphi, \\\{ C_i \\\}_i, \\\{ y_i \\\}_i,  \pi \bigr) \rightarrow \\\{0,1\\\} $$ {% endraw %}
+### {% raw %} $$\textsf{PCS.BatchVerify}\bigl(\mathsf{vk}_\mathsf{PCS}, \\\{ S_i \\\}_{1 \leq i \leq n}, \varphi, \\\{ C_i \\\}_{1 \leq i \leq n} ; \mathbf{y}^\mathrm{rev}, \varphi(\mathbf{y}),  \pi \bigr) \rightarrow \\\{0,1\\\} $$ {% endraw %}
 
 > The verifier succinctly verifies this batch opening, as if only one verification is taking place, and also verifies the image of $\varphi$. For increased efficiency, a concrete group element $C_i$ may be provided as a linear combination (an MSM representation) rather than as a concrete group element.
 
-**Step 1a:** Parse the proof $(\pi_1, \pi_2, C_\mathbf{y}, C_\mathrm{eval}, \pi_{\mathsf{PoK}}) \leftarrow \pi$.
+**Step 1a:** Parse the proof $(\pi_1, \pi_2, C_{\mathbf{y}^\mathrm{hid}}, C_\mathrm{eval}, \pi_{\mathsf{PoK}}) \leftarrow \pi$.
 
-**Step 1b:** Add the $y_i$'s and $S_i$'s to the Fiat–Shamir transcript.
+**Step 1b:** Add $\mathbf{y}^\mathrm{rev}$ and the $S_i$'s to the Fiat–Shamir transcript.
 
-**Step 1c:** $$c \xleftarrow{\mathcal{FS}} \mathbb{F}$$.
+**Step 1c:** Add $C_{\mathbf{y}^\mathrm{hid}}$ and $\varphi(\mathbf{y})$ to the Fiat–Shamir transcript.
+
+**Step 1d:** $$c \xleftarrow{\mathcal{FS}} \mathbb{F}$$.
 
 **Step 2:** Add $\pi_1$ to the Fiat–Shamir transcript.
 
@@ -208,7 +216,7 @@ The following formal description should work in more generality than just the or
 
 > If instead of a concrete commitment $C_i$ an MSM representation $\mathbf{C}_i$ was passed, it simply expands the following equation into a larger MSM:
 
-**Step 5a:** Compute the MSM $C_f \mathrel{\vcenter{:}}= \sum_i c^{i-1} Z_{S\setminus S_i}(x) \cdot C_i - Z_S (x) \cdot \pi_1 + c^i \, \mathbf{C}_\mathsf{PoK}$. 
+**Step 5a:** Compute the MSM $C_f \mathrel{\vcenter{:}}= \sum_{i = 1}^n c^{i-1} Z_{S\setminus S_i}(x) \cdot C_i - Z_S (x) \cdot \pi_1 + c^n \, \mathbf{C}_\mathsf{PoK}$. 
 
 **Step 5b:** $$\\\{0, 1\\\} \leftarrow \textsf{PCS.Verify}\bigl(\mathsf{vk}_\mathsf{PCS}, x, C_f, C_\mathrm{eval}, \pi_2)$$.
 
