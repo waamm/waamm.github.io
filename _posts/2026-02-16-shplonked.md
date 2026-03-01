@@ -19,13 +19,13 @@ The KZG[^pronunciation] protocol was the first construction of a polynomial comm
 
 [^pronunciation]: Usually it's named KZG after the authors Kate (pronounced [kah-tey](https://www.cs.purdue.edu/homes/akate/howtopronounce.html)), Zaverucha and Goldberg of **[KZG10]**, but is sometimes it's simply named after the first author Kate.
 
-The enduring appeal of the KZG PCS lies in two key properties: small constant-size evaluation proofs and fast verification of these proofs. KZG commitments now form a core building block in modern cryptography, including vector commitments, range proofs (e.g. **[Dekart]**), [verifiable secret-sharing](https://en.wikipedia.org/wiki/Verifiable_secret_sharing) (e.g. **[AJM+23, MDR23, Chunky]**) and [SNARKs](https://en.wikipedia.org/wiki/Non-interactive_zero-knowledge_proof) (e.g. Plonk **[GWC19]**).
+The enduring appeal of the KZG PCS lies in two key properties: small constant-size evaluation proofs and fast constant-time verification of these proofs. KZG commitments now form a core building block in modern cryptography, including vector commitments, range proofs (e.g. **[Dekart]**), [verifiable secret-sharing](https://en.wikipedia.org/wiki/Verifiable_secret_sharing) (e.g. **[AJM+23, MDR23, Chunky]**) and [SNARKs](https://en.wikipedia.org/wiki/Non-interactive_zero-knowledge_proof) (e.g. Plonk **[GWC19]**).
 
 Subsequent work introduced techniques for *batching* multiple KZG evaluation proofs --- across different polynomials or different evaluation points --- into a single proof, thereby substantially improving efficiency. The culmination of these batching techniques for the ordinary KZG scheme is $$\mathtt{SHPLONK}$$ **[BDFG20]**.
 
 In this post, following Trisha Datta, we generalise $$\mathtt{SHPLONK}$$ so that:
 
-1. The protocol can be instantiated with variants of KZG, not just the original KZG scheme.
+1. The protocol can be instantiated with all homomorphic variants of KZG, not just the original KZG scheme.
 2. The protocol supports selective disclosure: some evaluations may remain hidden, while the verifier learns only specified homomorphic functions of them.
 
 We leave out security proofs for now. <span style="color:red">TODO</span>
@@ -96,6 +96,9 @@ i.e., computing a linear combination of group elements $G_i$ with scalar coeffic
 > By an *MSM representation* of a group element $C$ we mean a pair of tuples $$\mathbf{C} = \{ (G_1,\ldots,G_k), (s_1,\ldots,s_k) \}$$ such that $C = \sum_{i=1}^k s_i \cdot G_i$. Inside of an MSM formula the symbol $\mathbf{C}$ is meant to expand into the linear combination $\sum_{i=1}^k s_i \cdot G_i$.
 {: .box .definition }
 
+> **Notation.** 
+> We assume that the cost of evaluating a homomorphism $\varphi$ is dominated by computing an MSM of size $\operatorname{cost}(\varphi)$,
+{: .box .notation }
 
 ### $$\mathtt{SHPLONK}$$
 
@@ -138,7 +141,7 @@ $$f \mathrel{\vcenter{:}}= \sum_{i=1}^n c^{i-1} Z_{S\setminus S_i} (x) \cdot f_i
  evaluates to $0$ at $x$. 
 
 > **Corollary.**  
-> In any homomorphic variant on KZG, where the commitment to the $f_i$'s and to $q$ has commitment randomness $\rho_i$ and $\rho_q$, and the verifier can compute $$\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i (x)$$, the prover can prove this by producing an opening proof for $f$ with commitment randomness
+> In any homomorphic variant on KZG, where the commitment to the $f_i$'s and to $q$ has commitment randomness $\rho_i$ and $\rho_q$, and the verifier can compute $$\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i (x)$$, the prover can prove this by producing an opening proof for $f$ using commitment randomness
 >
 > $$\rho \mathrel{\vcenter{:}}= \sum_{i=1}^n c^{i-1} Z_{S\setminus S_i} (x) \cdot \rho_i - Z_S (x) \cdot \rho_q.$$
 {: .box .corollary }
@@ -154,32 +157,33 @@ Ordinarily in $$\mathtt{SHPLONK}$$ the prover would send over each $\tilde{f}_i(
 
 A natural approach would be for the prover to send commitments to each of the $h$ evaluations in $\mathbf{y}^\mathrm{hid}$ that need to be kept hidden, plus a sigma protocol proving that it knows the hidden $\mathbf{y}^\mathrm{hid}$ which give
 - the $h$ commitments to the elements in $\mathbf{y}^\mathrm{hid}$, and
-- the element $\varphi(\mathbf{y})$.
+- the element $\varphi(\mathbf{y})$,
 
-This is already quite costly for the verifier: if the cost of evaluating the homomorphism $\varphi$ is dominated by computing an MSM of size $\operatorname{cost}(\varphi)$, then the verifier's cost for verifying this sigma protocol should be dominated by an MSM of size $\operatorname{cost}(\varphi) + 2h$.[^msm] Moreover, the verifier then needs to use another MSM of size $h+1$ to compute
-
-$$
-\begin{align}
-\bigl[\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i (x) \bigr]_1 & = \bigl[\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \sum_{s\in S_i} L_{i,s}(x) f(s) \bigr]_1 \nonumber \\
- & = \Bigl( \sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \sum_{s\in S_i^\mathrm{rev}} L_{i,s}(x) f(s) \Bigr) \cdot [1]_1 \nonumber \\
- & \qquad + \sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \sum_{s\in S_i^\mathrm{hid}} L_{i,s}(x) \bigl[ f(s) \bigr]_1 \nonumber
-\end{align}
-$$
-
-[^msm]: Using the Schwartz–Zippel lemma, normally one would expect to see $3$ MSM terms here for each of the hidden $y_i$. Alin Tomescu suggested that since the base $[1]_1$ (and the additional base $[\xi]_1$ for hiding KZG variants) repeats, the corresponding scalars can be summed and this can be merged into one term.
-
-Trisha Datta's approach is that the prover should only have to compute $\eqref{eq:eval}$. Namely, instead of committing to each secret element in $\mathbf{y}^\mathrm{hid}$ individually, it simply commits to them all at once in one commitment $C_{\mathbf{y}^\mathrm{hid}}$, using some homomorphic vector commitment scheme (e.g., a hiding KZG variant). (This commitment is needed at the start of the protocol to prevent a possible grinding attack.) Then once the challenge point $x$ is known, it sends the element $\eqref{eq:eval}$ along with a sigma protocol proving that it knows the secret $\mathbf{y}^\mathrm{hid}$ giving 
+but this would be quite costly for the verifier.[^cost] Trisha Datta's approach is that the prover should only have to compute $\eqref{eq:eval}$. Namely, instead of committing to each secret element in $\mathbf{y}^\mathrm{hid}$ individually, it simply commits to them all at once in one commitment $C_{\mathbf{y}^\mathrm{hid}}$, using some homomorphic vector commitment scheme (e.g., a hiding KZG variant). (This commitment is needed at the start of the protocol to prevent a possible grinding attack.) Then once the challenge point $x$ is known, it sends the element $\eqref{eq:eval}$ along with a sigma protocol proving that it knows the secret $\mathbf{y}^\mathrm{hid}$ giving 
 - the commitmentment $C_{\mathbf{y}^\mathrm{hid}}$,
 - the element $\eqref{eq:eval}$, and
 - the element $\varphi(\mathbf{y})$.
 
 A commitment for $h$ elements usually has cost similar to that of computing an MSM of size $h$, so the cost of verifying this sigma protocol should be similar to that of computing an MSM of size $\operatorname{cost}(\varphi) + h$.
 
+[^cost]:
+    The verifier's cost for verifying this sigma protocol should be dominated by an MSM of size $\operatorname{cost}(\varphi) + 2h$.[^msm] Moreover, the verifier then needs to use another MSM of size $h+1$ to compute
+    
+    $$
+    \begin{align}
+    \bigl[\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i (x) \bigr]_1 & = \bigl[\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \sum_{s\in S_i} L_{i,s}(x) f(s) \bigr]_1 \nonumber \\
+     & = \Bigl( \sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \sum_{s\in S_i^\mathrm{rev}} L_{i,s}(x) f(s) \Bigr) \cdot [1]_1 \nonumber \\
+     & \qquad + \sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \sum_{s\in S_i^\mathrm{hid}} L_{i,s}(x) \bigl[ f(s) \bigr]_1 \nonumber
+    \end{align}
+    $$
+
+    [^msm]: Using the Schwartz–Zippel lemma, normally one would expect to see $3$ MSM terms here for each of the hidden $y_i$. Alin Tomescu suggested that since the base $[1]_1$ (and the additional base $[\xi]_1$ for hiding KZG variants) repeats, the corresponding scalars can be summed and this can be merged into one term.
+
 
 > **Theorem.**  
-> In any homomorphic variant on KZG, where the commitment to the $f_i$'s and to $q$ has commitment randomness $\rho_i$ and $\rho_q$, and the commitment to $$\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i (x)$$ has commitment randomness $\rho_\mathrm{eval}$, the prover can prove this by combining an opening proof for $f$ with commitment randomness
+> In any homomorphic variant on KZG, where the commitment to the $f_i$'s and to $q$ has commitment randomness $\rho_i$ and $\rho_q$, and the commitment to $$\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i (x)$$ has commitment randomness $\rho_\mathrm{eval}$, the prover can prove this by combining an opening proof for $f$ using commitment randomness
 >
-> $$\rho \mathrel{\vcenter{:}}= \sum_{i=1}^n c^{i-1} Z_{S\setminus S_i} (x) \cdot \rho_i - Z_S (x) \cdot \rho_q - \rho_\mathrm{eval}$$
+> $$\rho \mathrel{\vcenter{:}}= \sum_{i=1}^n c^{i-1} Z_{S\setminus S_i} (x) \cdot \rho_i - Z_S (x) \cdot \rho_q - \rho_\mathrm{eval},$$
 >
 > with an appropriate sigma proof.
 {: .box .theorem }
@@ -207,17 +211,21 @@ Thus, the following formal description should work in more generality than just 
 
 **Step 3:** $$x \xleftarrow{\mathcal{FS}} \mathbb{F}$$.
 
-**Step 4a:** $f \leftarrow \sum_{i = 1}^n c^{i-1} Z_{S\setminus S_i}(x) f_i - Z_S(x) q$.
+**Step 4a:** Sample commitment randomness $$\rho_\operatorname{eval} \xleftarrow{\$} \mathcal{R}_\mathsf{Com}$$.
 
-**Step 4b:** $\rho \leftarrow \sum_{i = 1}^n c^{i-1} Z_{S\setminus S_i }(x) \rho_i - Z_S(x) \rho_q$.
+**Step 4b:** Compute the constant polynomial $$g \mathrel{\vcenter{:}}= \sum_{i = 1}^n c^{i-1} Z_{S\setminus S_i }(x)  \tilde{f}_i (x)$$.
 
-**Step 4c:** $$\pi_2 \leftarrow \textsf{PCS.Open}\bigl(\mathsf{prk}_\mathsf{PCS}, f, x; \rho)$$.
+**Step 4c:** Compute the commitment $$C_\operatorname{eval} \leftarrow \textsf{PCS.Commit} ( \mathsf{prk}_\mathsf{PCS}, g; \rho_\operatorname{eval} )$$.
 
-**Step 5a:** Compute the commitment $$C_\mathrm{eval} \mathrel{\vcenter{:}}= \bigl[ \sum_{i = 1}^n c^{i-1} Z_{S\setminus S_i }(x)  \tilde{f}_i (x) \bigr]_1 $$ (so in a hiding setting, another term is added here).
+**Step 5a:** $f \leftarrow \sum_{i = 1}^n c^{i-1} Z_{S\setminus S_i}(x) f_i - Z_S(x) q - g$.
 
-**Step 5b:** Compute the proof of knowledge $\pi_{\mathsf{PoK}}$.
+**Step 5b:** $\rho \leftarrow \sum_{i = 1}^n c^{i-1} Z_{S\setminus S_i }(x) \rho_i - Z_S(x) \rho_q - \rho_\operatorname{eval}$.
 
-**Step 6:** $\pi \leftarrow (\pi_1, \pi_2, C_{\mathbf{y}^\mathrm{hid}}, C_\mathrm{eval}, \pi_{\mathsf{PoK}})$.
+**Step 5c:** $$\pi_2 \leftarrow \textsf{PCS.Open}\bigl(\mathsf{prk}_\mathsf{PCS}, f, x; \rho)$$.
+
+**Step 6:** Compute the proof of knowledge $\pi_{\mathsf{PoK}}$.
+
+**Step 7:** $\pi \leftarrow (\pi_1, \pi_2, C_{\mathbf{y}^\mathrm{hid}}, C_\mathrm{eval}, \pi_{\mathsf{PoK}})$.
 
 ### {% raw %} $$\textsf{PCS.BatchVerify}\bigl(\mathsf{vk}_\mathsf{PCS}, \\\{ S_i \\\}_{1 \leq i \leq n}, \varphi, \\\{ C_i \\\}_{1 \leq i \leq n} ; \mathbf{y}^\mathrm{rev}, \varphi(\mathbf{y}),  \pi \bigr) \rightarrow \\\{0,1\\\} $$ {% endraw %}
 
@@ -239,9 +247,9 @@ Thus, the following formal description should work in more generality than just 
 
 > If instead of a concrete commitment $C_i$ an MSM representation $\mathbf{C}_i$ was passed, it simply expands the following equation into a larger MSM:
 
-**Step 5a:** Compute the MSM $C_f \mathrel{\vcenter{:}}= \sum_{i = 1}^n c^{i-1} Z_{S\setminus S_i}(x) \cdot C_i - Z_S (x) \cdot \pi_1 + c^n \, \mathbf{C}_\mathsf{PoK}$. 
+**Step 5a:** Compute the MSM $C_f \mathrel{\vcenter{:}}= \sum_{i = 1}^n c^{i-1} Z_{S\setminus S_i}(x) \cdot C_i - Z_S (x) \cdot \pi_1 - C_\mathrm{eval} + c^n \, \mathbf{C}_\mathsf{PoK}$. 
 
-**Step 5b:** $$\\\{0, 1\\\} \leftarrow \textsf{PCS.Verify}\bigl(\mathsf{vk}_\mathsf{PCS}, x, C_f, C_\mathrm{eval}, \pi_2)$$.
+**Step 5b:** $$\\\{0, 1\\\} \leftarrow \textsf{PCS.Verify}\bigl(\mathsf{vk}_\mathsf{PCS}, x, C_f, 0, \pi_2)$$.
 
 ## Acknowledgements
 
