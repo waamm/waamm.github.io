@@ -14,7 +14,7 @@ math: true
 The KZG[^pronunciation] protocol was the first construction of a polynomial commitment scheme and remains one of the most widely deployed today **[KZG10]**. 
 
 > **Definition (informal).**  
-> Given a polynomial $f$, a *polynomial commitment scheme (PCS)* allows a prover to commit to $f$ and later produce a succinct *evaluation proof* demonstrating that $f(x) = y$ at any chosen evaluation point $x$.
+> A *polynomial commitment scheme (PCS)* allows a prover to commit to a polynomial $f$ and later produce a succinct *evaluation proof* demonstrating that $f(x) = y$ at any chosen evaluation point $x$.
 {: .box .definition }
 
 [^pronunciation]: Usually it's named KZG after the authors Kate (pronounced [kah-tey](https://www.cs.purdue.edu/homes/akate/howtopronounce.html)), Zaverucha and Goldberg of **[KZG10]**, but is sometimes it's simply named after the first author Kate.
@@ -41,11 +41,11 @@ Let $f_1,\ldots,f_n$ be univariate polynomials, where each $f_i$ is evaluated on
 >
 > $$g(X_1 ,\ldots, X_m) = \sum_{i = 1}^m g_i(X_i),$$
 >
-> and commit separately to each of these univariate polynomials $g_i$. Consequently, the evaluation at $\mathbf{x}$ decomposes as
+> and commit separately to each of these univariate polynomials $g_i$. Consequently, the evaluation at $\mathbf{x}$ can be computed by making use of the identity
 >
 > $$g(\mathbf{x}) = \sum_{i = 1}^m g_i(x_i).$$
 >
-> However, to prevent information leakage in the sumcheck protocol the prover cannot reveal the individual evaluations $y_i \mathrel{\vcenter{:}}= g_i(x_i)$. Rather, the prover only reveals their sum $\sum_{i = 1}^m y_i$, which is the sought-after evaluation $g(\mathbf{x})$. Thus, this setting corresponds to the homomorphism $\varphi(y_1, \ldots, y_m) \mathrel{\vcenter{:}}= \sum_{i = 1}^m y_i$, and a version of KZG which properly hides the $g_i$ polynomials.
+> However, to prevent information leakage in the sumcheck protocol the prover cannot reveal the individual evaluations $y_i \mathrel{\vcenter{:}}= g_i(x_i)$. Rather, the prover only reveals their sum $\sum_{i = 1}^m y_i$, which is the sought-after evaluation $g(\mathbf{x})$. Thus, this setting corresponds to the homomorphism $\varphi(y_1, \ldots, y_m) \mathrel{\vcenter{:}}= \sum_{i = 1}^m y_i$, and a variant of KZG commitments which properly hides the $g_i$ polynomials.
 {: .box .example }
 
 ### Preliminaries
@@ -93,17 +93,17 @@ $$ \operatorname{MSM}(G_1,\ldots,G_k;s_1,\ldots,s_k) = \sum_{i=1}^k s_i \cdot G_
 i.e., computing a linear combination of group elements $G_i$ with scalar coefficients $s_i$. MSMs are the dominant cost in many proof systems. Here and throughout, an MSM refers to a multi-scalar multiplication in the subgroup $\mathbb{G}_1$.
 
 > **Definition.**  
-> By an *MSM representation* of an element $C = \sum_{i=1}^k s_i \cdot G_i$ we mean the collection of elements $$\mathbf{C} \mathrel{\vcenter{:}}= \{ (G_1,\ldots,G_k), (s_1,\ldots,s_k) \}$$. Inside of an MSM formula it is meant to expand back to the linear combination $\sum_{i=1}^k s_i \cdot G_i$.
+> By an *MSM representation* of a group element $C$ we mean a pair of tuples $$\mathbf{C} = \{ (G_1,\ldots,G_k), (s_1,\ldots,s_k) \}$$ such that $C = \sum_{i=1}^k s_i \cdot G_i$. Inside of an MSM formula the symbol $\mathbf{C}$ is meant to expand into the linear combination $\sum_{i=1}^k s_i \cdot G_i$.
 {: .box .definition }
 
 
 ### $$\mathtt{SHPLONK}$$
 
-For a fixed $i$, the claim that $f_i $ agrees with $\tilde{f}_i $ on the set $S_i$ is equivalent to the existence of a univariate polynomial $q_i$ satisfying
+For a fixed $i$, the claim that $f_i $ agrees with the interpolation polynomial $\tilde{f}_i $ on the set $S_i$ is equivalent to the existence of a univariate polynomial $q_i$ satisfying
 
 $$q_i(X) = \frac{ f_i (X) - \tilde{f}_i (X) }{ Z_{S_i} (X) }.$$
 
-Applying a version of the Schwartz–Zippel lemma, it then suffices given a challenge $c$ to show that there exists a polynomial $q$ such that 
+Applying a version of the Schwartz–Zippel lemma, it then suffices given a challenge $c$ to demonstrate that there exists a polynomial $q$ such that 
 
 $$q(X) = \sum_{i = 1}^nc^{i-1}  \frac{ f_i (X) - \tilde{f}_i (X) }{ Z_{S_i} (X) },$$
 
@@ -113,20 +113,35 @@ $$Z_S(X) \cdot q(X) = \sum_{i = 1}^n c^{i-1} Z_{S\setminus S_i }(X) \cdot \bigl(
 
 After committing to $q$, verifying this identity would need $n$ pairings for the right-hand-side, so $n+1$ pairings in total.
 
-Therefore, it is cheaper for the verifier to test it at a point: the claim is that the prover knows $\tilde{f}_i$ and $q$ such that this identity holds. Thus after committing to $q$, the verifier sends a point $x$, and then the prover proves the identity by committing to 
+Therefore, it is cheaper for the verifier to test it at a point: the claim is that the prover knows $\tilde{f}_i$'s and $q$ such that this identity holds. Thus after committing to $q$, the verifier sends a point $x$, and then the prover proves the identity by committing to 
 
 $$
 \begin{align}
 \check{q}(X) & = \frac{  \sum_{i=1}^n c^{i-1} Z_{S \setminus S_i} (x) \cdot \bigl(f_i (X) - \tilde{f}_i (x) \bigr) - Z_S (x)\cdot q(X) } {X - x}\nonumber \\
- & = \frac{ \bigl( \sum_{i=1}^n c^{i-1} Z_{S\setminus S_i} (x) \cdot f_i (X) - Z_S (x) \cdot q(X) \bigr) - \sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \cdot \tilde{f}_i (x) } {X - x} \nonumber 
+ & = \frac{ \sum_{i=1}^n c^{i-1} Z_{S\setminus S_i} (x) \cdot f_i (X) - Z_S (x) \cdot q(X) - \sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \cdot \tilde{f}_i (x) } {X - x} \nonumber 
 \end{align}
 $$
 
 Using two pairings, this is done in the KZG PCS by verifying the identity
 
-$$ \bigl( [\check{q}(\tau)]_1, [\tau]_2 - [x]_2 \bigr) = \bigl( \sum_{i=1}^n c^{i-1} Z_{S\setminus S_i} (x) \cdot [f_i (\tau)]_1 - Z_S (x) \cdot [q(\tau)]_1 - \bigl[\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i (x) \bigr]_1 , [1]_2 \bigr),$$
+$$
+\begin{equation}
+\bigl( [\check{q}(\tau)]_1, [\tau]_2 - [x]_2 \bigr) = \bigl( \sum_{i=1}^n c^{i-1} Z_{S\setminus S_i} (x) \cdot [f_i (\tau)]_1 - Z_S (x) \cdot [q(\tau)]_1 - \bigl[\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i (x) \bigr]_1 , [1]_2 \bigr).
+\label{eq:open}
+\end{equation}
+$$
 
-and similarly in other variants.
+Now observe that the existence of $$\check{q}$$ can be interpreted as simply proving that the polynomial
+
+$$f \mathrel{\vcenter{:}}= \sum_{i=1}^n c^{i-1} Z_{S\setminus S_i} (x) \cdot f_i (X) - Z_S (x) \cdot q(X) - \sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i (x)$$
+
+ evaluates to $0$ at $x$. 
+
+> **Corollary.**  
+> In any homomorphic variant on KZG, where the commitment to the $f_i$'s and to $q$ has commitment randomness $\rho_i$ and $\rho_q$, and the verifier can compute $$\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i (x)$$, the prover can prove this by producing an opening proof for $f$ with commitment randomness
+>
+> $$\rho \mathrel{\vcenter{:}}= \sum_{i=1}^n c^{i-1} Z_{S\setminus S_i} (x) \cdot \rho_i - Z_S (x) \cdot \rho_q.$$
+{: .box .corollary }
 
 ### Hiding with a sigma protocol
 
@@ -160,7 +175,17 @@ Trisha Datta's approach is that the prover should only have to compute $\eqref{e
 
 A commitment for $h$ elements usually has cost similar to that of computing an MSM of size $h$, so the cost of verifying this sigma protocol should be similar to that of computing an MSM of size $\operatorname{cost}(\varphi) + h$.
 
-The following formal description should work in more generality than just the ordinary KZG scheme. Note we are assuming that the Fiat–Shamir transcript already contains the commitments $C_i$ of the $f_i$ and parameters for the $\mathsf{PCS}$. The commitment randomness of $C_i$ is denoted $\rho_i$.
+
+> **Theorem.**  
+> In any homomorphic variant on KZG, where the commitment to the $f_i$'s and to $q$ has commitment randomness $\rho_i$ and $\rho_q$, and the commitment to $$\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i (x)$$ has commitment randomness $\rho_\mathrm{eval}$, the prover can prove this by combining an opening proof for $f$ with commitment randomness
+>
+> $$\rho \mathrel{\vcenter{:}}= \sum_{i=1}^n c^{i-1} Z_{S\setminus S_i} (x) \cdot \rho_i - Z_S (x) \cdot \rho_q - \rho_\mathrm{eval}$$
+>
+> with an appropriate sigma proof.
+{: .box .theorem }
+
+
+Thus, the following formal description should work in more generality than just the ordinary KZG scheme. Note we are assuming that the Fiat–Shamir transcript already contains the commitments $C_i$ of the $f_i$ and parameters for the $\mathsf{PCS}$. The commitment randomness of $C_i$ is denoted $\rho_i$.
 
 ### {% raw %} $$\textsf{PCS.BatchOpen}\bigl(\mathsf{prk}_\mathsf{PCS}, \\\{ S_i \\\}_{1 \leq i \leq n}, \varphi; \\\{ f_i \\\}_{1 \leq i \leq n}, \\\{ \rho_i \\\}_{1 \leq i \leq n} \bigr) \rightarrow \bigl( \mathbf{y}^\mathrm{rev}, \varphi(\mathbf{y}), \pi \bigr)$$ {% endraw %}
 
@@ -172,7 +197,7 @@ The following formal description should work in more generality than just the or
 
 **Step 1c:** $$c \xleftarrow{\mathcal{FS}} \mathbb{F}$$.
 
-**Step 2a:** Compute $$q \mathrel{\vcenter{:}}= \frac{ \sum_{i = 1}^n c^{i-1} Z_{S\setminus S_i }(X) \cdot \bigl( f_i (X) - \tilde{f}_i (X) \bigr)} {Z_S (X)}$$.
+**Step 2a:** Compute $$q(X) = \sum_{i = 1}^nc^{i-1}  \frac{ f_i (X) - \tilde{f}_i (X) }{ Z_{S_i} (X) }$$.
 
 **Step 2b:** Sample commitment randomness $$\rho_q \xleftarrow{\$} \mathcal{R}_\mathsf{Com}$$.
 
@@ -188,7 +213,7 @@ The following formal description should work in more generality than just the or
 
 **Step 4c:** $$\pi_2 \leftarrow \textsf{PCS.Open}\bigl(\mathsf{prk}_\mathsf{PCS}, f, x; \rho)$$.
 
-**Step 5a:** Compute $$C_\mathrm{eval} \mathrel{\vcenter{:}}= \bigl[ \sum_{i = 1}^n c^{i-1} Z_{S\setminus S_i }(x)  \tilde{f}_i (x) \bigr]_1 $$.
+**Step 5a:** Compute the commitment $$C_\mathrm{eval} \mathrel{\vcenter{:}}= \bigl[ \sum_{i = 1}^n c^{i-1} Z_{S\setminus S_i }(x)  \tilde{f}_i (x) \bigr]_1 $$ (so in a hiding setting, another term is added here).
 
 **Step 5b:** Compute the proof of knowledge $\pi_{\mathsf{PoK}}$.
 

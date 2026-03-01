@@ -3,7 +3,7 @@ title: "The Weil Pairing, Part I: Function Theory on Complex Tori"
 author: waamm
 date: 2025-12-18
 categories: [Pure Mathematics, Elliptic Curves]
-tags: [elliptic-curves, weil-pairing]
+tags: [elliptic-curve, weil-pairing]
 math: true
 ---
 

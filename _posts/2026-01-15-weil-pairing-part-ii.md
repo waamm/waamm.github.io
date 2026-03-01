@@ -3,7 +3,7 @@ title: "The Weil Pairing, Part II: Line Bundles on Complex Tori"
 author: waamm
 date: 2026-01-15
 categories: [Pure Mathematics, Elliptic Curves]
-tags: [elliptic-curves, weil-pairing]
+tags: [elliptic-curve, weil-pairing]
 math: true
 ---
 
