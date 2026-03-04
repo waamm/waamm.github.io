@@ -45,7 +45,7 @@ Let $f_1,\ldots,f_n$ be univariate polynomials, where each $f_i$ is evaluated on
 >
 > $$g(\mathbf{x}) = \sum_{i = 1}^m g_i(x_i).$$
 >
-> However, to prevent information leakage in the sumcheck protocol the prover cannot reveal the individual evaluations $y_i \mathrel{\vcenter{:}}= g_i(x_i)$. Rather, the prover only reveals their sum $\sum_{i = 1}^m y_i$, which is the sought-after evaluation $g(\mathbf{x})$. Thus, this setting corresponds to the homomorphism $\varphi(y_1, \ldots, y_m) \mathrel{\vcenter{:}}= \sum_{i = 1}^m y_i$, and a variant of KZG commitments which properly hides the $g_i$ polynomials.
+> However, to prevent information leakage in the sumcheck protocol the prover cannot reveal the individual evaluations $y_i \mathrel{\vcenter{:}}= g_i(x_i)$. Rather, the prover only reveals their sum $\sum_{i = 1}^m y_i$, which is the sought-after evaluation $g(\mathbf{x})$. Thus, this setting corresponds to the homomorphism $$\varphi( \{y_1 \}, \ldots, \{y_m \}) \mathrel{\vcenter{:}}= \sum_{i = 1}^m y_i$$, and a variant of KZG commitments which properly hides the $g_i$ polynomials.
 {: .box .example }
 
 ### Preliminaries
@@ -61,9 +61,9 @@ Now recall that for each polynomial $f_i$ we have fixed a set $S_i$ of evaluatio
 > 
 > $$ S_i = S_i^\mathrm{rev} \sqcup S_i^\mathrm{hid}, $$
 > 
-> corresponding to the evaluations that are to be revealed and that are to be kept hidden. For simplicity, we gather all evaluations into a vector $\mathbf{y} = (\mathbf{y}^\operatorname{rev}, \mathbf{y}^\operatorname{hid})$, where $\mathbf{y}^\operatorname{rev}$ consists of the evaluations to be revealed and $\mathbf{y}^\operatorname{hid}$ of those to be hidden.
+> corresponding to the evaluations $\mathbf{y}_i^\operatorname{rev}$ that are to be revealed and the evaluations $\mathbf{y}_i^\operatorname{hid}$ that are to be kept hidden. For simplicity, we gather all evaluations corresponding to $S_i$ into a vector $\mathbf{y}_i = (\mathbf{y}_i^\operatorname{rev}, \mathbf{y}_i^\operatorname{hid})$.
 > 
-> We let $h \mathrel{\vcenter{:}}= \lvert \mathbf{y}^\operatorname{hid} \rvert = \sum_i \lvert S_i^\mathrm{hid} \rvert$ denote the total number of evaluations that need to be kept hidden.
+> We let $h \mathrel{\vcenter{:}}= \sum \lvert \mathbf{y}_i^\operatorname{hid} \rvert = \sum_i \lvert S_i^\mathrm{hid} \rvert$ denote the total number of evaluations that need to be kept hidden.
 {: .box .notation }
 
 To facilitate the computation of KZG opening proofs, one usually encodes the evaluations of $f_i$ over $S_i$ into a single polynomial, as follows:
@@ -96,8 +96,8 @@ i.e., computing a linear combination of group elements $G_i$ with scalar coeffic
 > By an *MSM representation* of a group element $C$ we mean a pair of tuples $$\mathbf{C} = \{ (G_1,\ldots,G_k), (s_1,\ldots,s_k) \}$$ such that $C = \sum_{i=1}^k s_i \cdot G_i$. Inside of an MSM formula the symbol $\mathbf{C}$ is meant to expand into the linear combination $\sum_{i=1}^k s_i \cdot G_i$.
 {: .box .definition }
 
-> **Notation.** 
-> We assume that the cost of evaluating a homomorphism $\varphi$ is dominated by computing an MSM of size $\operatorname{cost}(\varphi)$,
+> **Notation.**  
+> We assume that the cost of evaluating a homomorphism $\varphi$ is dominated by computing an MSM of size $\lvert \operatorname{MSM}(\varphi) \rvert $, where $\lvert \operatorname{MSM}(\varphi) \rvert $ denotes the number of scalar-point pairs.
 {: .box .notation }
 
 ### $$\mathtt{SHPLONK}$$
@@ -155,25 +155,25 @@ Ordinarily in $$\mathtt{SHPLONK}$$ the prover would send over each $\tilde{f}_i(
 \label{eq:eval}
 \end{equation}
 
-A natural approach would be for the prover to send commitments to each of the $h$ evaluations in $\mathbf{y}^\mathrm{hid}$ that need to be kept hidden, plus a sigma protocol proving that it knows the hidden $\mathbf{y}^\mathrm{hid}$ which give
-- the $h$ commitments to the elements in $\mathbf{y}^\mathrm{hid}$, and
-- the element $\varphi(\mathbf{y})$,
+A natural approach would be for the prover to send commitments to each of the $h$ evaluations in $$\{ \mathbf{y}_i^\operatorname{hid} \}_i$$ that need to be kept hidden, plus a sigma protocol proving that it knows the hidden $$\{ \mathbf{y}_i^\operatorname{hid} \}_i$$ which give
+- the $h$ commitments to the elements in $$\{ \mathbf{y}_i^\operatorname{hid} \}_i$$, and
+- the element $$\varphi(\{ \mathbf{y}_i \}_i)$$,
 
-but this would be quite costly for the verifier.[^cost] Trisha Datta's approach is that the prover should only have to compute $\eqref{eq:eval}$. Namely, instead of committing to each secret element in $\mathbf{y}^\mathrm{hid}$ individually, it simply commits to them all at once in one commitment $C_{\mathbf{y}^\mathrm{hid}}$, using some homomorphic vector commitment scheme (e.g., a hiding KZG variant). (This commitment is needed at the start of the protocol to prevent a possible grinding attack.) Then once the challenge point $x$ is known, it sends the element $\eqref{eq:eval}$ along with a sigma protocol proving that it knows the secret $\mathbf{y}^\mathrm{hid}$ giving 
+but this would be quite costly for the verifier.[^cost] Trisha Datta's approach is that the prover should only have to compute $\eqref{eq:eval}$. Namely, instead of committing to each secret element in $$\{ \mathbf{y}_i^\operatorname{hid} \}_i$$ individually, it simply commits to them all at once in one commitment $C_{\mathbf{y}^\mathrm{hid}}$, using some homomorphic vector commitment scheme (e.g., a hiding KZG variant). (This commitment is needed at the start of the protocol to prevent a possible grinding attack.) Then once the challenge point $x$ is known, it sends the element $\eqref{eq:eval}$ along with a sigma protocol proving that it knows the secret $$\{ \mathbf{y}_i^\operatorname{hid} \}_i$$ giving 
 - the commitmentment $C_{\mathbf{y}^\mathrm{hid}}$,
 - the element $\eqref{eq:eval}$, and
-- the element $\varphi(\mathbf{y})$.
+- the element $$\varphi(\{ \mathbf{y}_i \}_i)$$.
 
-A commitment for $h$ elements usually has cost similar to that of computing an MSM of size $h$, so the cost of verifying this sigma protocol should be similar to that of computing an MSM of size $\operatorname{cost}(\varphi) + h$.
+A commitment for $h$ elements usually has cost similar to that of computing an MSM of size $h$, so the cost of verifying this sigma protocol should be similar to that of computing an MSM of size $\lvert \operatorname{MSM}(\varphi) \rvert $.
 
 [^cost]:
-    The verifier's cost for verifying this sigma protocol should be dominated by an MSM of size $\operatorname{cost}(\varphi) + 2h$.[^msm] Moreover, the verifier then needs to use another MSM of size $h+1$ to compute
+    The verifier's cost for verifying this sigma protocol should be dominated by an MSM of size $\lvert \operatorname{MSM}(\varphi) \rvert  + 2h$.[^msm] Moreover, the verifier then needs to use another MSM of size $h+1$ to compute
     
     $$
     \begin{align}
     \bigl[\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i (x) \bigr]_1 & = \bigl[\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \sum_{s\in S_i} L_{i,s}(x) f(s) \bigr]_1 \nonumber \\
      & = \Bigl( \sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \sum_{s\in S_i^\mathrm{rev}} L_{i,s}(x) f(s) \Bigr) \cdot [1]_1 \nonumber \\
-     & \qquad + \sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \sum_{s\in S_i^\mathrm{hid}} L_{i,s}(x) \bigl[ f(s) \bigr]_1 \nonumber
+     & \qquad + \sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \sum_{s\in S_i^\mathrm{hid}} L_{i,s}(x) \bigl[ f(s) \bigr]_1. \nonumber
     \end{align}
     $$
 
@@ -191,13 +191,14 @@ A commitment for $h$ elements usually has cost similar to that of computing an M
 
 Thus, the following formal description should work in more generality than just the ordinary KZG scheme. Note we are assuming that the Fiat–Shamir transcript already contains the commitments $C_i$ of the $f_i$ and parameters for the $\mathsf{PCS}$. The commitment randomness of $C_i$ is denoted $\rho_i$.
 
-### {% raw %} $$\textsf{PCS.BatchOpen}\bigl(\mathsf{prk}_\mathsf{PCS}, \\\{ S_i \\\}_{1 \leq i \leq n}, \varphi; \\\{ f_i \\\}_{1 \leq i \leq n}, \\\{ \rho_i \\\}_{1 \leq i \leq n} \bigr) \rightarrow \bigl( \mathbf{y}^\mathrm{rev}, \varphi(\mathbf{y}), \pi \bigr)$$ {% endraw %}
+### {% raw %} $$\textsf{BatchOpen}\bigl(\mathsf{prk}_\mathsf{PCS}, \\\{ S_i \\\}_{i}, \varphi; \\\{ f_i \\\}_{i}, \\\{ \rho_i \\\}_{i} \bigr) \rightarrow \bigl( \\\{ \mathbf{y}_i^\operatorname{rev} \\\}_{i}, \varphi(\\\{ \mathbf{y}_i \\\}_{i}), \pi \bigr)$$ {% endraw %}
 
 > The prover batches multiple opening proofs at various points into one opening proof, and keeps some evaluations secret whilst revealing a relationship determined by the homomorphism $\varphi$.
 
-**Step 1a:** Compute all evaluations $\mathbf{y}$, then $\varphi(\mathbf{y})$ and the commitment $C_{\mathbf{y}^\mathrm{hid}}$.
+**Step 1a:** Compute all evaluations $$\{ \mathbf{y}_i \}_i$$, then $$\varphi(\{ \mathbf{y}_i \}_i)$$ and the commitment $C_{\mathbf{y}^\mathrm{hid}}$.
 
-**Step 1b:** Add the $S_i$'s, $\mathbf{y}^\mathrm{rev}$, $\varphi(\mathbf{y})$ and $C_{\mathbf{y}^\mathrm{hid}}$ to the Fiat–Shamir transcript.
+**Step 1b:** Add the $$\{ S_i \}_i$$, $$\{ \mathbf{y}_i^\operatorname{rev} \}_i$$, $$\varphi(\{ \mathbf{y}_i \}_i)$$ and $C_{\mathbf{y}^\mathrm{hid}}$ to the Fiat–Shamir transcript.
+
 
 **Step 1c:** $$c \xleftarrow{\mathcal{FS}} \mathbb{F}$$.
 
@@ -227,13 +228,13 @@ Thus, the following formal description should work in more generality than just 
 
 **Step 7:** $\pi \leftarrow (\pi_1, \pi_2, C_{\mathbf{y}^\mathrm{hid}}, C_\mathrm{eval}, \pi_{\mathsf{PoK}})$.
 
-### {% raw %} $$\textsf{PCS.BatchVerify}\bigl(\mathsf{vk}_\mathsf{PCS}, \\\{ S_i \\\}_{1 \leq i \leq n}, \varphi, \\\{ C_i \\\}_{1 \leq i \leq n} ; \mathbf{y}^\mathrm{rev}, \varphi(\mathbf{y}),  \pi \bigr) \rightarrow \\\{0,1\\\} $$ {% endraw %}
+### {% raw %} $$\textsf{BatchVerify}\bigl(\mathsf{vk}_\mathsf{PCS}, \\\{ S_i \\\}_{i}, \varphi, \\\{ C_i \\\}_{i} ; \\\{ \mathbf{y}_i^\operatorname{rev} \\\}_{i}, \varphi(\\\{ \mathbf{y}_i \\\}_{i}),  \pi \bigr) \rightarrow \\\{0,1\\\} $$ {% endraw %}
 
 > The verifier succinctly verifies this batch opening, as if only one verification is taking place, and also verifies the image of $\varphi$. For increased efficiency, a concrete group element $C_i$ may be provided as a linear combination (an MSM representation) rather than as a concrete group element.
 
 **Step 1a:** Parse the proof $(\pi_1, \pi_2, C_{\mathbf{y}^\mathrm{hid}}, C_\mathrm{eval}, \pi_{\mathsf{PoK}}) \leftarrow \pi$.
 
-**Step 1b:** Add the $S_i$'s, $\mathbf{y}^\mathrm{rev}$, $\varphi(\mathbf{y})$ and $C_{\mathbf{y}^\mathrm{hid}}$ to the Fiat–Shamir transcript.
+**Step 1b:** Add the $$\{ S_i \}_i$$, $$\{ \mathbf{y}_i^\operatorname{rev} \}_i$$, $$\varphi(\{ \mathbf{y}_i \}_i)$$ and $C_{\mathbf{y}^\mathrm{hid}}$ to the Fiat–Shamir transcript.
 
 **Step 1c:** $$c \xleftarrow{\mathcal{FS}} \mathbb{F}$$.
 
