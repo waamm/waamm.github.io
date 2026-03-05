@@ -75,7 +75,7 @@ To facilitate the computation of KZG opening proofs, one usually encodes the eva
 >
 > $$\tilde{f}_i(X) = \sum_{s\in S_i} L_{i,s} (X) f_i(s),$$
 >
-> which agrees with $f_i$ on all points of $S_i$.
+> which agrees with $f_i$ on all points of $S_i$. Similarly, the interpolation polynomials over $S_i^\mathrm{rev}$ and $S_i^\mathrm{hid}$ will be denoted $ \tilde{f}_i^\operatorname{rev}$ and $ \tilde{f}_i^\operatorname{hid}$.
 {: .box .notation }
 
 The KZG scheme is an example of [pairing-based cryptography](https://en.wikipedia.org/wiki/Pairing-based_cryptography), so we make use of a pairing-friendly elliptic curve:
@@ -159,12 +159,22 @@ A natural approach would be for the prover to send commitments to each of the $h
 - the $h$ commitments to the elements in $$\{ \mathbf{y}_i^\operatorname{hid} \}_i$$, and
 - the element $$\varphi(\{ \mathbf{y}_i \}_i)$$,
 
-but this would be quite costly for the verifier.[^cost] Trisha Datta's approach is that the prover should only have to compute $\eqref{eq:eval}$. Namely, instead of committing to each secret element in $$\{ \mathbf{y}_i^\operatorname{hid} \}_i$$ individually, it simply commits to them all at once in one commitment $C_{\mathbf{y}^\mathrm{hid}}$, using some homomorphic vector commitment scheme (e.g., a hiding KZG variant). (This commitment is needed at the start of the protocol to prevent a possible grinding attack.) Then once the challenge point $x$ is known, it sends the element $\eqref{eq:eval}$ along with a sigma protocol proving that it knows the secret $$\{ \mathbf{y}_i^\operatorname{hid} \}_i$$ giving 
+but this would be quite costly for the verifier.[^cost] Trisha Datta's approach, in the setting where all evaluations are hidden, is that the prover should only have to compute $\eqref{eq:eval}$. Namely, instead of committing to each secret element in $$\{ \mathbf{y}_i^\operatorname{hid} \}_i$$ individually, it simply commits to them all at once in one commitment $C_{\mathbf{y}^\mathrm{hid}}$, using some homomorphic vector commitment scheme (e.g., a hiding KZG variant). (This commitment is needed at the start of the protocol to prevent a possible grinding attack.) Then once the challenge point $x$ is known, it sends the element $\eqref{eq:eval}$ along with a sigma protocol proving that it knows the secret $$\{ \mathbf{y}_i^\operatorname{hid} \}_i$$ giving 
 - the commitmentment $C_{\mathbf{y}^\mathrm{hid}}$,
 - the element $\eqref{eq:eval}$, and
 - the element $$\varphi(\{ \mathbf{y}_i \}_i)$$.
 
-A commitment for $h$ elements usually has cost similar to that of computing an MSM of size $h$, so the cost of verifying this sigma protocol should be similar to that of computing an MSM of size $\lvert \operatorname{MSM}(\varphi) \rvert $.
+A commitment for $h$ elements usually has cost similar to that of computing an MSM of size $h$, so the cost of verifying this sigma protocol should be similar to that of computing an MSM of size $\lvert \operatorname{MSM}(\varphi) \rvert $. In general the map from $$\{ \mathbf{y}_i^\operatorname{hid} \}_i$$ to $\eqref{eq:eval}$ is not a homomorphism, and instead it should be replaced by
+
+$$
+\bigl[\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i^\operatorname{hid} (x) \bigr]_1.
+$$
+
+Then the verifier will only need one extra MSM factor to compute the desired value
+
+$$
+\bigl[\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i (x) \bigr]_1 = \bigl[\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i^\operatorname{rev} (x) \bigr]_1 + \bigl[\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i^\operatorname{hid} (x) \bigr]_1.
+$$
 
 [^cost]:
     The verifier's cost for verifying this sigma protocol should be dominated by an MSM of size $\lvert \operatorname{MSM}(\varphi) \rvert  + 2h$.[^msm] Moreover, the verifier then needs to use another MSM of size $h+1$ to compute
@@ -172,8 +182,8 @@ A commitment for $h$ elements usually has cost similar to that of computing an M
     $$
     \begin{align}
     \bigl[\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i (x) \bigr]_1 & = \bigl[\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \sum_{s\in S_i} L_{i,s}(x) f(s) \bigr]_1 \nonumber \\
-     & = \Bigl( \sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \sum_{s\in S_i^\mathrm{rev}} L_{i,s}(x) f(s) \Bigr) \cdot [1]_1 \nonumber \\
-     & \qquad + \sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \sum_{s\in S_i^\mathrm{hid}} L_{i,s}(x) \bigl[ f(s) \bigr]_1. \nonumber
+     & = \Bigl( \sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \sum_{s\in S_i^\mathrm{hid}} L_{i,s}(x) f(s) \Bigr) \cdot [1]_1 \nonumber \\
+     & \qquad + \sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \sum_{s\in S_i^\mathrm{rev}} L_{i,s}(x) \bigl[ f(s) \bigr]_1. \nonumber
     \end{align}
     $$
 
@@ -181,7 +191,7 @@ A commitment for $h$ elements usually has cost similar to that of computing an M
 
 
 > **Theorem.**  
-> In any homomorphic variant on KZG, where the commitment to the $f_i$'s and to $q$ has commitment randomness $\rho_i$ and $\rho_q$, and the commitment to $$\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i (x)$$ has commitment randomness $\rho_\mathrm{eval}$, the prover can prove this by combining an opening proof for $f$ using commitment randomness
+> In any homomorphic variant on KZG, where the commitment to the $f_i$'s and to $q$ has commitment randomness $\rho_i$ and $\rho_q$, and the commitment to $$\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i^\operatorname{hid} (x)$$ has commitment randomness $\rho_\mathrm{eval}$, the prover can prove this by combining an opening proof for $f$ using commitment randomness
 >
 > $$\rho \mathrel{\vcenter{:}}= \sum_{i=1}^n c^{i-1} Z_{S\setminus S_i} (x) \cdot \rho_i - Z_S (x) \cdot \rho_q - \rho_\mathrm{eval},$$
 >
@@ -214,11 +224,13 @@ Thus, the following formal description should work in more generality than just 
 
 **Step 4a:** Sample commitment randomness $$\rho_\operatorname{eval} \xleftarrow{\$} \mathcal{R}_\mathsf{Com}$$.
 
-**Step 4b:** Compute the constant polynomial $$g \mathrel{\vcenter{:}}= \sum_{i = 1}^n c^{i-1} Z_{S\setminus S_i }(x)  \tilde{f}_i (x)$$.
+**Step 4b:** Compute the constant polynomial $$g^\operatorname{hid} \mathrel{\vcenter{:}}= \sum_{i = 1}^n c^{i-1} Z_{S\setminus S_i }(x)  \tilde{f}_i^\operatorname{hid} (x)$$.
 
-**Step 4c:** Compute the commitment $$C_\operatorname{eval} \leftarrow \textsf{PCS.Commit} ( \mathsf{prk}_\mathsf{PCS}, g; \rho_\operatorname{eval} )$$.
+**Step 4b:** Compute the constant polynomial $$g^\operatorname{rev} \mathrel{\vcenter{:}}= \sum_{i = 1}^n c^{i-1} Z_{S\setminus S_i }(x)  \tilde{f}_i^\operatorname{rev} (x)$$.
 
-**Step 5a:** $f \leftarrow \sum_{i = 1}^n c^{i-1} Z_{S\setminus S_i}(x) f_i - Z_S(x) q - g$.
+**Step 4d:** Compute the commitment $$C_\operatorname{eval} \leftarrow \textsf{PCS.Commit} ( \mathsf{prk}_\mathsf{PCS}, g^\operatorname{hid}; \rho_\operatorname{eval} )$$.
+
+**Step 5a:** $f \leftarrow \sum_{i = 1}^n c^{i-1} Z_{S\setminus S_i}(x) f_i - Z_S(x) q - g^\operatorname{hid} - g^\operatorname{rev}$.
 
 **Step 5b:** $\rho \leftarrow \sum_{i = 1}^n c^{i-1} Z_{S\setminus S_i }(x) \rho_i - Z_S(x) \rho_q - \rho_\operatorname{eval}$.
 
@@ -244,13 +256,17 @@ Thus, the following formal description should work in more generality than just 
 
 > In our application, verifying the sigma proof $\pi_{\mathsf{PoK}}$ corresponds to checking that an MSM in $\mathbb{G}_1$ is zero, and doing a computation in the scalar field $\mathbb{F}$. We postpone the former computation for greater efficiency:
 
-**Step 4:** Execute the $\mathbb{F}$ verification component of proof of knowledge $\pi_{\mathsf{PoK}}$, and let $\mathbf{C}_\mathsf{PoK}$ denote the deferred $\mathbb{G}_1$ MSM.
+**Step 4a:** Execute the $\mathbb{F}$ verification component of proof of knowledge $\pi_{\mathsf{PoK}}$, and let $\mathbf{C}_\mathsf{PoK}$ denote the deferred $\mathbb{G}_1$ MSM.
+
+**Step 4b:** Compute $$ \\\{ \tilde{f}_i^\operatorname{rev}(x) \\\}_{i} $$ from $$\\\{ \mathbf{y}_i^\operatorname{rev} \\\}_{i}$$.
+
+**Step 4c:** Compute the constant polynomial $$g^\operatorname{rev} \mathrel{\vcenter{:}}= \sum_{i = 1}^n c^{i-1} Z_{S\setminus S_i }(x)  \tilde{f}_i^\operatorname{rev} (x)$$.
 
 > If instead of a concrete commitment $C_i$ an MSM representation $\mathbf{C}_i$ was passed, it simply expands the following equation into a larger MSM:
 
-**Step 5a:** Compute the MSM $C_f \mathrel{\vcenter{:}}= \sum_{i = 1}^n c^{i-1} Z_{S\setminus S_i}(x) \cdot C_i - Z_S (x) \cdot \pi_1 - C_\mathrm{eval} + c^n \, \mathbf{C}_\mathsf{PoK}$. 
+**Step 5a:** Compute the MSM $$C_f \mathrel{\vcenter{:}}= \sum_{i = 1}^n c^{i-1} Z_{S\setminus S_i}(x) \cdot C_i - Z_S (x) \cdot \pi_1 - C_\mathrm{eval} - [g^\operatorname{rev}]_1 + c^n \, \mathbf{C}_\mathsf{PoK}$$. 
 
-**Step 5b:** $$\\\{0, 1\\\} \leftarrow \textsf{PCS.Verify}\bigl(\mathsf{vk}_\mathsf{PCS}, x, C_f, 0, \pi_2)$$.
+**Step 5b:** $$\\\{0, 1\\\} \leftarrow \textsf{PCS.Verify}\bigl(\mathsf{vk}_\mathsf{PCS}, x, C_f, \pi_2)$$.
 
 ## Acknowledgements
 
