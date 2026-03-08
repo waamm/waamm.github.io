@@ -57,7 +57,7 @@ Let $f_1,\ldots,f_n$ be univariate polynomials, where each $f_i$ is evaluated on
 Now recall that for each polynomial $f_i$ we have fixed a set $S_i$ of evaluation points, but that we want to keep some of the corresponding evaluations hidden.
 
 > **Notation.**  
-> Decompose each of these sets $S_i$ as
+> Decompose each of these sets $S_i$ as a disjoint union
 > 
 > $$ S_i = S_i^\mathrm{rev} \sqcup S_i^\mathrm{hid}, $$
 > 
@@ -71,17 +71,17 @@ To facilitate the computation of KZG opening proofs, one usually encodes the eva
 > **Notation.**  
 > Let $L_{i,s} (X)$ denote the Lagrange basis interpolation polynomial which evaluates to $1$ at $s \in S_i$ and to $0$ at all other points of $S_i$.
 >
-> Then the interpolation polynomial $\tilde{f}_i$ over $S_i$ is
+> Then given a polynomial $f_i$, its interpolation polynomial $\tilde{f}_i$ over $S_i$ is
 >
 > $$\tilde{f}_i(X) = \sum_{s\in S_i} L_{i,s} (X) f_i(s),$$
 >
-> which agrees with $f_i$ on all points of $S_i$. Similarly, the interpolation polynomials over $S_i^\mathrm{rev}$ and $S_i^\mathrm{hid}$ will be denoted $ \tilde{f}_i^\operatorname{rev}$ and $ \tilde{f}_i^\operatorname{hid}$.
+> which agrees with $f_i$ on all points of $S_i$. Similarly, the interpolation polynomials over the subsets $S_i^\mathrm{rev}$ and $S_i^\mathrm{hid}$ will be denoted $ \tilde{f}_i^\operatorname{rev}$ and $ \tilde{f}_i^\operatorname{hid}$.
 {: .box .notation }
 
 The KZG scheme is an example of [pairing-based cryptography](https://en.wikipedia.org/wiki/Pairing-based_cryptography), so we make use of a pairing-friendly elliptic curve:
 
 > **Notation.**  
-> A pairing-friendly curve has two cyclic subgroups $\mathbb{G}_1$ and $\mathbb{G}_2$ of prime order, and a bilinear map $\mathbb{G}_1 \times \mathbb{G}_2 \rightarrow \mathbb{G}_T$. Fix generators $[1]_1$ and $[1]_2$ of the groups $$\mathbb{G}_1$$ and $$\mathbb{G}_2$$. Then for a scalar $s$, define
+> A pairing-friendly curve has two cyclic subgroups $\mathbb{G}_1$ and $\mathbb{G}_2$ of prime order, and a bilinear map $\mathbb{G}_1 \times \mathbb{G}_2 \rightarrow \mathbb{G}_T$. Fix generators $[1]_1$ and $[1]_2$ of the groups $$\mathbb{G}_1$$ and $$\mathbb{G}_2$$. Then for a scalar $s$, we write
 >
 > $$ [s]_1 \mathrel{\vcenter{:}}= s \cdot [1]_1 , \qquad \textrm{and} \qquad [s]_2 \mathrel{\vcenter{:}}= s \cdot [1]_2 .$$
 {: .box .notation }
@@ -93,7 +93,7 @@ $$ \operatorname{MSM}(G_1,\ldots,G_k;s_1,\ldots,s_k) = \sum_{i=1}^k s_i \cdot G_
 i.e., computing a linear combination of group elements $G_i$ with scalar coefficients $s_i$. MSMs are the dominant cost in many proof systems. Here and throughout, an MSM refers to a multi-scalar multiplication in the subgroup $\mathbb{G}_1$.
 
 > **Definition.**  
-> By an *MSM representation* of a group element $C$ we mean a pair of tuples $$\mathbf{C} = \{ (G_1,\ldots,G_k), (s_1,\ldots,s_k) \}$$ such that $C = \sum_{i=1}^k s_i \cdot G_i$. Inside of an MSM formula the symbol $\mathbf{C}$ is meant to expand into the linear combination $\sum_{i=1}^k s_i \cdot G_i$.
+> By an *MSM representation* of a group element $C$ we mean a pair of tuples $$\mathbf{C} = \{ (G_1,\ldots,G_k), (s_1,\ldots,s_k) \}$$ such that $C = \sum_{i=1}^k s_i \cdot G_i$. Inside of an MSM computation the symbol $\mathbf{C}$ is meant to expand into the linear combination $\sum_{i=1}^k s_i \cdot G_i$.
 {: .box .definition }
 
 > **Notation.**  
@@ -136,12 +136,12 @@ $$
 
 Now observe that the existence of $$\check{q}$$ can be interpreted as simply proving that the polynomial
 
-$$f \mathrel{\vcenter{:}}= \sum_{i=1}^n c^{i-1} Z_{S\setminus S_i} (x) \cdot f_i (X) - Z_S (x) \cdot q(X) - \sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i (x)$$
+$$f(X) \mathrel{\vcenter{:}}= \sum_{i=1}^n c^{i-1} Z_{S\setminus S_i} (x) \cdot f_i (X) - Z_S (x) \cdot q(X) - \sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i (x)$$
 
  evaluates to $0$ at $x$. 
 
 > **Corollary.**  
-> In any homomorphic variant on KZG, where the commitment to the $f_i$'s and to $q$ has commitment randomness $\rho_i$ and $\rho_q$, and the verifier can compute $$\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i (x)$$, the prover can prove this by producing an opening proof for $f$ using commitment randomness
+> In any homomorphic variant on KZG, where the commitment to the $f_i$'s and to $q$ has commitment randomness $\rho_i$ and $\rho_q$, and the verifier can compute $$\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i (x)$$, the prover can prove a batched opening by producing an opening proof for this $f$ using commitment randomness
 >
 > $$\rho \mathrel{\vcenter{:}}= \sum_{i=1}^n c^{i-1} Z_{S\setminus S_i} (x) \cdot \rho_i - Z_S (x) \cdot \rho_q.$$
 {: .box .corollary }
@@ -164,13 +164,13 @@ but this would be quite costly for the verifier.[^cost] Trisha Datta's approach,
 - the element $\eqref{eq:eval}$, and
 - the element $$\varphi(\{ \mathbf{y}_i \}_i)$$.
 
-A commitment for $h$ elements usually has cost similar to that of computing an MSM of size $h$, so the cost of verifying this sigma protocol should be similar to that of computing an MSM of size $\lvert \operatorname{MSM}(\varphi) \rvert $. In general the map from $$\{ \mathbf{y}_i^\operatorname{hid} \}_i$$ to $\eqref{eq:eval}$ is not a homomorphism, and instead it should be replaced by
+A commitment for $h$ elements usually has cost similar to that of computing an MSM of size $h$, so the cost of verifying this sigma protocol should be similar to that of computing an MSM of size $\lvert \operatorname{MSM}(\varphi) \rvert + h $. In general the map from $$\{ \mathbf{y}_i^\operatorname{hid} \}_i$$ to $\eqref{eq:eval}$ is not a homomorphism, and instead it should be replaced by
 
 $$
 \bigl[\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i^\operatorname{hid} (x) \bigr]_1.
 $$
 
-Then the verifier will only need one extra MSM factor to compute the desired value
+Then the verifier will only need one extra MSM *factor* to compute the desired value (or rather, MSM component)
 
 $$
 \bigl[\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i (x) \bigr]_1 = \bigl[\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i^\operatorname{rev} (x) \bigr]_1 + \bigl[\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i^\operatorname{hid} (x) \bigr]_1.
@@ -182,8 +182,8 @@ $$
     $$
     \begin{align}
     \bigl[\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i (x) \bigr]_1 & = \bigl[\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \sum_{s\in S_i} L_{i,s}(x) f(s) \bigr]_1 \nonumber \\
-     & = \Bigl( \sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \sum_{s\in S_i^\mathrm{hid}} L_{i,s}(x) f(s) \Bigr) \cdot [1]_1 \nonumber \\
-     & \qquad + \sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \sum_{s\in S_i^\mathrm{rev}} L_{i,s}(x) \bigl[ f(s) \bigr]_1. \nonumber
+     & = \Bigl( \sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \sum_{s\in S_i^\mathrm{rev}} L_{i,s}(x) f(s) \Bigr) \cdot [1]_1 \nonumber \\
+     & \qquad + \sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \sum_{s\in S_i^\mathrm{hid}} L_{i,s}(x) \bigl[ f(s) \bigr]_1. \nonumber
     \end{align}
     $$
 
@@ -191,7 +191,7 @@ $$
 
 
 > **Theorem.**  
-> In any homomorphic variant on KZG, where the commitment to the $f_i$'s and to $q$ has commitment randomness $\rho_i$ and $\rho_q$, and the commitment to $$\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i^\operatorname{hid} (x)$$ has commitment randomness $\rho_\mathrm{eval}$, the prover can prove this by combining an opening proof for $f$ using commitment randomness
+> In any homomorphic variant on KZG, where the commitment to the $f_i$'s and to $q$ has commitment randomness $\rho_i$ and $\rho_q$, and the commitment to $$\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i^\operatorname{hid} (x)$$ has commitment randomness $\rho_\mathrm{eval}$, the prover can prove a batched opening with additional output $$\varphi(\\\{ \mathbf{y}^\operatorname{hid}_i \\\}_{i})$$ by combining an opening proof for $f$ using commitment randomness
 >
 > $$\rho \mathrel{\vcenter{:}}= \sum_{i=1}^n c^{i-1} Z_{S\setminus S_i} (x) \cdot \rho_i - Z_S (x) \cdot \rho_q - \rho_\mathrm{eval},$$
 >
@@ -201,13 +201,13 @@ $$
 
 Thus, the following formal description should work in more generality than just the ordinary KZG scheme. Note we are assuming that the Fiat–Shamir transcript already contains the commitments $C_i$ of the $f_i$ and parameters for the $\mathsf{PCS}$. The commitment randomness of $C_i$ is denoted $\rho_i$.
 
-### {% raw %} $$\textsf{BatchOpen}\bigl(\mathsf{prk}_\mathsf{PCS}, \\\{ S_i \\\}_{i}, \varphi; \\\{ f_i \\\}_{i}, \\\{ \rho_i \\\}_{i} \bigr) \rightarrow \bigl( \\\{ \mathbf{y}_i^\operatorname{rev} \\\}_{i}, \varphi(\\\{ \mathbf{y}_i \\\}_{i}), \pi \bigr)$$ {% endraw %}
+### {% raw %} $$\textsf{BatchOpen}\bigl(\mathsf{prk}_\mathsf{PCS}, \\\{ S_i \\\}_{i}, \varphi; \\\{ f_i \\\}_{i}, \\\{ \rho_i \\\}_{i} \bigr) \rightarrow \bigl( \\\{ \mathbf{y}_i^\operatorname{rev} \\\}_{i}, \varphi(\\\{ \mathbf{y}^\operatorname{hid}_i \\\}_{i}), \pi \bigr)$$ {% endraw %}
 
 > The prover batches multiple opening proofs at various points into one opening proof, and keeps some evaluations secret whilst revealing a relationship determined by the homomorphism $\varphi$.
 
-**Step 1a:** Compute all evaluations $$\{ \mathbf{y}_i \}_i$$, then $$\varphi(\{ \mathbf{y}_i \}_i)$$ and the commitment $C_{\mathbf{y}^\mathrm{hid}}$.
+**Step 1a:** Compute all evaluations $$\{ \mathbf{y}_i \}_i$$, then $$\varphi(\\\{ \mathbf{y}^\operatorname{hid}_i \\\}_{i})$$ and the commitment $C_{\mathbf{y}^\mathrm{hid}}$.
 
-**Step 1b:** Add the $$\{ S_i \}_i$$, $$\{ \mathbf{y}_i^\operatorname{rev} \}_i$$, $$\varphi(\{ \mathbf{y}_i \}_i)$$ and $C_{\mathbf{y}^\mathrm{hid}}$ to the Fiat–Shamir transcript.
+**Step 1b:** Add the $$\{ S_i \}_i$$, $$\{ \mathbf{y}_i^\operatorname{rev} \}_i$$, $$\varphi(\\\{ \mathbf{y}^\operatorname{hid}_i \\\}_{i})$$ and $C_{\mathbf{y}^\mathrm{hid}}$ to the Fiat–Shamir transcript.
 
 
 **Step 1c:** $$c \xleftarrow{\mathcal{FS}} \mathbb{F}$$.
@@ -240,13 +240,13 @@ Thus, the following formal description should work in more generality than just 
 
 **Step 7:** $\pi \leftarrow (\pi_1, \pi_2, C_{\mathbf{y}^\mathrm{hid}}, C_\mathrm{eval}, \pi_{\mathsf{PoK}})$.
 
-### {% raw %} $$\textsf{BatchVerify}\bigl(\mathsf{vk}_\mathsf{PCS}, \\\{ S_i \\\}_{i}, \varphi, \\\{ C_i \\\}_{i} ; \\\{ \mathbf{y}_i^\operatorname{rev} \\\}_{i}, \varphi(\\\{ \mathbf{y}_i \\\}_{i}),  \pi \bigr) \rightarrow \\\{0,1\\\} $$ {% endraw %}
+### {% raw %} $$\textsf{BatchVerify}\bigl(\mathsf{vk}_\mathsf{PCS}, \\\{ S_i \\\}_{i}, \varphi, \\\{ C_i \\\}_{i} ; \\\{ \mathbf{y}_i^\operatorname{rev} \\\}_{i}, \varphi(\\\{ \mathbf{y}^\operatorname{hid}_i \\\}_{i}),  \pi \bigr) \rightarrow \\\{0,1\\\} $$ {% endraw %}
 
 > The verifier succinctly verifies this batch opening, as if only one verification is taking place, and also verifies the image of $\varphi$. For increased efficiency, a concrete group element $C_i$ may be provided as a linear combination (an MSM representation) rather than as a concrete group element.
 
 **Step 1a:** Parse the proof $(\pi_1, \pi_2, C_{\mathbf{y}^\mathrm{hid}}, C_\mathrm{eval}, \pi_{\mathsf{PoK}}) \leftarrow \pi$.
 
-**Step 1b:** Add the $$\{ S_i \}_i$$, $$\{ \mathbf{y}_i^\operatorname{rev} \}_i$$, $$\varphi(\{ \mathbf{y}_i \}_i)$$ and $C_{\mathbf{y}^\mathrm{hid}}$ to the Fiat–Shamir transcript.
+**Step 1b:** Add the $$\{ S_i \}_i$$, $$\{ \mathbf{y}_i^\operatorname{rev} \}_i$$, $$\varphi(\\\{ \mathbf{y}^\operatorname{hid}_i \\\}_{i})$$ and $C_{\mathbf{y}^\mathrm{hid}}$ to the Fiat–Shamir transcript.
 
 **Step 1c:** $$c \xleftarrow{\mathcal{FS}} \mathbb{F}$$.
 
