@@ -269,7 +269,7 @@ The only nice picture I could find of a pullback bundle was this one:
 Abelian varieties are the $n$-dimensional analogues of elliptic curves, and as a rule of thumb every reasonable statement about elliptic curves should have a generalization that applies to all abelian varieties. In the previous post our first step was to realise a complex elliptic curve as the quotient of a one-dimensional complex vector space by a lattice, resulting in a complex torus. 
 
 > **Theorem.**  
-> Let $$A(\mathbb{C})$$ be an $n$-dimensional abelian variety over the complex numbers, and let $V$ denote the tangent space at the identity; this is an $n$-dimensional complex vector space. Then there exists a lattice $\Lambda \subset V$ such that the exponential map yields an isomorphism
+> Let $$A(\mathbb{C})$$ be an $n$-dimensional abelian variety over the complex numbers, and let $V$ denote the tangent space at the identity; this is an $n$-dimensional complex vector space. Then there exists a lattice $\Lambda \subset V$ such that the exponential map $V\rightarrow A(\mathbb{C})$ yields an isomorphism
 > 
 > $$
 > V / \Lambda \simeq A(\mathbb{C})

@@ -29,6 +29,7 @@ html:not([data-mode]) {
   .box.proof       { background: #f9f9f9; border-color: #666; }
   .box.example     { background: #e6ffff; border-color: #00cccc; color: #000; }
   .box.corollary   { background: #fff4e6; border-color: #ff9933; color: #000; }
+  .box.algorithm   { background: #eef2ff; border-color: #5c6bc0; color: #000; }
 }
 
 /* ---------------- Dark mode ---------------- */
@@ -46,6 +47,7 @@ html[data-mode='dark'] {
   .box.proof       { background: #222; border-color: #888; }
   .box.example     { background: #003333; border-color: #00cccc; color: #eee; }
   .box.corollary   { background: #4d2b00; border-color: #ff9933; color: #eee; }
+  .box.algorithm   { background: #1a1f3a; border-color: #7986cb; color: #eee; }
 }
 
 /* ---------------- Optional fallback for system dark mode ---------------- */
@@ -64,6 +66,7 @@ html[data-mode='dark'] {
   .box.proof       { background: #222; border-color: #888; }
   .box.example     { background: #003333; border-color: #00cccc; color: #eee; }
   .box.corollary   { background: #4d2b00; border-color: #ff9933; color: #eee; }
+  .box.algorithm   { background: #1a1f3a; border-color: #7986cb; color: #eee; }
   }
 }
 

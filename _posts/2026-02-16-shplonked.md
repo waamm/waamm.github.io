@@ -28,7 +28,7 @@ In this post, following Trisha Datta, we generalise $$\mathtt{SHPLONK}$$ so that
 1. The protocol can be instantiated with all homomorphic variants of KZG, not just the original KZG scheme.
 2. The protocol supports selective disclosure: some evaluations may remain hidden, while the verifier learns only specified homomorphic functions of them.
 
-We leave out security proofs for now. <span style="color:red">TODO</span>
+A side effect of (1) is that both the resulting formulas and implementations become simpler than in instantiated versions. We leave out security proofs for now. <span style="color:red">TODO</span>
 
 ## $$\mathtt{SHPLONKeD}$$
 
@@ -63,7 +63,7 @@ Now recall that for each polynomial $f_i$ we have fixed a set $S_i$ of evaluatio
 > 
 > corresponding to the evaluations $\mathbf{y}_i^\operatorname{rev}$ that are to be revealed and the evaluations $\mathbf{y}_i^\operatorname{hid}$ that are to be kept hidden. For simplicity, we gather all evaluations corresponding to $S_i$ into a vector $\mathbf{y}_i = (\mathbf{y}_i^\operatorname{rev}, \mathbf{y}_i^\operatorname{hid})$.
 > 
-> We let $h \mathrel{\vcenter{:}}= \sum \lvert \mathbf{y}_i^\operatorname{hid} \rvert = \sum_i \lvert S_i^\mathrm{hid} \rvert$ denote the total number of evaluations that need to be kept hidden.
+> We let $h \mathrel{\vcenter{:}}= \sum_i \lvert \mathbf{y}_i^\operatorname{hid} \rvert = \sum_i \lvert S_i^\mathrm{hid} \rvert$ denote the total number of evaluations that need to be kept hidden.
 {: .box .notation }
 
 To facilitate the computation of KZG opening proofs, one usually encodes the evaluations of $f_i$ over $S_i$ into a single polynomial, as follows:
@@ -90,7 +90,7 @@ Finally, recall that a multi-scalar multiplication (MSM) of size $k$ in an ellip
 
 $$ \operatorname{MSM}(G_1,\ldots,G_k;s_1,\ldots,s_k) = \sum_{i=1}^k s_i \cdot G_i,$$
 
-i.e., computing a linear combination of group elements $G_i$ with scalar coefficients $s_i$. MSMs are the dominant cost in many proof systems. Here and throughout, an MSM refers to a multi-scalar multiplication in the subgroup $\mathbb{G}_1$.
+i.e., computing a linear combination of group elements $G_i$ with scalar coefficients $s_i$. MSMs are the dominant cost in many proof systems involving elliptic curves. Here and throughout, an MSM refers to a multi-scalar multiplication in the subgroup $\mathbb{G}_1$.
 
 > **Definition.**  
 > By an *MSM representation* of a group element $C$ we mean a pair of tuples $$\mathbf{C} = \{ (G_1,\ldots,G_k), (s_1,\ldots,s_k) \}$$ such that $C = \sum_{i=1}^k s_i \cdot G_i$. Inside of an MSM computation the symbol $\mathbf{C}$ is meant to expand into the linear combination $\sum_{i=1}^k s_i \cdot G_i$.
@@ -141,7 +141,7 @@ $$f(X) \mathrel{\vcenter{:}}= \sum_{i=1}^n c^{i-1} Z_{S\setminus S_i} (x) \cdot 
  evaluates to $0$ at $x$. 
 
 > **Corollary.**  
-> In any homomorphic variant on KZG, where the commitment to the $f_i$'s and to $q$ has commitment randomness $\rho_i$ and $\rho_q$, and the verifier can compute $$\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i (x)$$, the prover can prove a batched opening by producing an opening proof for this $f$ using commitment randomness
+> In any homomorphic variant of KZG, where the commitment to the $f_i$'s and to $q$ has commitment randomness $\rho_i$ and $\rho_q$, and the verifier can compute $$\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i (x)$$, the prover can prove a batched opening by producing an opening proof for this $f$ using commitment randomness
 >
 > $$\rho \mathrel{\vcenter{:}}= \sum_{i=1}^n c^{i-1} Z_{S\setminus S_i} (x) \cdot \rho_i - Z_S (x) \cdot \rho_q.$$
 {: .box .corollary }
@@ -187,7 +187,7 @@ $$
     \end{align}
     $$
 
-    [^msm]: Using the Schwartz–Zippel lemma, normally one would expect to see $3$ MSM terms here for each of the hidden $y_i$. Alin Tomescu suggested that since the base $[1]_1$ (and the additional base $[\xi]_1$ for hiding KZG variants) repeats, the corresponding scalars can be summed and this can be merged into one term.
+    [^msm]: Using the Schwartz–Zippel lemma, normally one would expect to see $3$ MSM terms here for each of the hidden $y_i$. Alin Tomescu observed that since the base $[1]_1$ (and the additional base $[\xi]_1$ for hiding KZG variants) repeats, the corresponding scalars can be summed and this can be merged into one term.
 
 
 > **Theorem.**  
