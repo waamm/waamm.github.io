@@ -81,7 +81,7 @@ To facilitate the computation of KZG opening proofs, one usually encodes the eva
 The KZG scheme is an example of [pairing-based cryptography](https://en.wikipedia.org/wiki/Pairing-based_cryptography), so we make use of a pairing-friendly elliptic curve:
 
 > **Notation.**  
-> A pairing-friendly curve has two cyclic subgroups $\mathbb{G}_1$ and $\mathbb{G}_2$ of prime order, and a bilinear map $\mathbb{G}_1 \times \mathbb{G}_2 \rightarrow \mathbb{G}_T$. Fix generators $[1]_1$ and $[1]_2$ of the groups $$\mathbb{G}_1$$ and $$\mathbb{G}_2$$. Then for a scalar $s$, we write
+> A pairing-friendly curve has two cyclic subgroups $\mathbb{G}_1$ and $\mathbb{G}_2$ of prime order, along with a bilinear map $\mathbb{G}_1 \times \mathbb{G}_2 \rightarrow \mathbb{G}_T$. Fix generators $[1]_1$ and $[1]_2$ of the groups $$\mathbb{G}_1$$ and $$\mathbb{G}_2$$. Then for a scalar $s$, we write
 >
 > $$ [s]_1 \mathrel{\vcenter{:}}= s \cdot [1]_1 , \qquad \textrm{and} \qquad [s]_2 \mathrel{\vcenter{:}}= s \cdot [1]_2 .$$
 {: .box .notation }
