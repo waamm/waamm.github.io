@@ -4,4 +4,4 @@ icon: fas fa-info-circle
 order: 4
 ---
 
-This website collects personal notes on cryptography, spanning both theory and practice.
+This website collects personal notes on math and programming, spanning both theory and practice.

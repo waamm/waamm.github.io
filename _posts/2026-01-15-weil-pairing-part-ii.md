@@ -9,7 +9,7 @@ math: true
 
 > "My mathematics work is proceeding beyond my wildest hopes, and I am even a bit worried --- if it's only in prison that I work so well, will I have to arrange to spend two or three months locked up every year?"
 > 
-> — André Weil, letter to his wife Eveline from the Rouen prison, 7 April 1940 (around the time he discovered the Weil pairing and proved the Riemann hypothesis for curves over finite fields) **[Wei92, p. 146]**[^Cartan]
+> — [André Weil](https://en.wikipedia.org/wiki/André_Weil), letter to his wife Eveline from the Rouen prison, 7 April 1940 (around the time he discovered the Weil pairing and proved the Riemann hypothesis for curves over finite fields) **[Wei92, p. 146]**[^Cartan]
 
 [^Cartan]: According to the same autobiography, Cartan wrote to Weil during his imprisonment that "We're not all lucky enough to sit and work undisturbed like you".
 

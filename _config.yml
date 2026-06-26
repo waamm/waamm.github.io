@@ -16,7 +16,7 @@ timezone: Europe/Amsterdam
 
 title: ProofVantage # the main title
 
-tagline: Notes on cryptography # it will display as the subtitle
+tagline: Notes on math and programming # it will display as the subtitle
 
 description: >- # used by seo meta and the atom feed
   Notes on the mathematics of cryptography.
