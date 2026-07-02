@@ -191,7 +191,7 @@ $$
 
 
 > **Theorem.**  
-> In any homomorphic variant on KZG, where the commitment to the $f_i$'s and to $q$ has commitment randomness $\rho_i$ and $\rho_q$, and the commitment to $$\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i^\operatorname{hid} (x)$$ has commitment randomness $\rho_\mathrm{eval}$, the prover can prove a batched opening with additional output $$\varphi(\\\{ \mathbf{y}^\operatorname{hid}_i \\\}_{i})$$ by combining an opening proof for $f$ using commitment randomness
+> In any homomorphic variant on KZG, where the commitment to the $f_i$'s and to $q$ has commitment randomness $\rho_i$ and $\rho_q$, and the commitment to $$\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i^\operatorname{hid} (x)$$ has commitment randomness $\rho_\mathrm{eval}$, the prover can prove a batched opening with additional output $$\varphi(\{ \mathbf{y}^\operatorname{hid}_i \}_{i})$$ by combining an opening proof for $f$ using commitment randomness
 >
 > $$\rho \mathrel{\vcenter{:}}= \sum_{i=1}^n c^{i-1} Z_{S\setminus S_i} (x) \cdot \rho_i - Z_S (x) \cdot \rho_q - \rho_\mathrm{eval},$$
 >
@@ -201,13 +201,13 @@ $$
 
 Thus, the following formal description should work in more generality than just the ordinary KZG scheme. Note we are assuming that the Fiat–Shamir transcript already contains the commitments $C_i$ of the $f_i$ and parameters for the $\mathsf{PCS}$. The commitment randomness of $C_i$ is denoted $\rho_i$.
 
-### {% raw %} $$\textsf{BatchOpen}\bigl(\mathsf{prk}_\mathsf{PCS}, \\\{ S_i \\\}_{i}, \varphi; \\\{ f_i \\\}_{i}, \\\{ \rho_i \\\}_{i} \bigr) \rightarrow \bigl( \\\{ \mathbf{y}_i^\operatorname{rev} \\\}_{i}, \varphi(\\\{ \mathbf{y}^\operatorname{hid}_i \\\}_{i}), \pi \bigr)$$ {% endraw %}
+### {% raw %} $$\textsf{BatchOpen}\bigl(\mathsf{prk}_\mathsf{PCS}, \{ S_i \}_{i}, \varphi; \{ f_i \}_{i}, \{ \rho_i \}_{i} \bigr) \rightarrow \bigl( \{ \mathbf{y}_i^\operatorname{rev} \}_{i}, \varphi(\{ \mathbf{y}^\operatorname{hid}_i \}_{i}), \pi \bigr)$$ {% endraw %}
 
 > The prover batches multiple opening proofs at various points into one opening proof, and keeps some evaluations secret whilst revealing a relationship determined by the homomorphism $\varphi$.
 
-**Step 1a:** Compute all evaluations $$\{ \mathbf{y}_i \}_i$$, then $$\varphi(\\\{ \mathbf{y}^\operatorname{hid}_i \\\}_{i})$$ and the commitment $C_{\mathbf{y}^\mathrm{hid}}$.
+**Step 1a:** Compute all evaluations $$\{ \mathbf{y}_i \}_i$$, then $$\varphi(\{ \mathbf{y}^\operatorname{hid}_i \}_{i})$$ and the commitment $C_{\mathbf{y}^\mathrm{hid}}$.
 
-**Step 1b:** Add the $$\{ S_i \}_i$$, $$\{ \mathbf{y}_i^\operatorname{rev} \}_i$$, $$\varphi(\\\{ \mathbf{y}^\operatorname{hid}_i \\\}_{i})$$ and $C_{\mathbf{y}^\mathrm{hid}}$ to the Fiat–Shamir transcript.
+**Step 1b:** Add the $$\{ S_i \}_i$$, $$\{ \mathbf{y}_i^\operatorname{rev} \}_i$$, $$\varphi(\{ \mathbf{y}^\operatorname{hid}_i \}_{i})$$ and $C_{\mathbf{y}^\mathrm{hid}}$ to the Fiat–Shamir transcript.
 
 
 **Step 1c:** $$c \xleftarrow{\mathcal{FS}} \mathbb{F}$$.
@@ -240,13 +240,13 @@ Thus, the following formal description should work in more generality than just 
 
 **Step 7:** $\pi \leftarrow (\pi_1, \pi_2, C_{\mathbf{y}^\mathrm{hid}}, C_\mathrm{eval}, \pi_{\mathsf{PoK}})$.
 
-### {% raw %} $$\textsf{BatchVerify}\bigl(\mathsf{vk}_\mathsf{PCS}, \\\{ S_i \\\}_{i}, \varphi, \\\{ C_i \\\}_{i} ; \\\{ \mathbf{y}_i^\operatorname{rev} \\\}_{i}, \varphi(\\\{ \mathbf{y}^\operatorname{hid}_i \\\}_{i}),  \pi \bigr) \rightarrow \\\{0,1\\\} $$ {% endraw %}
+### {% raw %} $$\textsf{BatchVerify}\bigl(\mathsf{vk}_\mathsf{PCS}, \{ S_i \}_{i}, \varphi, \{ C_i \}_{i} ; \{ \mathbf{y}_i^\operatorname{rev} \}_{i}, \varphi(\{ \mathbf{y}^\operatorname{hid}_i \}_{i}),  \pi \bigr) \rightarrow \{0,1\} $$ {% endraw %}
 
 > The verifier succinctly verifies this batch opening, as if only one verification is taking place, and also verifies the image of $\varphi$. For increased efficiency, a concrete group element $C_i$ may be provided as a linear combination (an MSM representation) rather than as a concrete group element.
 
 **Step 1a:** Parse the proof $(\pi_1, \pi_2, C_{\mathbf{y}^\mathrm{hid}}, C_\mathrm{eval}, \pi_{\mathsf{PoK}}) \leftarrow \pi$.
 
-**Step 1b:** Add the $$\{ S_i \}_i$$, $$\{ \mathbf{y}_i^\operatorname{rev} \}_i$$, $$\varphi(\\\{ \mathbf{y}^\operatorname{hid}_i \\\}_{i})$$ and $C_{\mathbf{y}^\mathrm{hid}}$ to the Fiat–Shamir transcript.
+**Step 1b:** Add the $$\{ S_i \}_i$$, $$\{ \mathbf{y}_i^\operatorname{rev} \}_i$$, $$\varphi(\{ \mathbf{y}^\operatorname{hid}_i \}_{i})$$ and $C_{\mathbf{y}^\mathrm{hid}}$ to the Fiat–Shamir transcript.
 
 **Step 1c:** $$c \xleftarrow{\mathcal{FS}} \mathbb{F}$$.
 
@@ -258,7 +258,7 @@ Thus, the following formal description should work in more generality than just 
 
 **Step 4a:** Execute the $\mathbb{F}$ verification component of proof of knowledge $\pi_{\mathsf{PoK}}$, and let $\mathbf{C}_\mathsf{PoK}$ denote the deferred $\mathbb{G}_1$ MSM.
 
-**Step 4b:** Compute $$ \\\{ \tilde{f}_i^\operatorname{rev}(x) \\\}_{i} $$ from $$\\\{ \mathbf{y}_i^\operatorname{rev} \\\}_{i}$$.
+**Step 4b:** Compute $$ \{ \tilde{f}_i^\operatorname{rev}(x) \}_{i} $$ from $$\{ \mathbf{y}_i^\operatorname{rev} \}_{i}$$.
 
 **Step 4c:** Compute the constant polynomial $$g^\operatorname{rev} \mathrel{\vcenter{:}}= \sum_{i = 1}^n c^{i-1} Z_{S\setminus S_i }(x)  \tilde{f}_i^\operatorname{rev} (x)$$.
 
@@ -266,7 +266,7 @@ Thus, the following formal description should work in more generality than just 
 
 **Step 5a:** Compute the MSM $$C_f \mathrel{\vcenter{:}}= \sum_{i = 1}^n c^{i-1} Z_{S\setminus S_i}(x) \cdot C_i - Z_S (x) \cdot \pi_1 - C_\mathrm{eval} - [g^\operatorname{rev}]_1 + c^n \, \mathbf{C}_\mathsf{PoK}$$. 
 
-**Step 5b:** $$\\\{0, 1\\\} \leftarrow \textsf{PCS.Verify}\bigl(\mathsf{vk}_\mathsf{PCS}, x, C_f, \pi_2)$$.
+**Step 5b:** $$\{0, 1\} \leftarrow \textsf{PCS.Verify}\bigl(\mathsf{vk}_\mathsf{PCS}, x, C_f, \pi_2)$$.
 
 ## Acknowledgements
 

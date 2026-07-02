@@ -21,7 +21,7 @@ Throughout the rest of this post, it is assumed that the reader is familiar with
 
 ## The Weil Pairing over Fields
 
-Before specialising it to the complex-analytic setting, we will first have to review a standard definition of the Weil pairing over arbitrary fields, for which we need to recall some concepts: rational functions on an elliptic curve, their zeroes and poles, divisors, and linear equivalence.
+Before specialising it to the complex-analytic setting, we will first have to state a standard definition of the Weil pairing over arbitrary fields, for which we need to recall some concepts: rational functions on an elliptic curve, their zeroes and poles, divisors, and linear equivalence.
 
 > **Notation.**  
 > Without loss of generality, we will always assume that an elliptic curve $E$ is presented as the affine zero set $E^\mathrm{aff}$ of a Weierstrass equation over a field $K$, together with its identity element $O$ "at infinity".

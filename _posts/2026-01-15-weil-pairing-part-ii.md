@@ -320,7 +320,7 @@ j_{\lambda + \mu} (z) = j_\lambda(z + \mu) j_\mu (z)\qquad \textrm{for all }\lam
 $$
 
 > **Definition (system of multipliers).**  
-Let $\Lambda \subset V$ be a lattice. Then a family of invertible holomorphic functions $\\\{ j_\lambda (z) \\\}_{\lambda \in \Lambda}$ on $V$ satisfying this condition is called a *system of multipliers* on $V$.
+Let $\Lambda \subset V$ be a lattice. Then a family of invertible holomorphic functions $\{ j_\lambda (z) \}_{\lambda \in \Lambda}$ on $V$ satisfying this condition is called a *system of multipliers* on $V$.
 {: .box .definition }
 
 > **Proposition (global sections are theta functions).**  
@@ -330,7 +330,7 @@ Let $\Lambda \subset V$ be a lattice. Then a family of invertible holomorphic fu
 This is a version of [descent](https://en.wikipedia.org/wiki/Descent_along_torsors).
 
 > **Definition (theta functions).**  
-> Given a system of multipliers $\\\{ j_\lambda (z) \\\}_{\lambda \in \Lambda}$, a *theta function* is a holomorphic function $\theta: V \rightarrow \mathbb{C}$ satisfying
+> Given a system of multipliers $\{ j_\lambda (z) \}_{\lambda \in \Lambda}$, a *theta function* is a holomorphic function $\theta: V \rightarrow \mathbb{C}$ satisfying
 >
 > $$
 > \theta(z + \lambda) = j_\lambda (z) \theta(z)\qquad \textrm{for all }\lambda \in \Lambda.
@@ -356,7 +356,7 @@ The existence of inverses in this group explains why line bundles are often refe
 Many systems of multipliers correspond to isomorphic line bundles; their equivalence can be captured as follows:
 
 > **Corollary.**  
-> Two systems of multipliers $$\\\{ j_\lambda (z) \\\}_{\lambda \in \Lambda}$$ and $$\\\{ j_\lambda '(z) \\\}_{\lambda \in \Lambda}$$ define isomorphic line bundles if and only if there exists a nonvanishing holomorphic function $h$ on $V$ such that $$j_\lambda(z) h(z) = j_\lambda ' (z) h(z + \lambda)$$.
+> Two systems of multipliers $$\{ j_\lambda (z) \}_{\lambda \in \Lambda}$$ and $$\{ j_\lambda '(z) \}_{\lambda \in \Lambda}$$ define isomorphic line bundles if and only if there exists a nonvanishing holomorphic function $h$ on $V$ such that $$j_\lambda(z) h(z) = j_\lambda ' (z) h(z + \lambda)$$.
 {: .box .proposition }
 
 > *Proof sketch:* Denote the corresponding line bundles on $V$ by $L$ and $L'$. Then $L \simeq L'$ if and only if $L \otimes (L')^{-1}$ is trivial, if and only if $L \otimes (L')^{-1}$ has a nonvanishing global section. By the previous defintion such a section is precisely a theta functions for the system of multipliers $$j_\lambda(z) j_\lambda ' (z)^{-1}$$.
@@ -368,7 +368,7 @@ This can be formalised in terms of [group cohomology](https://en.wikipedia.org/w
 > Let $T = V/\Lambda$ be a hypertorus. The map 
 >
 > $$
-> \\\{\textrm{systems of multipliers} \\\} \longrightarrow \mathrm{Pic}(T)
+> \{\textrm{systems of multipliers} \} \longrightarrow \mathrm{Pic}(T)
 > $$
 > 
 > induces an isomorphism of groups $\mathrm{H}^1 \bigl(\Lambda, \Gamma(V, \mathcal{O}_V^\times) \bigr) \simeq \mathrm{Pic}(T)$.
@@ -388,7 +388,7 @@ We now relate this to the usual construction of line bundles on an elliptic curv
 > Let $$D$$ be a divisor on a complex torus $T$. Then there exists a natural system of multipliers on $T$ such that the sections of the corresponding line bundle $\mathcal{L}(D)$ are given by
 >
 > $$
-> \Gamma\bigl( \mathcal{L}(D),U \bigr) \simeq \\\{ \textrm{meromorphic function }f\textrm{ on }U: \mathrm{div}(f) + D|_U \geq 0 \\\}.
+> \Gamma\bigl( \mathcal{L}(D),U \bigr) \simeq \{ \textrm{meromorphic function }f\textrm{ on }U: \mathrm{div}(f) + D|_U \geq 0 \}.
 > $$
 {: .box .proposition }
 
@@ -474,7 +474,7 @@ From \eqref{eq:ramification} it follows that a principal divisor pulls back to a
 > $$
 {: .box .proposition }
 
-> *Proof:* We may lift $\phi$ to the universal covers $\tilde{\phi}: V\rightarrow V'$ of $T$ and $T'$. Then the pullback of $L$ with system of multipliers $\\\{ j_{\lambda'} (z) = f(z+\lambda') / f(z) \\\}_{\lambda' \in \Lambda'}$ is a bundle with system of multipliers
+> *Proof:* We may lift $\phi$ to the universal covers $\tilde{\phi}: V\rightarrow V'$ of $T$ and $T'$. Then the pullback of $L$ with system of multipliers $\{ j_{\lambda'} (z) = f(z+\lambda') / f(z) \}_{\lambda' \in \Lambda'}$ is a bundle with system of multipliers
 >
 > $$
 j_\lambda (z)= \frac{f(\tilde{\phi}(z)+\tilde{\phi}(\lambda))}{f(\tilde{\phi}(z))}, 
@@ -502,10 +502,10 @@ We are now in a position to show that the additional term in the quasi-periodici
 On a group variety, these translations are the inherent symmetries, making it natural to study the behavior of a line bundle under them.
 
 > **Lemma.**  
-> Let $t$ be an element of a complex hypertorus $T = V / \Lambda$ and pick a lift $\tilde{t} \in T$. For any line bundle $L$ on $T$ with system of multipliers $$\\\{j_\lambda(z) \\\}_\lambda$$, the translate $\tau_t^* L$ has system of multipliers $$\\\{ j_\lambda(z + \tilde{t}) \\\}_\lambda$$.
+> Let $t$ be an element of a complex hypertorus $T = V / \Lambda$ and pick a lift $\tilde{t} \in T$. For any line bundle $L$ on $T$ with system of multipliers $$\{j_\lambda(z) \}_\lambda$$, the translate $\tau_t^* L$ has system of multipliers $$\{ j_\lambda(z + \tilde{t}) \}_\lambda$$.
 {: .box .lemma }
 
-> *Proof:* Denote by $L'$ the $$\Lambda$$-equivariant line bundle $$V \times \mathbb{C}$$ on $$V$$ with system of multipliers $$\\\{ j_\lambda(z + \tilde{t}) \\\}_\lambda$$, and similarly consider $\tau_t^* L$ as a $$\Lambda$$-equivariant line bundle on $V$. Then the map
+> *Proof:* Denote by $L'$ the $$\Lambda$$-equivariant line bundle $$V \times \mathbb{C}$$ on $$V$$ with system of multipliers $$\{ j_\lambda(z + \tilde{t}) \}_\lambda$$, and similarly consider $\tau_t^* L$ as a $$\Lambda$$-equivariant line bundle on $V$. Then the map
 >
 > $$
 > L' \longrightarrow \tau_t^* L,\qquad (z,l) \longmapsto (z + \tilde{t}, l)
@@ -618,7 +618,7 @@ We can now explicitly describe the set of isomorphism classes of holomorphic lin
 > **Theorem (Appell–Humbert [App91, Hum93]).**  
 > Let $T$ be a complex hypertorus. The map
 > 
-> $$ \\\{ \textrm{Appell–Humbert data for }T \\\} \longrightarrow \mathrm{Pic}(T),\qquad (H,\chi) \longmapsto L(H,\chi)$$
+> $$ \{ \textrm{Appell–Humbert data for }T \} \longrightarrow \mathrm{Pic}(T),\qquad (H,\chi) \longmapsto L(H,\chi)$$
 >
 > is a bijection.
 {: .box .theorem }
@@ -638,7 +638,7 @@ $$
 > $$
 {: .box .lemma }
 
-> *Proof:* By a previous lemma, the system of multipliers of $\tau_t L(H, \chi)$ is $\\\{ j_\lambda(z + \tilde{t}) \\\}_\lambda$; expanding yields
+> *Proof:* By a previous lemma, the system of multipliers of $\tau_t L(H, \chi)$ is $\{ j_\lambda(z + \tilde{t}) \}_\lambda$; expanding yields
 > 
 > $$
 > j_\lambda(z + \tilde{t}) = j_\lambda(z) e^{\pi H(\lambda, \tilde{t})}.
