@@ -61,9 +61,9 @@ Now recall that for each polynomial $f_i$ we have fixed a set $S_i$ of evaluatio
 > 
 > $$ S_i = S_i^\mathrm{rev} \sqcup S_i^\mathrm{hid}, $$
 > 
-> corresponding to the evaluations $\mathbf{y}_i^\operatorname{rev}$ that are to be revealed and the evaluations $\mathbf{y}_i^\operatorname{hid}$ that are to be kept hidden. For simplicity, we gather all evaluations corresponding to $S_i$ into a vector $\mathbf{y}_i = (\mathbf{y}_i^\operatorname{rev}, \mathbf{y}_i^\operatorname{hid})$.
+> corresponding to the evaluations $\mathbf{y}_i^{\operatorname{rev}}$ that are to be revealed and the evaluations $\mathbf{y}_i^{\operatorname{hid}}$ that are to be kept hidden. For simplicity, we gather all evaluations corresponding to $S_i$ into a vector $\mathbf{y}_i = (\mathbf{y}_i^{\operatorname{rev}}, \mathbf{y}_i^{\operatorname{hid}})$.
 > 
-> We let $h \mathrel{\vcenter{:}}= \sum_i \lvert \mathbf{y}_i^\operatorname{hid} \rvert = \sum_i \lvert S_i^\mathrm{hid} \rvert$ denote the total number of evaluations that need to be kept hidden.
+> We let $h \mathrel{\vcenter{:}}= \sum_i \lvert \mathbf{y}_i^{\operatorname{hid}} \rvert = \sum_i \lvert S_i^\mathrm{hid} \rvert$ denote the total number of evaluations that need to be kept hidden.
 {: .box .notation }
 
 To facilitate the computation of KZG opening proofs, one usually encodes the evaluations of $f_i$ over $S_i$ into a single polynomial, as follows:
@@ -75,7 +75,7 @@ To facilitate the computation of KZG opening proofs, one usually encodes the eva
 >
 > $$\tilde{f}_i(X) = \sum_{s\in S_i} L_{i,s} (X) f_i(s),$$
 >
-> which agrees with $f_i$ on all points of $S_i$. Similarly, the interpolation polynomials over the subsets $S_i^\mathrm{rev}$ and $S_i^\mathrm{hid}$ will be denoted $ \tilde{f}_i^\operatorname{rev}$ and $ \tilde{f}_i^\operatorname{hid}$.
+> which agrees with $f_i$ on all points of $S_i$. Similarly, the interpolation polynomials over the subsets $S_i^\mathrm{rev}$ and $S_i^\mathrm{hid}$ will be denoted $ \tilde{f}_i^{\operatorname{rev}}$ and $ \tilde{f}_i^{\operatorname{hid}}$.
 {: .box .notation }
 
 The KZG scheme is an example of [pairing-based cryptography](https://en.wikipedia.org/wiki/Pairing-based_cryptography), so we make use of a pairing-friendly elliptic curve:
@@ -155,25 +155,25 @@ Ordinarily in $$\mathtt{SHPLONK}$$ the prover would send over each $\tilde{f}_i(
 \label{eq:eval}
 \end{equation}
 
-A natural approach would be for the prover to send commitments to each of the $h$ evaluations in $$\{ \mathbf{y}_i^\operatorname{hid} \}_i$$ that need to be kept hidden, plus a sigma protocol proving that it knows the hidden $$\{ \mathbf{y}_i^\operatorname{hid} \}_i$$ which give
-- the $h$ commitments to the elements in $$\{ \mathbf{y}_i^\operatorname{hid} \}_i$$, and
+A natural approach would be for the prover to send commitments to each of the $h$ evaluations in $$\{ \mathbf{y}_i^{\operatorname{hid}} \}_i$$ that need to be kept hidden, plus a sigma protocol proving that it knows the hidden $$\{ \mathbf{y}_i^{\operatorname{hid}} \}_i$$ which give
+- the $h$ commitments to the elements in $$\{ \mathbf{y}_i^{\operatorname{hid}} \}_i$$, and
 - the element $$\varphi(\{ \mathbf{y}_i \}_i)$$,
 
-but this would be quite costly for the verifier.[^cost] Trisha Datta's approach, in the setting where all evaluations are hidden, is that the prover should only have to compute $\eqref{eq:eval}$. Namely, instead of committing to each secret element in $$\{ \mathbf{y}_i^\operatorname{hid} \}_i$$ individually, it simply commits to them all at once in one commitment $C_{\mathbf{y}^\mathrm{hid}}$, using some homomorphic vector commitment scheme (e.g., a hiding KZG variant). (This commitment is needed at the start of the protocol to prevent a possible grinding attack.) Then once the challenge point $x$ is known, it sends the element $\eqref{eq:eval}$ along with a sigma protocol proving that it knows the secret $$\{ \mathbf{y}_i^\operatorname{hid} \}_i$$ giving 
+but this would be quite costly for the verifier.[^cost] Trisha Datta's approach, in the setting where all evaluations are hidden, is that the prover should only have to compute $\eqref{eq:eval}$. Namely, instead of committing to each secret element in $$\{ \mathbf{y}_i^{\operatorname{hid}} \}_i$$ individually, it simply commits to them all at once in one commitment $C_{\mathbf{y}^\mathrm{hid}}$, using some homomorphic vector commitment scheme (e.g., a hiding KZG variant). (This commitment is needed at the start of the protocol to prevent a possible grinding attack.) Then once the challenge point $x$ is known, it sends the element $\eqref{eq:eval}$ along with a sigma protocol proving that it knows the secret $$\{ \mathbf{y}_i^{\operatorname{hid}} \}_i$$ giving 
 - the commitmentment $C_{\mathbf{y}^\mathrm{hid}}$,
 - the element $\eqref{eq:eval}$, and
 - the element $$\varphi(\{ \mathbf{y}_i \}_i)$$.
 
-A commitment for $h$ elements usually has cost similar to that of computing an MSM of size $h$, so the cost of verifying this sigma protocol should be similar to that of computing an MSM of size $\lvert \operatorname{MSM}(\varphi) \rvert + h $. In general the map from $$\{ \mathbf{y}_i^\operatorname{hid} \}_i$$ to $\eqref{eq:eval}$ is not a homomorphism, and instead it should be replaced by
+A commitment for $h$ elements usually has cost similar to that of computing an MSM of size $h$, so the cost of verifying this sigma protocol should be similar to that of computing an MSM of size $\lvert \operatorname{MSM}(\varphi) \rvert + h $. In general the map from $$\{ \mathbf{y}_i^{\operatorname{hid}} \}_i$$ to $\eqref{eq:eval}$ is not a homomorphism, and instead it should be replaced by
 
 $$
-\bigl[\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i^\operatorname{hid} (x) \bigr]_1.
+\bigl[\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i^{\operatorname{hid}} (x) \bigr]_1.
 $$
 
 Then the verifier will only need one extra MSM *factor* to compute the desired value (or rather, MSM component)
 
 $$
-\bigl[\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i (x) \bigr]_1 = \bigl[\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i^\operatorname{rev} (x) \bigr]_1 + \bigl[\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i^\operatorname{hid} (x) \bigr]_1.
+\bigl[\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i (x) \bigr]_1 = \bigl[\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i^{\operatorname{rev}} (x) \bigr]_1 + \bigl[\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i^{\operatorname{hid}} (x) \bigr]_1.
 $$
 
 [^cost]:
@@ -191,7 +191,7 @@ $$
 
 
 > **Theorem.**  
-> In any homomorphic variant on KZG, where the commitment to the $f_i$'s and to $q$ has commitment randomness $\rho_i$ and $\rho_q$, and the commitment to $$\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i^\operatorname{hid} (x)$$ has commitment randomness $\rho_\mathrm{eval}$, the prover can prove a batched opening with additional output $$\varphi(\{ \mathbf{y}^\operatorname{hid}_i \}_{i})$$ by combining an opening proof for $f$ using commitment randomness
+> In any homomorphic variant on KZG, where the commitment to the $f_i$'s and to $q$ has commitment randomness $\rho_i$ and $\rho_q$, and the commitment to $$\sum_{i=1}^n c^{i-1} Z_{S\setminus S_i } (x) \tilde{f}_i^{\operatorname{hid}} (x)$$ has commitment randomness $\rho_\mathrm{eval}$, the prover can prove a batched opening with additional output $$\varphi(\{ \mathbf{y}^{\operatorname{hid}}_i \}_{i})$$ by combining an opening proof for $f$ using commitment randomness
 >
 > $$\rho \mathrel{\vcenter{:}}= \sum_{i=1}^n c^{i-1} Z_{S\setminus S_i} (x) \cdot \rho_i - Z_S (x) \cdot \rho_q - \rho_\mathrm{eval},$$
 >
@@ -201,13 +201,13 @@ $$
 
 Thus, the following formal description should work in more generality than just the ordinary KZG scheme. Note we are assuming that the Fiat–Shamir transcript already contains the commitments $C_i$ of the $f_i$ and parameters for the $\mathsf{PCS}$. The commitment randomness of $C_i$ is denoted $\rho_i$.
 
-### {% raw %} $$\textsf{BatchOpen}\bigl(\mathsf{prk}_\mathsf{PCS}, \{ S_i \}_{i}, \varphi; \{ f_i \}_{i}, \{ \rho_i \}_{i} \bigr) \rightarrow \bigl( \{ \mathbf{y}_i^\operatorname{rev} \}_{i}, \varphi(\{ \mathbf{y}^\operatorname{hid}_i \}_{i}), \pi \bigr)$$ {% endraw %}
+### {% raw %} $$\textsf{BatchOpen}\bigl(\mathsf{prk}_\mathsf{PCS}, \{ S_i \}_{i}, \varphi; \{ f_i \}_{i}, \{ \rho_i \}_{i} \bigr) \rightarrow \bigl( \{ \mathbf{y}_i^{\operatorname{rev}} \}_{i}, \varphi(\{ \mathbf{y}^{\operatorname{hid}}_i \}_{i}), \pi \bigr)$$ {% endraw %}
 
 > The prover batches multiple opening proofs at various points into one opening proof, and keeps some evaluations secret whilst revealing a relationship determined by the homomorphism $\varphi$.
 
-**Step 1a:** Compute all evaluations $$\{ \mathbf{y}_i \}_i$$, then $$\varphi(\{ \mathbf{y}^\operatorname{hid}_i \}_{i})$$ and the commitment $C_{\mathbf{y}^\mathrm{hid}}$.
+**Step 1a:** Compute all evaluations $$\{ \mathbf{y}_i \}_i$$, then $$\varphi(\{ \mathbf{y}^{\operatorname{hid}}_i \}_{i})$$ and the commitment $C_{\mathbf{y}^\mathrm{hid}}$.
 
-**Step 1b:** Add the $$\{ S_i \}_i$$, $$\{ \mathbf{y}_i^\operatorname{rev} \}_i$$, $$\varphi(\{ \mathbf{y}^\operatorname{hid}_i \}_{i})$$ and $C_{\mathbf{y}^\mathrm{hid}}$ to the Fiat–Shamir transcript.
+**Step 1b:** Add the $$\{ S_i \}_i$$, $$\{ \mathbf{y}_i^{\operatorname{rev}} \}_i$$, $$\varphi(\{ \mathbf{y}^{\operatorname{hid}}_i \}_{i})$$ and $C_{\mathbf{y}^\mathrm{hid}}$ to the Fiat–Shamir transcript.
 
 
 **Step 1c:** $$c \xleftarrow{\mathcal{FS}} \mathbb{F}$$.
@@ -222,17 +222,17 @@ Thus, the following formal description should work in more generality than just 
 
 **Step 3:** $$x \xleftarrow{\mathcal{FS}} \mathbb{F}$$.
 
-**Step 4a:** Sample commitment randomness $$\rho_\operatorname{eval} \xleftarrow{\$} \mathcal{R}_\mathsf{Com}$$.
+**Step 4a:** Sample commitment randomness $$\rho_{\operatorname{eval}} \xleftarrow{\$} \mathcal{R}_\mathsf{Com}$$.
 
-**Step 4b:** Compute the constant polynomial $$g^\operatorname{hid} \mathrel{\vcenter{:}}= \sum_{i = 1}^n c^{i-1} Z_{S\setminus S_i }(x)  \tilde{f}_i^\operatorname{hid} (x)$$.
+**Step 4b:** Compute the constant polynomial $$g^{\operatorname{hid}} \mathrel{\vcenter{:}}= \sum_{i = 1}^n c^{i-1} Z_{S\setminus S_i }(x)  \tilde{f}_i^{\operatorname{hid}} (x)$$.
 
-**Step 4b:** Compute the constant polynomial $$g^\operatorname{rev} \mathrel{\vcenter{:}}= \sum_{i = 1}^n c^{i-1} Z_{S\setminus S_i }(x)  \tilde{f}_i^\operatorname{rev} (x)$$.
+**Step 4b:** Compute the constant polynomial $$g^{\operatorname{rev}} \mathrel{\vcenter{:}}= \sum_{i = 1}^n c^{i-1} Z_{S\setminus S_i }(x)  \tilde{f}_i^{\operatorname{rev}} (x)$$.
 
-**Step 4d:** Compute the commitment $$C_\operatorname{eval} \leftarrow \textsf{PCS.Commit} ( \mathsf{prk}_\mathsf{PCS}, g^\operatorname{hid}; \rho_\operatorname{eval} )$$.
+**Step 4d:** Compute the commitment $$C_{\operatorname{eval}} \leftarrow \textsf{PCS.Commit} ( \mathsf{prk}_\mathsf{PCS}, g^{\operatorname{hid}}; \rho_{\operatorname{eval}} )$$.
 
-**Step 5a:** $f \leftarrow \sum_{i = 1}^n c^{i-1} Z_{S\setminus S_i}(x) f_i - Z_S(x) q - g^\operatorname{hid} - g^\operatorname{rev}$.
+**Step 5a:** $f \leftarrow \sum_{i = 1}^n c^{i-1} Z_{S\setminus S_i}(x) f_i - Z_S(x) q - g^{\operatorname{hid}} - g^{\operatorname{rev}}$.
 
-**Step 5b:** $\rho \leftarrow \sum_{i = 1}^n c^{i-1} Z_{S\setminus S_i }(x) \rho_i - Z_S(x) \rho_q - \rho_\operatorname{eval}$.
+**Step 5b:** $\rho \leftarrow \sum_{i = 1}^n c^{i-1} Z_{S\setminus S_i }(x) \rho_i - Z_S(x) \rho_q - \rho_{\operatorname{eval}}$.
 
 **Step 5c:** $$\pi_2 \leftarrow \textsf{PCS.Open}\bigl(\mathsf{prk}_\mathsf{PCS}, f, x; \rho)$$.
 
@@ -240,13 +240,13 @@ Thus, the following formal description should work in more generality than just 
 
 **Step 7:** $\pi \leftarrow (\pi_1, \pi_2, C_{\mathbf{y}^\mathrm{hid}}, C_\mathrm{eval}, \pi_{\mathsf{PoK}})$.
 
-### {% raw %} $$\textsf{BatchVerify}\bigl(\mathsf{vk}_\mathsf{PCS}, \{ S_i \}_{i}, \varphi, \{ C_i \}_{i} ; \{ \mathbf{y}_i^\operatorname{rev} \}_{i}, \varphi(\{ \mathbf{y}^\operatorname{hid}_i \}_{i}),  \pi \bigr) \rightarrow \{0,1\} $$ {% endraw %}
+### {% raw %} $$\textsf{BatchVerify}\bigl(\mathsf{vk}_\mathsf{PCS}, \{ S_i \}_{i}, \varphi, \{ C_i \}_{i} ; \{ \mathbf{y}_i^{\operatorname{rev}} \}_{i}, \varphi(\{ \mathbf{y}^{\operatorname{hid}}_i \}_{i}),  \pi \bigr) \rightarrow \{0,1\} $$ {% endraw %}
 
 > The verifier succinctly verifies this batch opening, as if only one verification is taking place, and also verifies the image of $\varphi$. For increased efficiency, a concrete group element $C_i$ may be provided as a linear combination (an MSM representation) rather than as a concrete group element.
 
 **Step 1a:** Parse the proof $(\pi_1, \pi_2, C_{\mathbf{y}^\mathrm{hid}}, C_\mathrm{eval}, \pi_{\mathsf{PoK}}) \leftarrow \pi$.
 
-**Step 1b:** Add the $$\{ S_i \}_i$$, $$\{ \mathbf{y}_i^\operatorname{rev} \}_i$$, $$\varphi(\{ \mathbf{y}^\operatorname{hid}_i \}_{i})$$ and $C_{\mathbf{y}^\mathrm{hid}}$ to the Fiat–Shamir transcript.
+**Step 1b:** Add the $$\{ S_i \}_i$$, $$\{ \mathbf{y}_i^{\operatorname{rev}} \}_i$$, $$\varphi(\{ \mathbf{y}^{\operatorname{hid}}_i \}_{i})$$ and $C_{\mathbf{y}^\mathrm{hid}}$ to the Fiat–Shamir transcript.
 
 **Step 1c:** $$c \xleftarrow{\mathcal{FS}} \mathbb{F}$$.
 
@@ -258,13 +258,13 @@ Thus, the following formal description should work in more generality than just 
 
 **Step 4a:** Execute the $\mathbb{F}$ verification component of proof of knowledge $\pi_{\mathsf{PoK}}$, and let $\mathbf{C}_\mathsf{PoK}$ denote the deferred $\mathbb{G}_1$ MSM.
 
-**Step 4b:** Compute $$ \{ \tilde{f}_i^\operatorname{rev}(x) \}_{i} $$ from $$\{ \mathbf{y}_i^\operatorname{rev} \}_{i}$$.
+**Step 4b:** Compute $$ \{ \tilde{f}_i^{\operatorname{rev}}(x) \}_{i} $$ from $$\{ \mathbf{y}_i^{\operatorname{rev}} \}_{i}$$.
 
-**Step 4c:** Compute the constant polynomial $$g^\operatorname{rev} \mathrel{\vcenter{:}}= \sum_{i = 1}^n c^{i-1} Z_{S\setminus S_i }(x)  \tilde{f}_i^\operatorname{rev} (x)$$.
+**Step 4c:** Compute the constant polynomial $$g^{\operatorname{rev}} \mathrel{\vcenter{:}}= \sum_{i = 1}^n c^{i-1} Z_{S\setminus S_i }(x)  \tilde{f}_i^{\operatorname{rev}} (x)$$.
 
 > If instead of a concrete commitment $C_i$ an MSM representation $\mathbf{C}_i$ was passed, it simply expands the following equation into a larger MSM:
 
-**Step 5a:** Compute the MSM $$C_f \mathrel{\vcenter{:}}= \sum_{i = 1}^n c^{i-1} Z_{S\setminus S_i}(x) \cdot C_i - Z_S (x) \cdot \pi_1 - C_\mathrm{eval} - [g^\operatorname{rev}]_1 + c^n \, \mathbf{C}_\mathsf{PoK}$$. 
+**Step 5a:** Compute the MSM $$C_f \mathrel{\vcenter{:}}= \sum_{i = 1}^n c^{i-1} Z_{S\setminus S_i}(x) \cdot C_i - Z_S (x) \cdot \pi_1 - C_\mathrm{eval} - [g^{\operatorname{rev}}]_1 + c^n \, \mathbf{C}_\mathsf{PoK}$$. 
 
 **Step 5b:** $$\{0, 1\} \leftarrow \textsf{PCS.Verify}\bigl(\mathsf{vk}_\mathsf{PCS}, x, C_f, \pi_2)$$.
 

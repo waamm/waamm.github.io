@@ -158,7 +158,7 @@ $$
 > \mathrm{div}(v_P) = [P] + [-P] -2[O],
 > $$
 >
-> so the support of $\mathrm{div}(v_P)$ is the set $\\\{P, -P, O \\\}$ and its degree is $0$.
+> so the support of $\mathrm{div}(v_P)$ is the set $\{P, -P, O \}$ and its degree is $0$.
 {: .box .example }
 
 More generally, one can show that the line through two points $P,Q$ has divisor $[P] + [Q] + [-P - Q] -3[O]$.
@@ -243,7 +243,7 @@ More abstractly, a lattice in a finite-dimensional real vector space $V$ is a su
 Let's start with the simplest case, namely $n=1$:
 
 > **Example.**  
-> Any nonzero element $\omega$ in $\mathbb{R}$ generates a subgroup $\omega \mathbb{Z} = \\\{ \omega \cdot k \in \mathbb{R}: k\in \mathbb{Z} \\\}$ isomorphic to $\mathbb{Z}$, so a lattice $\Lambda \subset \mathbb{R}$ is always of the form $\omega \mathbb{Z}$ for some $\omega \in \mathbb{R}^\times$.
+> Any nonzero element $\omega$ in $\mathbb{R}$ generates a subgroup $\omega \mathbb{Z} = \{ \omega \cdot k \in \mathbb{R}: k\in \mathbb{Z} \}$ isomorphic to $\mathbb{Z}$, so a lattice $\Lambda \subset \mathbb{R}$ is always of the form $\omega \mathbb{Z}$ for some $\omega \in \mathbb{R}^\times$.
 {: .box .example }
 
 > **Proposition.**  
@@ -272,7 +272,7 @@ Let $\Lambda$ be a lattice in $\mathbb{C}$. The quotient space $\mathbb{C}/\Lamb
 > *Proof:* Since the fundamental periods form a basis for the two-dimensional real vector space $\mathbb{C}$, the set
 >
 > $$
-> \\\{ c_1 \omega_1 + c_2 \omega_2 : 0\leq c_1,c_2 < 1  \\\}
+> \{ c_1 \omega_1 + c_2 \omega_2 : 0\leq c_1,c_2 < 1  \}
 > $$
 > 
 > forms a [fundamental domain](https://en.wikipedia.org/wiki/Fundamental_domain) (called the *fundamental parallelepiped*):
@@ -286,7 +286,7 @@ Let $\Lambda$ be a lattice in $\mathbb{C}$. The quotient space $\mathbb{C}/\Lamb
 > The two borders that satisfy $c_1 = 1$ and $c_2 = 1$, so
 >
 > $$
-> \\\{ \omega_1 + c_2 \omega_2 : 0\leq c_2 \leq 1  \\\} \qquad \textrm{ and }\qquad \\\{ c_1 \omega_1 + \omega_2 : 0\leq c_1 \leq 1  \\\},
+> \{ \omega_1 + c_2 \omega_2 : 0\leq c_2 \leq 1  \} \qquad \textrm{ and }\qquad \{ c_1 \omega_1 + \omega_2 : 0\leq c_1 \leq 1  \},
 > $$
 >
 are identified by the lattice with their opposites (which satisfy $c_1 = 0$ and $c_2 = 0$ respectively). Pictorally the identification with the torus can then be seen as follows:
@@ -476,7 +476,7 @@ a suitable exponential factor:
 It has a simple zero at each lattice point, and no poles since it converges absolutely. This proves
 
 > **Proposition.**  
-> Let $\Lambda$ be a lattice in $\mathbb{C}$. Then for any finite set of points $\\\{ a_i \\\}_i$ in $\mathbb{C}$ and integers $\\\{ n_i \\\}_i$, the function
+> Let $\Lambda$ be a lattice in $\mathbb{C}$. Then for any finite set of points $\{ a_i \}_i$ in $\mathbb{C}$ and integers $\{ n_i \}_i$, the function
 >
 > $$
 > f(z)\mathrel{\vcenter{:}}= \prod_{i}\sigma(z-a_{i};\Lambda)^{n_{i}}
@@ -655,7 +655,7 @@ we find
 {: .box .corollary }
 
 > **Notation.**  
-> When the fundamental periods $$\omega_1, \omega_2$$ of a lattice $\Lambda \subset \mathbb{C}$ are fixed, one often writes $\eta_i \mathrel{\vcenter{:}}= \eta_{\omega_i}$ for $i\in \\\{ 1,2 \\\}$.
+> When the fundamental periods $$\omega_1, \omega_2$$ of a lattice $\Lambda \subset \mathbb{C}$ are fixed, one often writes $\eta_i \mathrel{\vcenter{:}}= \eta_{\omega_i}$ for $i\in \{ 1,2 \}$.
 {: .box .notation }
 
 > *Proof:* After using linearity of $\lambda\mapsto\eta_{\lambda}$ and expanding 
